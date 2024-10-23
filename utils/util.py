@@ -156,19 +156,19 @@ def posOfSwitches(gameState):
     
     return [tuple(x) for x in np.argwhere((gameState[1] == 4) | (gameState[1] == 5) | (gameState[1] == 6))]
 
-def isEndState(posStones: List[Tuple[int, int]], posSwitches: List[Tuple[int, int]]) -> bool:
+def isEndState(posOfStones: List[Tuple[int, int]], posSwitches: List[Tuple[int, int]]) -> bool:
     """
     Check if the positions of the stones match the positions of the switches.
 
     Args:
-        posStones (List[Tuple[int, int]]): A list of tuples representing the coordinates of the stones.
+        posOfStones (List[Tuple[int, int]]): A list of tuples representing the coordinates of the stones.
         posSwitches (List[Tuple[int, int]]): A list of tuples representing the coordinates of the switches.
 
     Returns:
         bool: True if the stones are in the same positions as the switches, otherwise False.
     """
     
-    return sorted(posStones) == sorted(posSwitches)
+    return sorted(posOfStones) == sorted(posSwitches)
 
 def costFunction(actions: Tuple[int, str]) -> int:
     """
@@ -183,9 +183,45 @@ def costFunction(actions: Tuple[int, str]) -> int:
     """
     
     return sum([x[0] + len(x[1]) for x in actions])
+
+def isValidAction(
+    action: List[int], 
+    posAres: Tuple[int, int], 
+    posOfStones: List[Tuple[int, int]], 
+    posWalls: List[Tuple[int, int]]
+) -> bool:
+    """
+    Check if the given action is valid based on the current position of Ares, the stones, and the walls.
+
+    Args:
+        action (List[int]): The action Ares is attempting to take.
+        posAres (Tuple[int, int]): A tuple representing the current position of Ares (x, y).
+        posOfStones (List[Tuple[int, int]]): A list of tuples where each tuple contains
+                                           the coordinates (x, y) of a stone.
+        posWalls (List[Tuple[int, int]]): A list of tuples representing the coordinates of the walls.
+
+    Returns:
+        bool: True if the action is valid, False otherwise.
+        
+    The function handles two cases:
+    1. If Ares is pushing a stone (uppercase action), it checks if the stone's next position after being 
+    pushed is either another stone's position or a wall's position.
+    2. If it's a normal move (lowercase action), check if Ares's next position is wall.
+    """
+    
+    if action[-1].isupper():
+        x1, y1 = posAres[0] + 2 * action[0], posAres[1] + 2 * action[1] # get stone's next position
+    else:
+        x1, y1 = posAres[0] + action[0], posAres[1] + action[1] # get Ares's next position
+    
+    return (x1, y1) not in posOfStones + posWalls
     
 
-def validActionsInNextStep(posAres: Tuple[int, int], posAndWeightStones: List[Tuple[int, int, int]]):
+def validActionsInNextStep(
+    posAres: Tuple[int, int], 
+    posAndWeightStones: List[Tuple[int, int, int]], 
+    posWalls: List[Tuple[int, int]]
+):
     """
     Determines valid actions for Ares in the next step based on the current position of Ares and the
     positions and weights of the stones.
@@ -193,7 +229,8 @@ def validActionsInNextStep(posAres: Tuple[int, int], posAndWeightStones: List[Tu
     Args:
         posAres (Tuple[int, int]): A tuple representing the current position of Ares (x, y).
         posAndWeightStones (List[Tuple[int, int, int]]): A list of tuples where each tuple contains
-        the coordinates (x, y) of a stone and its weight.
+                                                         the coordinates (x, y) of a stone and its weight.
+        posWalls (List[Tuple[int, int]]): A list of tuples representing the coordinates of the walls.
 
     Returns:
         List[Tuple[int, str]]: A list of valid actions.
@@ -202,21 +239,49 @@ def validActionsInNextStep(posAres: Tuple[int, int], posAndWeightStones: List[Tu
     actionsAll = [[0, -1, 0, 'l', 'L'], [0, 1, 0, 'r', 'R'], [-1, 0, 0, 'u', 'U'], [1, 0, 0, 'd', 'D']]
     validActions = []
     
-    posStones = [x[:2] for x in posAndWeightStones]
+    posOfStones = [x[:2] for x in posAndWeightStones]
     for action in actionsAll:
         xAresNextStep, yAresNextStep = posAres[0] + action[0], posAres[1] + action[1]
-        if (xAresNextStep, yAresNextStep) in posStones: # push stone
+        if (xAresNextStep, yAresNextStep) in posOfStones: # push stone
             action.pop(3) # pop lowercase
             
-            index = posStones.index((xAresNextStep, yAresNextStep))
+            index = posOfStones.index((xAresNextStep, yAresNextStep))
             action[3] = posAndWeightStones[index][-1]  # update weight
         else:
             action.pop(4) # pop uppercase
-    
-        validActions.append((action[2], action[-1]))
+            
+        if isValidAction(action, posAres, posOfStones, posWalls):
+            validActions.append(tuple(action))
     
     return validActions
 
-def updateState(posAres, posAndWeightStones, action):
-    return 0
+def updateState(
+    posAres: Tuple[int, int], 
+    posAndWeightStones: List[Tuple[int, int, int]], 
+    action: Tuple[int, int, int, int]
+):
+    """
+    Update the state of the game by calculating the next position of Ares and adjusting the positions of the 
+    stones based on the action taken.
+
+    Args:
+        posAres (Tuple[int, int]): A tuple representing the current position of Ares (x, y).
+        posAndWeightStones (List[Tuple[int, int, int]]): A list of tuples where each tuple contains
+                                                         the coordinates (x, y) of a stone and its weight.
+        action (Tuple[int, int, int, int]): The action Ares is attempting to take.
+
+    Returns:
+        nextPosOfAres (Tuple[int, int]): The updated position of Ares.
+        posAndWeightOfStones (List[Tuple[int, int, int]]): The updated list of stone positions and weights.
+    """
+    
+    nextPosOfAres = (posAres[0] + action[0], posAres[1] + action[1])
+    posOfStones = [x[:2] for x in posAndWeightStones]
+    if action[-1].isupper(): # push stone
+        index = posOfStones.index(nextPosOfAres)
+        nextPosAndWeightOfStone = (posAres[0] + action[0], posAres[1] + action[1], posAndWeightStones[index][-1])
+        posAndWeightStones.pop(index)
+        posAndWeightStones.append(nextPosAndWeightOfStone)
+        
+    return nextPosOfAres, posAndWeightOfStones
     

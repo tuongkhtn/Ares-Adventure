@@ -43,5 +43,5 @@ def uniformCostSearch(gameState):
                 newState = updateState(node[-1][0], node[-1][1], action) 
                 
                 frontier.push(node + [newState], cost)
-                actions.push((node_action[0] + action[0], node_action[1] + action[1]), cost)
+                actions.push((node_action[0] + action[2], node_action[1] + action[4]), cost)
     
