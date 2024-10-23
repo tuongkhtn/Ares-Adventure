@@ -21,6 +21,15 @@ class PriorityQueue:
 
     def isEmpty(self):
         return len(self.heap) == 0
+    
+class CustomSet(set):
+    def add(self, item):
+        item_hashable = (item[0], frozenset(item[1]))
+        super().add(item_hashable)
+        
+    def __contains__(self, item):
+        item_hashable = (item[0], frozenset(item[1]))
+        return super().__contains__(item_hashable)
 
 def readCommand():
     """
@@ -170,19 +179,19 @@ def isEndState(posOfStones: List[Tuple[int, int]], posSwitches: List[Tuple[int, 
     
     return sorted(posOfStones) == sorted(posSwitches)
 
-def costFunction(actions: Tuple[int, str]) -> int:
+def costFunction(action: Tuple[int, str]) -> int:
     """
     Caculates the total cost based on a list of actions.
 
     Args:
-        actions (Tuple[int, str]): A tuple where the first element is an integer (weight of the action)
+        action (Tuple[int, str]): A tuple where the first element is an integer (weight of the action)
         and the second element is a string (the action itself).
 
     Returns:
         int: The total cost, which is the sum the weight and the number of moves. 
     """
     
-    return sum([x[0] + len(x[1]) for x in actions])
+    return action[0] + len(action[1])
 
 def isValidAction(
     action: List[int], 
