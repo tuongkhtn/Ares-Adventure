@@ -1,15 +1,33 @@
-# from algorithms import printHello
-from utils import PriorityQueue
+from utils import readCommand
+from utils import transferToGameState
+from utils import posOfAres, posAndWeightOfStones, posOfSwitches, posOfWalls
+from utils import isEndState
+from utils import validActionsInNextStep
+from utils import updateState
 
 if __name__ == '__main__':
-    posAndWeightStones = [(1, 2, 3), (3, 4, 5)]
-    nextStone = (3, 4)
-    posStones = [x[:2] for x in posAndWeightStones]
+    weights, maze = readCommand()
+    gameState = transferToGameState(weights, maze)
     
-    index = posStones.index(nextStone)
+    posAres = posOfAres(gameState)
+    posAndWeightStones = posAndWeightOfStones(gameState)
+    posSwitches = posOfSwitches(gameState)
+    posWalls = posOfWalls(gameState)
+    posStones = [x[:2] for x in posAndWeightOfStones(gameState)]
     
-    posAndWeightStones.append((5, 6, posAndWeightStones[index][-1]))
-    posAndWeightStones.pop(index)
-
-    print(posAndWeightStones)
+    print("Maze:\n", gameState[1])
+    print("Position of Ares: ", posAres)
+    print("Position of Stones: ", posAndWeightStones)
+    print("Position of Switches: ", posSwitches)
+    print("Position of Walls: ", posWalls)
+    
+    print("End state: ", isEndState(posStones, posSwitches))
+    
+    validActions = validActionsInNextStep(posAres, posAndWeightStones, posWalls)
+    print("Valid actions: ", validActions)
+    
+    nextPosOfAres, newPosAndWeightStones = updateState(posAres, posAndWeightStones, (0, -1, 1, 'L'))
+    print("Next position of Ares: ", nextPosOfAres)
+    print("New position and weight of stones: ", newPosAndWeightStones)
+    
     

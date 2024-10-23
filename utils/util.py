@@ -103,7 +103,7 @@ def posOfAres(gameState):
         Tuple[int, int]: The position of Ares in the maze as (row, column).
     """
     
-    return tuple(np.argwhere(gameState[1] == 3)[0])
+    return tuple(np.argwhere(gameState[1] == 3)[0].tolist())
 
 def posAndWeightOfStones(gameState):
     """
@@ -119,7 +119,7 @@ def posAndWeightOfStones(gameState):
         coordinates (row, column) of a stone and its corresponding weight.
     """
     
-    listStones = [tuple(x) for x in np.argwhere((gameState[1] == 2) | (gameState[1] == 5))]
+    listStones = [tuple(x.tolist()) for x in np.argwhere((gameState[1] == 2) | (gameState[1] == 5))]
     for i in range(len(listStones)):
         listStones[i] += (gameState[0][i],)
     return listStones
@@ -138,7 +138,7 @@ def posOfWalls(gameState):
         coordinates of a wall in the maze.
     """
     
-    return [tuple(x) for x in np.argwhere(gameState[1] == 1)]
+    return [tuple(x.tolist()) for x in np.argwhere(gameState[1] == 1)]
 
 def posOfSwitches(gameState):
     """
@@ -154,7 +154,7 @@ def posOfSwitches(gameState):
         coordinates of a switch, stone on a switch and Ares on a switch in the maze.
     """
     
-    return [tuple(x) for x in np.argwhere((gameState[1] == 4) | (gameState[1] == 5) | (gameState[1] == 6))]
+    return [tuple(x.tolist()) for x in np.argwhere((gameState[1] == 4) | (gameState[1] == 5) | (gameState[1] == 6))]
 
 def isEndState(posOfStones: List[Tuple[int, int]], posSwitches: List[Tuple[int, int]]) -> bool:
     """
@@ -246,7 +246,7 @@ def validActionsInNextStep(
             action.pop(3) # pop lowercase
             
             index = posOfStones.index((xAresNextStep, yAresNextStep))
-            action[3] = posAndWeightStones[index][-1]  # update weight
+            action[2] = posAndWeightStones[index][-1]  # update weight
         else:
             action.pop(4) # pop uppercase
             
@@ -279,9 +279,9 @@ def updateState(
     posOfStones = [x[:2] for x in posAndWeightStones]
     if action[-1].isupper(): # push stone
         index = posOfStones.index(nextPosOfAres)
-        nextPosAndWeightOfStone = (posAres[0] + action[0], posAres[1] + action[1], posAndWeightStones[index][-1])
+        nextPosAndWeightOfStone = (posAres[0] + 2 * action[0], posAres[1] + 2 * action[1], posAndWeightStones[index][-1])
         posAndWeightStones.pop(index)
         posAndWeightStones.append(nextPosAndWeightOfStone)
         
-    return nextPosOfAres, posAndWeightOfStones
+    return nextPosOfAres, posAndWeightStones
     
