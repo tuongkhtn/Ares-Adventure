@@ -53,7 +53,7 @@ def readCommand():
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('-l', '--level', type=str,
-                        help='level of game to play', default='input-02.txt')
+                        help='level of game to play', default='input-01.txt')
     # parser.add_argument('-m', '--method', )
     args = parser.parse_args()
     

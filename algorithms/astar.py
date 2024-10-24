@@ -30,13 +30,15 @@ def heuristic(switches, stones):
 
     if not sortedStones or not sortedSwitches:
         return 0
+    
 
     cost_matrix = np.zeros((len(sortedStones), len(sortedSwitches)))
     
     # Calculate the cost matrix
     for i in range(len(sortedStones)):
         for j in range(len(sortedSwitches)):
-            cost_matrix[i][j] = manhattanDistance(sortedStones[i], sortedSwitches[j])
+            weight = [stone[-1] for stone in stones if tuple(stone[:2]) == sortedStones[i]][0]
+            cost_matrix[i][j] = manhattanDistance(sortedStones[i], sortedSwitches[j])*weight
     
     # Use linear_sum_assignment to find the optimal assignment
     row_ind, col_ind = linear_sum_assignment(cost_matrix)
@@ -96,6 +98,7 @@ def aStarSearch(gameState):
                     continue
                 
                 heuristic_hx = heuristic(posSwitches, newState[1])
+                
                 cost_gx = costFunction((node_action[0] + valid_action[2], node_action[1] + valid_action[-1]))
                 cost_fx = heuristic_hx + cost_gx
 
