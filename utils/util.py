@@ -242,7 +242,7 @@ def validActionsInNextStep(
         posWalls (List[Tuple[int, int]]): A list of tuples representing the coordinates of the walls.
 
     Returns:
-        List[Tuple[int, str]]: A list of valid actions.
+        List[Tuple[int, int, int, str]]: A list of valid actions.
     """
     
     actionsAll = [[0, -1, 0, 'l', 'L'], [0, 1, 0, 'r', 'R'], [-1, 0, 0, 'u', 'U'], [1, 0, 0, 'd', 'D']]
