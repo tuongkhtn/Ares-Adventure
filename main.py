@@ -4,18 +4,29 @@ from utils import posOfAres, posAndWeightOfStones, posOfSwitches, posOfWalls
 from utils import isEndState
 from utils import validActionsInNextStep
 from utils import updateState
-from algorithms import uniformCostSearch
+from algorithms.ucs import uniformCostSearch
+from algorithms.astar import aStarSearch
 from utils import PriorityQueue
 from utils import costFunction
 
 if __name__ == '__main__':
     weights, maze = readCommand()
+    print("weights: ", weights)
+    print("maze: ", maze)
     gameState = transferToGameState(weights, maze)
-    
-    # posAres = posOfAres(gameState)
-    # posAndWeightStones = posAndWeightOfStones(gameState)
-    # posSwitches = posOfSwitches(gameState)
-    # posWalls = posOfWalls(gameState)
+    print("gameState: ", gameState)
+    posAres = posOfAres(gameState)
+    print("posAres: ", posAres)
+    posAndWeightStones = posAndWeightOfStones(gameState)
+    print("posAndWeightStones: ", posAndWeightStones)
+    posSwitches = posOfSwitches(gameState)
+    print("posSwitches: ", posSwitches)
+    posWalls = posOfWalls(gameState)
+    print("posWalls: ", posWalls)
+
+
+    aStarSearch(gameState)
+
     # posStones = [x[:2] for x in posAndWeightOfStones(gameState)]
     
     # print("Maze:\n", gameState[1])
@@ -33,18 +44,4 @@ if __name__ == '__main__':
     # print("Next position of Ares: ", nextPosOfAres)
     # print("New position and weight of stones: ", newPosAndWeightStones)
     
-    
-    # a = (0, 'u')
-    # b = (99, 'R')
-    # print(costFunction(a))
-    # print(costFunction(b))
-    
-    # actions = PriorityQueue()
-    # actions.push((0, 'd'), 2000.0)
-    # actions.push((0, 'u'), 2017.0)
-    # actions.push((99, 'R'), 1917.0)
-    
-    # while not actions.isEmpty():
-    #     print(actions.pop())
-    
-    uniformCostSearch(gameState)
+
