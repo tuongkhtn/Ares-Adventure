@@ -6,6 +6,7 @@ from utils import validActionsInNextStep
 from utils import updateState
 from algorithms import uniformCostSearch
 from utils import PriorityQueue
+from utils import costFunction
 
 if __name__ == '__main__':
     weights, maze = readCommand()
@@ -32,13 +33,18 @@ if __name__ == '__main__':
     # print("Next position of Ares: ", nextPosOfAres)
     # print("New position and weight of stones: ", newPosAndWeightStones)
     
-    # uniformCostSearch(gameState)
     
-    actions = PriorityQueue()
-    actions.push((0, 'd'), 1)
-    actions.push((0, 'u'), 2)
-    actions.push((99, 'R'), 3)
+    # a = (0, 'u')
+    # b = (99, 'R')
+    # print(costFunction(a))
+    # print(costFunction(b))
     
-    print(actions.pop())
+    # actions = PriorityQueue()
+    # actions.push((0, 'd'), 2000.0)
+    # actions.push((0, 'u'), 2017.0)
+    # actions.push((99, 'R'), 1917.0)
     
+    # while not actions.isEmpty():
+    #     print(actions.pop())
     
+    uniformCostSearch(gameState)
