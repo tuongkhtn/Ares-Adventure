@@ -7,10 +7,11 @@ from utils import updateState
 from algorithms import uniformCostSearch
 from utils import PriorityQueue
 from utils import costFunction
+import time
 
 if __name__ == '__main__':
-    weights, maze = readCommand()
-    gameState = transferToGameState(weights, maze)
+    # weights, maze = readCommand()
+    # gameState = transferToGameState(weights, maze)
     
     # posAres = posOfAres(gameState)
     # posAndWeightStones = posAndWeightOfStones(gameState)
@@ -34,8 +35,8 @@ if __name__ == '__main__':
     # print("New position and weight of stones: ", newPosAndWeightStones)
     
     
-    # a = (0, 'u')
-    # b = (99, 'R')
+    # a = (0, 'ab')
+    # b = (0, 'ba')
     # print(costFunction(a))
     # print(costFunction(b))
     
@@ -47,4 +48,12 @@ if __name__ == '__main__':
     # while not actions.isEmpty():
     #     print(actions.pop())
     
+    start = time.time()
+    weights, maze = readCommand()
+    gameState = transferToGameState(weights, maze)
+    
     uniformCostSearch(gameState)
+    
+    print("Time: ", time.time() - start)
+    
+    

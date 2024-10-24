@@ -280,16 +280,74 @@ def updateState(
         posAndWeightStones_copy.pop(index)
         posAndWeightStones_copy.append(nextPosAndWeightOfStone)
         
-        
     return nextPosOfAres, sorted(posAndWeightStones_copy)
+
+def isFailed(
+    posStones: List[Tuple[int, int]], 
+    posSwitches: List[Tuple[int, int]],
+    posWalls: List[Tuple[int, int]]
+) -> bool:
+    """
+    Check if the current game state results in a failure based on the positions of stones, switches and walls.
+
+    Args:
+        posStones (List[Tuple[int, int]]): A list of tuples where each tuple contains the coordinates (x, y) 
+                                           of a stone.
+        posSwitches (List[Tuple[int, int]]): A list of tuples representing the coordinates of the switches.
+        posWalls (List[Tuple[int, int]]): A list of tuples representing the coordinates of the walls.
+        
+    Returns:
+        bool: Returns True if any stone in stuck and cannot move, otherwise returns False.
+        
+    There are six cases for stone to get stuck:
+    A W A   A W W   A S W   A S W   A S S   A S W    
+    A P W   A P S   A P W   A P S   A P S   W P A
+    A A A   A A A   A A A   A A A   A A A   S A W
+    
+    A: Any character.
+    P: Stone under examination is stuck or not.
+    W: Wall.
+    S: Other stones.
+    """
+    
+    rotatePattern = [[0, 1, 2, 3, 4, 5, 6, 7, 8],
+                     [2, 5, 8, 1, 4, 7, 0, 3, 6],
+                     [0, 1, 2, 3, 4, 5, 6, 7, 8][::-1],
+                     [2, 5, 8, 1, 4, 7, 0, 3, 6][::-1]]
+    
+    flipPattern = [[2, 1, 0, 5, 4, 3, 8, 7, 6],
+                   [0, 3, 6, 1, 4, 7, 2, 5, 8],
+                   [2, 1, 0, 5, 4, 3, 8, 7, 6][::-1],
+                   [0, 3, 6, 1, 4, 7, 2, 5, 8][::-1]]
+    
+    allPattern = rotatePattern + flipPattern
+    
+    for stone in posStones:
+        if stone not in posSwitches:
+            x, y = stone
+            board = [(x-1, y-1), (x-1, y), (x-1, y+1),
+                     (x, y-1), (x, x), (x, y+1),
+                     (x+1, y-1), (x+1, y), (x+1, y+1)] # get 3x3 matrix, it is the cells adjacent to the stone under consideration.
+            
+            for pattern in allPattern:
+                newBoard = [board[i] for i in pattern]
+                if newBoard[1] in posWalls and newBoard[5] in posWalls: return True
+                elif newBoard[5] in posStones and newBoard[1] in posWalls and newBoard[2] in posWalls: return True
+                elif newBoard[1] in posStones and newBoard[2] in posWalls and newBoard[5] in posWalls: return True
+                elif newBoard[1] in posStones and newBoard[5] in posStones and newBoard[2] in posWalls: return True
+                elif newBoard[1] in posStones and newBoard[2] in posStones and newBoard[5] in posStones: return True
+                elif newBoard[1] in posStones and newBoard[6] in posStones and newBoard[2] in posWalls and newBoard[3] in posWalls and newBoard[8] in posWalls: return True
+    
+    return False
+             
     
 def costFunction(action: Tuple[int, str]) -> int:
     """
     Caculates the total cost based on a list of actions.
 
     Args:
-        action (Tuple[int, str]): A tuple where the first element is an integer (weight of the action)
-        and the second element is a string (the action itself).
+        action (Tuple[int, str]): A tuple where the first element is an integer (total weight of the action)
+        and the second element is a path (the action itself).
 
     Returns:
         int: The total cost, which is the sum the weight and the number of moves. 
@@ -298,6 +356,6 @@ def costFunction(action: Tuple[int, str]) -> int:
     discount = 0.9
     sum = 0.0
     for i in range(len(action[1])):
-        sum += ord(action[1][i]) * 10 * (discount**i)
+        sum += ord(action[1][i]) * (discount**i)
         
-    return (action[0] + len(action[1]) * 10000) + sum
+    return (action[0] + len(action[1])) + sum * 0.00001
