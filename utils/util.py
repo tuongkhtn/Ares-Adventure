@@ -308,3 +308,59 @@ def costFunction(action: Tuple[int, str]) -> int:
         sum += ord(action[1][i]) * 10 * (discount**i)
         
     return (action[0] + len(action[1])) + sum*0.00001
+
+
+def isFailed(stones, posWalls, posSwitches):
+    """This function used to observe if the state is potentially failed, then prune the search.
+    
+    It checks if any of the stones is blocked by walls and other stones. The check is done by
+    rotating and flipping the board and checking if the stone is blocked in any of the 8 
+    possible orientations.
+    
+    Args:
+        stones (List[Tuple[int, int, int]]): A list of tuples where each tuple contains the 
+                                            coordinates (x, y) of a stone and its weight.
+        posWalls (List[Tuple[int, int]]): A list of tuples representing the coordinates of the walls.
+        posSwitches (List[Tuple[int, int]]): A list of tuples representing the coordinates of the switches.
+    
+    Returns:
+        bool: True if the state is potentially failed, False otherwise.
+    """
+    rotatePattern = [[0,1,2,3,4,5,6,7,8],
+                    [2,5,8,1,4,7,0,3,6],
+                    [0,1,2,3,4,5,6,7,8][::-1],
+                    [2,5,8,1,4,7,0,3,6][::-1]]
+    flipPattern = [[2,1,0,5,4,3,8,7,6],
+                    [0,3,6,1,4,7,2,5,8],
+                    [2,1,0,5,4,3,8,7,6][::-1],
+                    [0,3,6,1,4,7,2,5,8][::-1]]
+    allPattern = rotatePattern + flipPattern
+    
+    posStones = [stone[:2] for stone in stones]  
+    for box in posStones:
+        if  box not in posSwitches:
+            board = [(box[0] - 1, box[1] - 1), (box[0] - 1, box[1]), (box[0] - 1, box[1] + 1), 
+                    (box[0], box[1] - 1), (box[0], box[1]), (box[0], box[1] + 1), 
+                    (box[0] + 1, box[1] - 1), (box[0] + 1, box[1]), (box[0] + 1, box[1] + 1)]
+            for pattern in allPattern:
+                newBoard = [board[i] for i in pattern]
+                if newBoard[1] in posWalls and newBoard[5] in posWalls: return True
+                elif newBoard[1] in posStones and newBoard[2] in posWalls and newBoard[5] in posWalls: return True
+                elif newBoard[1] in posStones and newBoard[2] in posWalls and newBoard[5] in posStones: return True
+                elif newBoard[1] in posStones and newBoard[2] in posStones and newBoard[5] in posStones: return True
+                elif newBoard[1] in posStones and newBoard[6] in posStones and newBoard[2] in posWalls and newBoard[3] in posWalls and newBoard[8] in posWalls: return True
+    return False
+
+
+def manhattanDistance (pos1, pos2):
+    """
+    Calculate the Manhattan distance between two positions.
+
+    Args:
+        pos1 (Tuple[int, int]): The first position as a tuple of (x, y) coordinates.
+        pos2 (Tuple[int, int]): The second position as a tuple of (x, y) coordinates.
+
+    Returns:
+        int: The Manhattan distance between the two positions.
+    """
+    return abs(pos1[0] - pos2[0]) + abs(pos1[1] - pos2[1])
