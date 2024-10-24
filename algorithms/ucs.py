@@ -5,6 +5,7 @@ from utils import costFunction
 from utils import validActionsInNextStep
 from utils import updateState
 from utils import CustomSet
+from utils import isFailed
 
 def printQueue(actions):
     import copy
@@ -37,7 +38,7 @@ def uniformCostSearch(gameState):
     posWalls = posOfWalls(gameState)
     posSwitches = posOfSwitches(gameState)
     
-    cnt = 0
+    minCost = float('inf')
     
     while not frontier.isEmpty():
         # print("Loop:", cnt + 1)
@@ -49,7 +50,9 @@ def uniformCostSearch(gameState):
         posOfStonesLastState = [x[:2] for x in node[-1][-1]]
         
         if isEndState(posOfStonesLastState, posSwitches):
-            print("End: ", node_action)
+            if minCost > costFunction(node_action):
+                minCost = costFunction(node_action)
+                totalWeightAndPath = node_action
             break
         
         if node[-1] not in exploredSet:
@@ -60,9 +63,13 @@ def uniformCostSearch(gameState):
                 # print(action)
                 # print(newState)
                 
-                cost = costFunction((node_action[0] + action[2], node_action[1] + action[-1]))
+                if isFailed(newState[1], posWalls, posSwitches):
+                   continue
+                
+                addWeightAndPath = (node_action[0] + action[2], node_action[1] + action[-1])
+                cost = costFunction(addWeightAndPath)  
                 frontier.push(node + [newState], cost)
-                actions.push((node_action[0] + action[2], node_action[1] + action[-1]), cost)    
+                actions.push(addWeightAndPath, cost)    
         
         # print("Push actions:")
         # printQueue(actions)
@@ -73,4 +80,7 @@ def uniformCostSearch(gameState):
         # print("######################################################################################\n")
         
         # cnt += 1
+    print("End: ", totalWeightAndPath)
+    print("Cost: ", minCost)
+    
         

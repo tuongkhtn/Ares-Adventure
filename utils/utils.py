@@ -287,31 +287,15 @@ def updateState(
         posAndWeightStones_copy.pop(index)
         posAndWeightStones_copy.append(nextPosAndWeightOfStone)
         
-        
     return nextPosOfAres, sorted(posAndWeightStones_copy)
-    
-def costFunction(action: Tuple[int, str]) -> int:
+
+def isFailed(
+    posAndWeightStones: List[Tuple[int, int, int]], 
+    posWalls: List[Tuple[int, int]], 
+    posSwitches: List[Tuple[int, int]]
+) -> bool:
     """
-    Caculates the total cost based on a list of actions.
-
-    Args:
-        action (Tuple[int, str]): A tuple where the first element is an integer (weight of the action)
-        and the second element is a string (the action itself).
-
-    Returns:
-        int: The total cost, which is the sum the weight and the number of moves. 
-    """
-    
-    discount = 0.9
-    sum = 0.0
-    for i in range(len(action[1])):
-        sum += ord(action[1][i]) * 10 * (discount**i)
-        
-    return (action[0] + len(action[1])) + sum*0.00001
-
-
-def isFailed(stones, posWalls, posSwitches):
-    """This function used to observe if the state is potentially failed, then prune the search.
+    This function used to observe if the state is potentially failed, then prune the search.
     
     It checks if any of the stones is blocked by walls and other stones. The check is done by
     rotating and flipping the board and checking if the stone is blocked in any of the 8 
@@ -325,7 +309,18 @@ def isFailed(stones, posWalls, posSwitches):
     
     Returns:
         bool: True if the state is potentially failed, False otherwise.
+        
+    There are six cases for stone to get stuck:
+    A W A   A W W   A S W   A S W   A S S   A S W    
+    A P W   A P S   A P W   A P S   A P S   W P A
+    A A A   A A A   A A A   A A A   A A A   S A W
+    
+    A: Any character.
+    P: Stone under examination is stuck or not.
+    W: Wall.
+    S: Other stones.
     """
+    
     rotatePattern = [[0,1,2,3,4,5,6,7,8],
                     [2,5,8,1,4,7,0,3,6],
                     [0,1,2,3,4,5,6,7,8][::-1],
@@ -336,23 +331,46 @@ def isFailed(stones, posWalls, posSwitches):
                     [0,3,6,1,4,7,2,5,8][::-1]]
     allPattern = rotatePattern + flipPattern
     
-    posStones = [stone[:2] for stone in stones]  
-    for box in posStones:
-        if  box not in posSwitches:
-            board = [(box[0] - 1, box[1] - 1), (box[0] - 1, box[1]), (box[0] - 1, box[1] + 1), 
-                    (box[0], box[1] - 1), (box[0], box[1]), (box[0], box[1] + 1), 
-                    (box[0] + 1, box[1] - 1), (box[0] + 1, box[1]), (box[0] + 1, box[1] + 1)]
+    posStones = [x[:2] for x in posAndWeightStones]  
+    for stone in posStones:
+        if  stone not in posSwitches:
+            x, y = stone
+            board = [(x-1, y-1), (x-1, y), (x-1, y+1),
+                     (x, y-1), (x, x), (x, y+1),
+                     (x+1, y-1), (x+1, y), (x+1, y+1)] # get 3x3 matrix, it is the cells adjacent to the stone under consideration.
+
             for pattern in allPattern:
                 newBoard = [board[i] for i in pattern]
+                
                 if newBoard[1] in posWalls and newBoard[5] in posWalls: return True
+                elif newBoard[5] in posStones and newBoard[1] in posWalls and newBoard[2] in posWalls: return True
                 elif newBoard[1] in posStones and newBoard[2] in posWalls and newBoard[5] in posWalls: return True
-                elif newBoard[1] in posStones and newBoard[2] in posWalls and newBoard[5] in posStones: return True
+                elif newBoard[1] in posStones and newBoard[5] in posStones and newBoard[2] in posWalls: return True
                 elif newBoard[1] in posStones and newBoard[2] in posStones and newBoard[5] in posStones: return True
                 elif newBoard[1] in posStones and newBoard[6] in posStones and newBoard[2] in posWalls and newBoard[3] in posWalls and newBoard[8] in posWalls: return True
+
     return False
 
+def costFunction(action: Tuple[int, str]) -> int:
+    """
+    Caculates the total cost based on a list of actions.
 
-def manhattanDistance (pos1, pos2):
+    Args:
+        action (Tuple[int, str]): A tuple where the first element is an integer (total weight of the action)
+        and the second element is a path (the action itself).
+
+    Returns:
+        int: The total cost, which is the sum the weight and the number of moves. 
+    """
+    
+    discount = 0.9
+    sum = 0.0
+    for i in range(len(action[1])):
+        sum += ord(action[1][i]) * (discount**i)
+        
+    return (action[0] + len(action[1])) + sum * 0.00001
+
+def manhattanDistance (pos1: Tuple[int, int], pos2: Tuple[int, int]) -> int:
     """
     Calculate the Manhattan distance between two positions.
 
@@ -363,4 +381,5 @@ def manhattanDistance (pos1, pos2):
     Returns:
         int: The Manhattan distance between the two positions.
     """
+    
     return abs(pos1[0] - pos2[0]) + abs(pos1[1] - pos2[1])
