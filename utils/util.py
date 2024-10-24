@@ -22,6 +22,13 @@ class PriorityQueue:
 
     def isEmpty(self):
         return len(self.heap) == 0
+    def peek_all(self):
+        heap_copy = self.heap[:]
+        result = []
+        while heap_copy:
+            (priority, _, item) = heapq.heappop(heap_copy)
+            result.append((item, priority))
+        return result
     
 class CustomSet(set):
     def add(self, item):
