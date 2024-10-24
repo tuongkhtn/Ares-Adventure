@@ -5,6 +5,8 @@ from utils import costFunction
 from utils import validActionsInNextStep
 from utils import updateState
 from utils import CustomSet
+from scipy.optimize import linear_sum_assignment
+import numpy as np
 
 def manhattanDistance (pos1, pos2):
     return abs(pos1[0] - pos2[0]) + abs(pos1[1] - pos2[1])
@@ -16,9 +18,21 @@ def heuristic(switches, stones):
     completes = set(switches) & set(posStones)
     sortedStones = list(set(posStones).difference(completes))
     sortedSwitches = list(set(switches).difference(completes))
+
+    if not sortedStones or not sortedSwitches:
+        return 0
+
+    cost_matrix = np.zeros((len(sortedStones), len(sortedSwitches)))
+    
     for i in range(len(sortedStones)):
-        distance += (manhattanDistance(sortedStones[i][:2], sortedSwitches[i]))
-    return distance
+        for j in range(len(sortedSwitches)):
+            cost_matrix[i][j] = abs(sortedStones[i][0] - sortedSwitches[j][0]) + abs(sortedStones[i][1] - sortedSwitches[j][1])
+    
+    row_ind, col_ind = linear_sum_assignment(cost_matrix)
+    
+    total_distance = cost_matrix[row_ind, col_ind].sum()
+    
+    return total_distance
 
 def printActions(actions):
     while not actions.isEmpty():
