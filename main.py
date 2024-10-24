@@ -25,6 +25,7 @@ if __name__ == '__main__':
     print("posWalls: ", posWalls)
 
 
+    uniformCostSearch(gameState)
     aStarSearch(gameState)
 
     # posStones = [x[:2] for x in posAndWeightOfStones(gameState)]

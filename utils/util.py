@@ -53,7 +53,7 @@ def readCommand():
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('-l', '--level', type=str,
-                        help='level of game to play', default='input-01.txt')
+                        help='level of game to play', default='input-02.txt')
     # parser.add_argument('-m', '--method', )
     args = parser.parse_args()
     
@@ -307,4 +307,4 @@ def costFunction(action: Tuple[int, str]) -> int:
     for i in range(len(action[1])):
         sum += ord(action[1][i]) * 10 * (discount**i)
         
-    return (action[0] + len(action[1]) * 10000) + sum
+    return (action[0] + len(action[1])) + sum*0.00001

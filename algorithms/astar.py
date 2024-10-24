@@ -65,7 +65,6 @@ def isFailed(stones, posWalls, posSwitches):
                 elif newBoard[1] in posStones and newBoard[2] in posStones and newBoard[5] in posStones: return True
                 elif newBoard[1] in posStones and newBoard[6] in posStones and newBoard[2] in posWalls and newBoard[3] in posWalls and newBoard[8] in posWalls: return True
     return False
-
 def aStarSearch(gameState):
     startPosAres = posOfAres(gameState)
     startStones = posAndWeightOfStones(gameState)
@@ -82,47 +81,46 @@ def aStarSearch(gameState):
     startState = (startPosAres, startStones) # Tuple(PosAres: Tuple(int, int), Stones: List[Stone: Tuple(X: int, Y: int, Weight: int)]))
 
     openSet = PriorityQueue() # PriorityQueue(State: Tuple(PosAres: Tuple(int, int), Stones: List[Stone: Tuple[X: int, Y: int, Weight: int]]), Cost f(x): int)
-    openSet.push([startState], 0 + heuristic(posSwitches, startStones))
+    openSet.push([startState], 0)
 
     exploredSet = CustomSet()
 
     actions = PriorityQueue() # PriorityQueue(Tuple(total weight: int, path: str), value: int)
+    actions.push((0, ''), float('inf')) 
 
-    actions.push((0, ''), heuristic(posSwitches, startStones)) 
-
+    cnt = 0
     while not openSet.isEmpty():
-        print("-"*100)
-        node = openSet.pop() # Tuple(PosAres: Tuple(int, int), Stones: List[Stone: Tuple[X: int, Y: int, Weight: int]])
         
-
-        print("actions: ", actions.peek_all())
+        print("-"*100)
+        node = openSet.pop() # List[Tuple(PosAres: Tuple(int, int), Stones: List[Stone: Tuple[X: int, Y: int, Weight: int]])]
         node_action = actions.pop() # Tuple(total weight: int, path: str)
         print('node_action', node_action)
 
-        if isEndState(node[0][0], posSwitches):
+        posOfStonesLastState = [x[:2] for x in node[-1][-1]]
+
+        if isEndState(posOfStonesLastState, posSwitches):
             print("End: ", node_action)
             break
         print("node", node)
         print("node[-1]", node[-1])
         if node[-1] not in exploredSet:
             exploredSet.add(node[-1])
-            cost_gx = len([x for x in node_action[1] if x.islower()])
+
             for valid_action in validActionsInNextStep(node[-1][0], node[-1][1], posWalls):  # action Tuple[X: int, Y: int,  stoneWeight: int, command: str]
                 print("valid_action", valid_action)
-                newState = updateState(node[-1][0], list(node[-1][1]), valid_action)  # newState Tuple[PosAres: Tuple(int, int), Stones: List[Stone: Tuple[X: int, Y: int, Weight: int]]]
+                newState = updateState(node[-1][0], node[-1][1], valid_action)  # newState Tuple[PosAres: Tuple(int, int), Stones: List[Stone: Tuple[X: int, Y: int, Weight: int]]]
                 print('newState', newState)
                 if isFailed(stones=newState[1], posWalls=posWalls, posSwitches=posSwitches):
                     continue
                 heuristic_hx = heuristic(posSwitches, newState[1])
                 print("heuristic_hx", heuristic_hx)
+                cost_gx = costFunction((node_action[0] + valid_action[2], node_action[1] + valid_action[-1]))
+                print("ost_gx", cost_gx)
                 cost_fx = heuristic_hx + cost_gx
                 print("cost_fx", cost_fx)
                 openSet.push(node + [newState], cost_fx)
                 actions.push((node_action[0] + valid_action[2], node_action[1] + valid_action[-1]), cost_fx) 
-                # print('(node_action[0] + action[2], node_action[1] + action[-1])', (node_action[0] + action[2], node_action[1] + action[-1]))
 
-
-        print("valid_action", valid_action)
         
 
 
