@@ -22,6 +22,13 @@ class PriorityQueue:
 
     def isEmpty(self):
         return len(self.heap) == 0
+    def peek_all(self):
+        heap_copy = self.heap[:]
+        result = []
+        while heap_copy:
+            (priority, _, item) = heapq.heappop(heap_copy)
+            result.append((item, priority))
+        return result
     
 class CustomSet(set):
     def add(self, item):
@@ -283,21 +290,25 @@ def updateState(
     return nextPosOfAres, sorted(posAndWeightStones_copy)
 
 def isFailed(
-    posStones: List[Tuple[int, int]], 
-    posSwitches: List[Tuple[int, int]],
-    posWalls: List[Tuple[int, int]]
+    posAndWeightStones: List[Tuple[int, int, int]], 
+    posWalls: List[Tuple[int, int]], 
+    posSwitches: List[Tuple[int, int]]
 ) -> bool:
     """
-    Check if the current game state results in a failure based on the positions of stones, switches and walls.
-
+    This function used to observe if the state is potentially failed, then prune the search.
+    
+    It checks if any of the stones is blocked by walls and other stones. The check is done by
+    rotating and flipping the board and checking if the stone is blocked in any of the 8 
+    possible orientations.
+    
     Args:
-        posStones (List[Tuple[int, int]]): A list of tuples where each tuple contains the coordinates (x, y) 
-                                           of a stone.
-        posSwitches (List[Tuple[int, int]]): A list of tuples representing the coordinates of the switches.
+        stones (List[Tuple[int, int, int]]): A list of tuples where each tuple contains the 
+                                            coordinates (x, y) of a stone and its weight.
         posWalls (List[Tuple[int, int]]): A list of tuples representing the coordinates of the walls.
-        
+        posSwitches (List[Tuple[int, int]]): A list of tuples representing the coordinates of the switches.
+    
     Returns:
-        bool: Returns True if any stone in stuck and cannot move, otherwise returns False.
+        bool: True if the state is potentially failed, False otherwise.
         
     There are six cases for stone to get stuck:
     A W A   A W W   A S W   A S W   A S S   A S W    
@@ -310,37 +321,36 @@ def isFailed(
     S: Other stones.
     """
     
-    rotatePattern = [[0, 1, 2, 3, 4, 5, 6, 7, 8],
-                     [2, 5, 8, 1, 4, 7, 0, 3, 6],
-                     [0, 1, 2, 3, 4, 5, 6, 7, 8][::-1],
-                     [2, 5, 8, 1, 4, 7, 0, 3, 6][::-1]]
-    
-    flipPattern = [[2, 1, 0, 5, 4, 3, 8, 7, 6],
-                   [0, 3, 6, 1, 4, 7, 2, 5, 8],
-                   [2, 1, 0, 5, 4, 3, 8, 7, 6][::-1],
-                   [0, 3, 6, 1, 4, 7, 2, 5, 8][::-1]]
-    
+    rotatePattern = [[0,1,2,3,4,5,6,7,8],
+                    [2,5,8,1,4,7,0,3,6],
+                    [0,1,2,3,4,5,6,7,8][::-1],
+                    [2,5,8,1,4,7,0,3,6][::-1]]
+    flipPattern = [[2,1,0,5,4,3,8,7,6],
+                    [0,3,6,1,4,7,2,5,8],
+                    [2,1,0,5,4,3,8,7,6][::-1],
+                    [0,3,6,1,4,7,2,5,8][::-1]]
     allPattern = rotatePattern + flipPattern
     
+    posStones = [x[:2] for x in posAndWeightStones]  
     for stone in posStones:
-        if stone not in posSwitches:
+        if  stone not in posSwitches:
             x, y = stone
             board = [(x-1, y-1), (x-1, y), (x-1, y+1),
                      (x, y-1), (x, x), (x, y+1),
                      (x+1, y-1), (x+1, y), (x+1, y+1)] # get 3x3 matrix, it is the cells adjacent to the stone under consideration.
-            
+
             for pattern in allPattern:
                 newBoard = [board[i] for i in pattern]
+                
                 if newBoard[1] in posWalls and newBoard[5] in posWalls: return True
                 elif newBoard[5] in posStones and newBoard[1] in posWalls and newBoard[2] in posWalls: return True
                 elif newBoard[1] in posStones and newBoard[2] in posWalls and newBoard[5] in posWalls: return True
                 elif newBoard[1] in posStones and newBoard[5] in posStones and newBoard[2] in posWalls: return True
                 elif newBoard[1] in posStones and newBoard[2] in posStones and newBoard[5] in posStones: return True
                 elif newBoard[1] in posStones and newBoard[6] in posStones and newBoard[2] in posWalls and newBoard[3] in posWalls and newBoard[8] in posWalls: return True
-    
+
     return False
-             
-    
+
 def costFunction(action: Tuple[int, str]) -> int:
     """
     Caculates the total cost based on a list of actions.
@@ -359,3 +369,17 @@ def costFunction(action: Tuple[int, str]) -> int:
         sum += ord(action[1][i]) * (discount**i)
         
     return (action[0] + len(action[1])) + sum * 0.00001
+
+def manhattanDistance (pos1: Tuple[int, int], pos2: Tuple[int, int]) -> int:
+    """
+    Calculate the Manhattan distance between two positions.
+
+    Args:
+        pos1 (Tuple[int, int]): The first position as a tuple of (x, y) coordinates.
+        pos2 (Tuple[int, int]): The second position as a tuple of (x, y) coordinates.
+
+    Returns:
+        int: The Manhattan distance between the two positions.
+    """
+    
+    return abs(pos1[0] - pos2[0]) + abs(pos1[1] - pos2[1])

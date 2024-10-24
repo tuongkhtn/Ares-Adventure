@@ -63,8 +63,7 @@ def uniformCostSearch(gameState):
                 # print(action)
                 # print(newState)
                 
-                posOfNewStones = [x[:2] for x in newState[1]]
-                if isFailed(posOfNewStones, posSwitches, posWalls):
+                if isFailed(newState[1], posWalls, posSwitches):
                    continue
                 
                 addWeightAndPath = (node_action[0] + action[2], node_action[1] + action[-1])
