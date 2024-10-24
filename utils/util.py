@@ -5,6 +5,7 @@ sys.path.append(str(Path(__file__).parent.parent))
 from typing import List, Tuple
 import heapq
 import numpy as np
+import copy
 
 class PriorityQueue:
     def __init__(self):
@@ -179,20 +180,6 @@ def isEndState(posOfStones: List[Tuple[int, int]], posSwitches: List[Tuple[int, 
     
     return sorted(posOfStones) == sorted(posSwitches)
 
-def costFunction(action: Tuple[int, str]) -> int:
-    """
-    Caculates the total cost based on a list of actions.
-
-    Args:
-        action (Tuple[int, str]): A tuple where the first element is an integer (weight of the action)
-        and the second element is a string (the action itself).
-
-    Returns:
-        int: The total cost, which is the sum the weight and the number of moves. 
-    """
-    
-    return action[0] + len(action[1])
-
 def isValidAction(
     action: List[int], 
     posAres: Tuple[int, int], 
@@ -285,12 +272,32 @@ def updateState(
     """
     
     nextPosOfAres = (posAres[0] + action[0], posAres[1] + action[1])
-    posOfStones = [x[:2] for x in posAndWeightStones]
+    posAndWeightStones_copy = copy.deepcopy(posAndWeightStones)
+    posOfStones = [x[:2] for x in posAndWeightStones_copy]
     if action[-1].isupper(): # push stone
         index = posOfStones.index(nextPosOfAres)
-        nextPosAndWeightOfStone = (posAres[0] + 2 * action[0], posAres[1] + 2 * action[1], posAndWeightStones[index][-1])
-        posAndWeightStones.pop(index)
-        posAndWeightStones.append(nextPosAndWeightOfStone)
+        nextPosAndWeightOfStone = (posAres[0] + 2 * action[0], posAres[1] + 2 * action[1], posAndWeightStones_copy[index][-1])
+        posAndWeightStones_copy.pop(index)
+        posAndWeightStones_copy.append(nextPosAndWeightOfStone)
         
-    return nextPosOfAres, posAndWeightStones
+        
+    return nextPosOfAres, sorted(posAndWeightStones_copy)
     
+def costFunction(action: Tuple[int, str]) -> int:
+    """
+    Caculates the total cost based on a list of actions.
+
+    Args:
+        action (Tuple[int, str]): A tuple where the first element is an integer (weight of the action)
+        and the second element is a string (the action itself).
+
+    Returns:
+        int: The total cost, which is the sum the weight and the number of moves. 
+    """
+    
+    discount = 0.9
+    sum = 0.0
+    for i in range(len(action[1])):
+        sum += ord(action[1][i]) * 10 * (discount**i)
+        
+    return (action[0] + len(action[1]) * 10000) + sum

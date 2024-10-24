@@ -6,9 +6,12 @@ from utils import validActionsInNextStep
 from utils import updateState
 from utils import CustomSet
 
-def printActions(actions):
-    while not actions.isEmpty():
-        print(actions.pop())
+def printQueue(actions):
+    import copy
+    
+    actions_copy = copy.deepcopy(actions)
+    while not actions_copy.isEmpty():
+        print(actions_copy.pop())
 
 def uniformCostSearch(gameState):
     """_summary_
@@ -26,7 +29,7 @@ def uniformCostSearch(gameState):
     frontier = PriorityQueue()
     frontier.push([startState], 0)
     
-    actions = PriorityQueue() # actions store (weight, action), cost
+    actions = PriorityQueue() # actions store (totalWeight, path), cost
     actions.push((0, ''), float('inf'))
     
     exploredSet = CustomSet() # save state appeared
@@ -36,9 +39,12 @@ def uniformCostSearch(gameState):
     
     cnt = 0
     
-    while cnt < 2:
+    while not frontier.isEmpty():
+        # print("Loop:", cnt + 1)
         node = frontier.pop()
         node_action = actions.pop()
+        # print("Node: ", node)
+        # print("Node action:", node_action)
         
         posOfStonesLastState = [x[:2] for x in node[-1][-1]]
         
@@ -46,19 +52,25 @@ def uniformCostSearch(gameState):
             print("End: ", node_action)
             break
         
-        print("Loop:", cnt + 1)
-        
         if node[-1] not in exploredSet:
             exploredSet.add(node[-1])
-            cost = costFunction(node_action)
+            # print("Actions:")
             for action in validActionsInNextStep(node[-1][0], node[-1][1], posWalls):
                 newState = updateState(node[-1][0], node[-1][1], action) 
-                print(action)
+                # print(action)
+                # print(newState)
                 
+                cost = costFunction((node_action[0] + action[2], node_action[1] + action[-1]))
                 frontier.push(node + [newState], cost)
                 actions.push((node_action[0] + action[2], node_action[1] + action[-1]), cost)    
         
-        printActions(actions)
+        # print("Push actions:")
+        # printQueue(actions)
         
-        cnt += 1
+        # print("Push state:")
+        # printQueue(frontier)
+        
+        # print("######################################################################################\n")
+        
+        # cnt += 1
         

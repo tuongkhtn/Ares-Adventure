@@ -7,7 +7,7 @@ from utils import updateState
 from algorithms.ucs import uniformCostSearch
 from algorithms.astar import aStarSearch
 from utils import PriorityQueue
-
+from utils import costFunction
 
 if __name__ == '__main__':
     weights, maze = readCommand()
@@ -44,7 +44,4 @@ if __name__ == '__main__':
     # print("Next position of Ares: ", nextPosOfAres)
     # print("New position and weight of stones: ", newPosAndWeightStones)
     
-    # uniformCostSearch(gameState)
-    
 
-    
