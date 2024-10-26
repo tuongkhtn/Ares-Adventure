@@ -1,11 +1,12 @@
 from utils import readCommand
 from utils import transferToGameState, saveStates
-from algorithms import uniformCostSearch, depthFirstSearch, breadthFirstSearch, aStarSearch
+from algorithms import uniformCostSearch, aStarSearch
+from algorithms.dfs import depthFirstSearch
+from algorithms.bfs import breadthFirstSearch
 import time
 import tracemalloc
 import psutil
 import os
-
 
 if __name__ == '__main__':
     # tracemalloc.start()
