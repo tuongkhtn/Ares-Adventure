@@ -72,29 +72,40 @@ def aStarSearch(gameState):
 
     actions = PriorityQueue() # PriorityQueue(Tuple(total weight: int, path: str), value: int)
     actions.push((0, ''), float('inf')) 
-
+    cnt = 0
     while not openSet.isEmpty():
+        cnt+=1
+        print("-"*100)
+        print("Loop:", cnt)
+        if (cnt > 20):
+            break
         
         node = openSet.pop() # List[Tuple(PosAres: Tuple(int, int), Stones: List[Stone: Tuple[X: int, Y: int, Weight: int]])]
         node_action = actions.pop() # Tuple(total weight: int, path: str)
 
         posOfStonesLastState = [x[:2] for x in node[-1][-1]]
 
+        print("node: ", node)
+        print("node_action: ", node_action)
+
+
         if isEndState(posOfStonesLastState, posSwitches):
             print("End: ", node_action)
-            for x in node:
-                print(x)
+            # for x in node:
+            #     print(x)
             break
-
+        
+        
         if node[-1] not in exploredSet:
-
+            print("node[-1]: ", node[-1])
             exploredSet.add(node[-1])
 
             for valid_action in validActionsInNextStep(node[-1][0], node[-1][1], posWalls):  # action Tuple[X: int, Y: int,  stoneWeight: int, command: str]
-                
+                print("valid_action: ", valid_action)
                 newState = updateState(node[-1][0], node[-1][1], valid_action)  # newState Tuple[PosAres: Tuple(int, int), Stones: List[Stone: Tuple[X: int, Y: int, Weight: int]]]
                 
                 if isFailed(newState[1], posWalls, posSwitches):
+                    print("newState: ", newState)
                     continue
                 
                 heuristic_hx = heuristic(posSwitches, newState[1])

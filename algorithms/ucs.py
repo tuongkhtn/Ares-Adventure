@@ -15,7 +15,9 @@ def printQueue(actions):
         print(actions_copy.pop())
 
 def uniformCostSearch(gameState):
-    """_summary_
+    """
+    Performs the Uniform Cost Search algorithm to find the optimal path for Ares to reach
+    the goal state.
     
     Args:
         gameState (Tuple[List[int], np.ndarray): A tuple containing:

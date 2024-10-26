@@ -3,6 +3,8 @@ from utils import transferToGameState
 from algorithms import uniformCostSearch, aStarSearch
 import time
 import tracemalloc
+from algorithms.astar import aStarSearch
+import time
 
 if __name__ == '__main__':
     tracemalloc.start()
