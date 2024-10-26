@@ -21,13 +21,19 @@ def uniformCostSearch(gameState):
         gameState (Tuple[List[int], np.ndarray): A tuple containing:
             - List[int]: The weights of the stones.
             - np.ndarray: A 2D grid representing the maze.
+    
+    Returns:
+        numberOfSteps (int): The number of steps in the solution path.
+        totalWeight (int): The total weight accumulated along the solution path.
+        numberOfNodes (int): The total number of nodes expanded during the search.
+        path (str): A string representing the sequence of actions taken in the solution path.
     """
     
     beginPosAres = posOfAres(gameState)
     beginPosAndWeightStones = posAndWeightOfStones(gameState)
     startState = (beginPosAres, beginPosAndWeightStones)
     
-    frontier = PriorityQueue()
+    frontier = PriorityQueue() # frontier save states
     frontier.push([startState], 0)
     
     actions = PriorityQueue() # actions store (totalWeight, path), cost
@@ -38,7 +44,10 @@ def uniformCostSearch(gameState):
     posWalls = posOfWalls(gameState)
     posSwitches = posOfSwitches(gameState)
     
-    minCost = float('inf')
+    totalWeightAndPath = ""
+    minCost = 0
+    
+    numberOfNodes = 1
     
     while not frontier.isEmpty():
         # print("Loop:", cnt + 1)
@@ -50,9 +59,8 @@ def uniformCostSearch(gameState):
         posOfStonesLastState = [x[:2] for x in node[-1][-1]]
         
         if isEndState(posOfStonesLastState, posSwitches):
-            if minCost > costFunction(node_action):
-                minCost = costFunction(node_action)
-                totalWeightAndPath = node_action
+            minCost = costFunction(node_action)
+            totalWeightAndPath = node_action
             break
         
         if node[-1] not in exploredSet:
@@ -69,7 +77,8 @@ def uniformCostSearch(gameState):
                 addWeightAndPath = (node_action[0] + action[2], node_action[1] + action[-1])
                 cost = costFunction(addWeightAndPath)  
                 frontier.push(node + [newState], cost)
-                actions.push(addWeightAndPath, cost)    
+                actions.push(addWeightAndPath, cost)   
+                numberOfNodes += 1 
         
         # print("Push actions:")
         # printQueue(actions)
@@ -80,7 +89,8 @@ def uniformCostSearch(gameState):
         # print("######################################################################################\n")
         
         # cnt += 1
-    print("End: ", totalWeightAndPath)
-    print("Cost: ", minCost)
     
-        
+    path = totalWeightAndPath[1]
+    numberOfSteps = len(path)
+    totalWeight = totalWeightAndPath[0]
+    return numberOfSteps, totalWeight, numberOfNodes, path

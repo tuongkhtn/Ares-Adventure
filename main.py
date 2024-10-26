@@ -1,33 +1,30 @@
 from utils import readCommand
 from utils import transferToGameState
-from algorithms.ucs import uniformCostSearch
+from algorithms import uniformCostSearch, aStarSearch
 import time
-from algorithms.astar import aStarSearch
-from utils import PriorityQueue
-from utils import costFunction
-import time
+import tracemalloc
 
 if __name__ == '__main__':
+    tracemalloc.start()
     start = time.time()
-    weights, maze = readCommand()
+    
+    weights, maze, method = readCommand()
     gameState = transferToGameState(weights, maze)
-    print("gameState: ", gameState)
-    posAres = posOfAres(gameState)
-    print("posAres: ", posAres)
-    posAndWeightStones = posAndWeightOfStones(gameState)
-    print("posAndWeightStones: ", posAndWeightStones)
-    posSwitches = posOfSwitches(gameState)
-    print("posSwitches: ", posSwitches)
-    posWalls = posOfWalls(gameState)
-    print("posWalls: ", posWalls)
-
-    start = time.time()
-    uniformCostSearch(gameState)
+        
+    if method == 'dfs':
+        print('dfs')
+    elif method == 'bfs':
+        print('bfs')
+    elif method == 'ucs':
+        steps, weight, nodes, path = uniformCostSearch(gameState)
+    elif method == 'astar':
+        finalNumberOfSteps, finalWeight,  numberOfNodes, finalPath, finalStates = aStarSearch(gameState)
+        
     end = time.time()
-    print("UCS time: ", end - start)
-    start = time.time()
-    aStarSearch(gameState)
-    end = time.time()
-    print("A* time: ", end - start)
-
-
+        
+    current, peak = tracemalloc.get_traced_memory()
+    tracemalloc.stop()
+    
+    print(method.upper())
+    print(f"Steps: {steps}, Weight: {weight}, Node: {nodes}, Time (ms): {(end-start):.2f}, Memory (MB): {current / 10**6:.2f}")
+    print(path)
