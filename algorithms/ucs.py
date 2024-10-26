@@ -29,13 +29,19 @@ def uniformCostSearch(gameState):
         totalWeight (int): The total weight accumulated along the solution path.
         numberOfNodes (int): The total number of nodes expanded during the search.
         path (str): A string representing the sequence of actions taken in the solution path.
+    
+    Returns:
+        numberOfSteps (int): The number of steps in the solution path.
+        totalWeight (int): The total weight accumulated along the solution path.
+        numberOfNodes (int): The total number of nodes expanded during the search.
+        path (str): A string representing the sequence of actions taken in the solution path.
     """
     
     beginPosAres = posOfAres(gameState)
     beginPosAndWeightStones = posAndWeightOfStones(gameState)
     startState = (beginPosAres, beginPosAndWeightStones)
     
-    frontier = PriorityQueue() # frontier save states
+    frontier = PriorityQueue() # frontier save states # frontier save states
     frontier.push([startState], 0)
     
     actions = PriorityQueue() # actions store (totalWeight, path), cost
@@ -46,6 +52,10 @@ def uniformCostSearch(gameState):
     posWalls = posOfWalls(gameState)
     posSwitches = posOfSwitches(gameState)
     
+    totalWeightAndPath = ""
+    minCost = 0
+    
+    numberOfNodes = 1
     totalWeightAndPath = ""
     minCost = 0
     
@@ -61,6 +71,8 @@ def uniformCostSearch(gameState):
         posOfStonesLastState = [x[:2] for x in node[-1][-1]]
         
         if isEndState(posOfStonesLastState, posSwitches):
+            minCost = costFunction(node_action)
+            totalWeightAndPath = node_action
             minCost = costFunction(node_action)
             totalWeightAndPath = node_action
             break
@@ -79,6 +91,8 @@ def uniformCostSearch(gameState):
                 addWeightAndPath = (node_action[0] + action[2], node_action[1] + action[-1])
                 cost = costFunction(addWeightAndPath)  
                 frontier.push(node + [newState], cost)
+                actions.push(addWeightAndPath, cost)   
+                numberOfNodes += 1 
                 actions.push(addWeightAndPath, cost)   
                 numberOfNodes += 1 
         

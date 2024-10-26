@@ -12,16 +12,22 @@ if __name__ == '__main__':
     
     weights, maze, method = readCommand()
     gameState = transferToGameState(weights, maze)
-        
-    if method == 'dfs':
-        print('dfs')
-    elif method == 'bfs':
-        print('bfs')
-    elif method == 'ucs':
-        steps, weight, nodes, path = uniformCostSearch(gameState)
-    elif method == 'astar':
-        aStarSearch(gameState)
-        
+    print("gameState: ", gameState)
+    posAres = posOfAres(gameState)
+    print("posAres: ", posAres)
+    posAndWeightStones = posAndWeightOfStones(gameState)
+    print("posAndWeightStones: ", posAndWeightStones)
+    posSwitches = posOfSwitches(gameState)
+    print("posSwitches: ", posSwitches)
+    posWalls = posOfWalls(gameState)
+    print("posWalls: ", posWalls)
+
+    start = time.time()
+    uniformCostSearch(gameState)
+    end = time.time()
+    print("UCS time: ", end - start)
+    start = time.time()
+    aStarSearch(gameState)
     end = time.time()
         
     current, peak = tracemalloc.get_traced_memory()
