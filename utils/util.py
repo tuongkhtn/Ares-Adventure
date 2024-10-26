@@ -5,6 +5,9 @@ sys.path.append(str(Path(__file__).parent.parent))
 from typing import List, Tuple
 import heapq
 import numpy as np
+import copy
+import os
+import csv
 
 class PriorityQueue:
     def __init__(self):
@@ -21,6 +24,13 @@ class PriorityQueue:
 
     def isEmpty(self):
         return len(self.heap) == 0
+    def peek_all(self):
+        heap_copy = self.heap[:]
+        result = []
+        while heap_copy:
+            (priority, _, item) = heapq.heappop(heap_copy)
+            result.append((item, priority))
+        return result
     
 class CustomSet(set):
     def add(self, item):
@@ -40,13 +50,16 @@ def readCommand():
     Returns:
         weights (List[int]): The weight of the stones.
         maze (List[str]): The structure of the maze represented as a list of strings.
+        method (str): The method used to solve the maze.
+        level (str): The level of the maze.
     """
     
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('-l', '--level', type=str,
                         help='level of game to play', default='input-01.txt')
-    # parser.add_argument('-m', '--method', )
+    parser.add_argument('-m', '--method', type=str,
+                        help='algorithm method', default='dfs')
     args = parser.parse_args()
     
     with open(args.level, 'r') as f:
@@ -54,8 +67,8 @@ def readCommand():
         
     weights = [int(x) for x in lines[0].strip().split()]
     maze = lines[1:]
-    
-    return weights, maze
+        
+    return weights, maze, args.method, args.level
 
 def transferToGameState(weights: List[int], maze: List[str]):
     """
@@ -179,20 +192,6 @@ def isEndState(posOfStones: List[Tuple[int, int]], posSwitches: List[Tuple[int, 
     
     return sorted(posOfStones) == sorted(posSwitches)
 
-def costFunction(action: Tuple[int, str]) -> int:
-    """
-    Caculates the total cost based on a list of actions.
-
-    Args:
-        action (Tuple[int, str]): A tuple where the first element is an integer (weight of the action)
-        and the second element is a string (the action itself).
-
-    Returns:
-        int: The total cost, which is the sum the weight and the number of moves. 
-    """
-    
-    return action[0] + len(action[1])
-
 def isValidAction(
     action: List[int], 
     posAres: Tuple[int, int], 
@@ -242,7 +241,7 @@ def validActionsInNextStep(
         posWalls (List[Tuple[int, int]]): A list of tuples representing the coordinates of the walls.
 
     Returns:
-        List[Tuple[int, str]]: A list of valid actions.
+        List[Tuple[int, int, int, str]]: A list of valid actions.
     """
     
     actionsAll = [[0, -1, 0, 'l', 'L'], [0, 1, 0, 'r', 'R'], [-1, 0, 0, 'u', 'U'], [1, 0, 0, 'd', 'D']]
@@ -285,12 +284,127 @@ def updateState(
     """
     
     nextPosOfAres = (posAres[0] + action[0], posAres[1] + action[1])
-    posOfStones = [x[:2] for x in posAndWeightStones]
+    posAndWeightStones_copy = copy.deepcopy(posAndWeightStones)
+    posOfStones = [x[:2] for x in posAndWeightStones_copy]
     if action[-1].isupper(): # push stone
         index = posOfStones.index(nextPosOfAres)
-        nextPosAndWeightOfStone = (posAres[0] + 2 * action[0], posAres[1] + 2 * action[1], posAndWeightStones[index][-1])
-        posAndWeightStones.pop(index)
-        posAndWeightStones.append(nextPosAndWeightOfStone)
+        nextPosAndWeightOfStone = (posAres[0] + 2 * action[0], posAres[1] + 2 * action[1], posAndWeightStones_copy[index][-1])
+        posAndWeightStones_copy.pop(index)
+        posAndWeightStones_copy.append(nextPosAndWeightOfStone)
         
-    return nextPosOfAres, posAndWeightStones
+    return nextPosOfAres, sorted(posAndWeightStones_copy)
+
+def isFailed(
+    posAndWeightStones: List[Tuple[int, int, int]], 
+    posWalls: List[Tuple[int, int]], 
+    posSwitches: List[Tuple[int, int]]
+) -> bool:
+    """
+    This function used to observe if the state is potentially failed, then prune the search.
     
+    It checks if any of the stones is blocked by walls and other stones. The check is done by
+    rotating and flipping the board and checking if the stone is blocked in any of the 8 
+    possible orientations.
+    
+    Args:
+        stones (List[Tuple[int, int, int]]): A list of tuples where each tuple contains the 
+                                            coordinates (x, y) of a stone and its weight.
+        posWalls (List[Tuple[int, int]]): A list of tuples representing the coordinates of the walls.
+        posSwitches (List[Tuple[int, int]]): A list of tuples representing the coordinates of the switches.
+    
+    Returns:
+        bool: True if the state is potentially failed, False otherwise.
+        
+    There are six cases for stone to get stuck:
+    A W A   A W W   A S W   A S W   A S S   A S W    
+    A P W   A P S   A P W   A P S   A P S   W P A
+    A A A   A A A   A A A   A A A   A A A   S A W
+    
+    A: Any character.
+    P: Stone under examination is stuck or not.
+    W: Wall.
+    S: Other stones.
+    """
+    
+    rotatePattern = [[0,1,2,3,4,5,6,7,8],
+                    [2,5,8,1,4,7,0,3,6],
+                    [0,1,2,3,4,5,6,7,8][::-1],
+                    [2,5,8,1,4,7,0,3,6][::-1]]
+    flipPattern = [[2,1,0,5,4,3,8,7,6],
+                    [0,3,6,1,4,7,2,5,8],
+                    [2,1,0,5,4,3,8,7,6][::-1],
+                    [0,3,6,1,4,7,2,5,8][::-1]]
+    allPattern = rotatePattern + flipPattern
+    
+    posStones = [x[:2] for x in posAndWeightStones]  
+    for stone in posStones:
+        if  stone not in posSwitches:
+            x, y = stone
+            board = [(x-1, y-1), (x-1, y), (x-1, y+1),
+                     (x, y-1), (x, x), (x, y+1),
+                     (x+1, y-1), (x+1, y), (x+1, y+1)] # get 3x3 matrix, it is the cells adjacent to the stone under consideration.
+
+            for pattern in allPattern:
+                newBoard = [board[i] for i in pattern]
+                
+                if newBoard[1] in posWalls and newBoard[5] in posWalls: return True
+                elif newBoard[5] in posStones and newBoard[1] in posWalls and newBoard[2] in posWalls: return True
+                elif newBoard[1] in posStones and newBoard[2] in posWalls and newBoard[5] in posWalls: return True
+                elif newBoard[1] in posStones and newBoard[5] in posStones and newBoard[2] in posWalls: return True
+                elif newBoard[1] in posStones and newBoard[2] in posStones and newBoard[5] in posStones: return True
+                elif newBoard[1] in posStones and newBoard[6] in posStones and newBoard[2] in posWalls and newBoard[3] in posWalls and newBoard[8] in posWalls: return True
+
+    return False
+
+def costFunction(action: Tuple[int, str]) -> int:
+    """
+    Caculates the total cost based on a list of actions.
+
+    Args:
+        action (Tuple[int, str]): A tuple where the first element is an integer (total weight of the action)
+        and the second element is a path (the action itself).
+
+    Returns:
+        int: The total cost, which is the sum the weight and the number of moves. 
+    """
+    
+    discount = 0.9
+    sum = 0.0
+    for i in range(len(action[1])):
+        sum += ord(action[1][i]) * (discount**i)
+        
+    return (action[0] + len(action[1])) + sum * 0.00001
+
+def manhattanDistance (pos1: Tuple[int, int], pos2: Tuple[int, int]) -> int:
+    """
+    Calculate the Manhattan distance between two positions.
+
+    Args:
+        pos1 (Tuple[int, int]): The first position as a tuple of (x, y) coordinates.
+        pos2 (Tuple[int, int]): The second position as a tuple of (x, y) coordinates.
+
+    Returns:
+        int: The Manhattan distance between the two positions.
+    """
+    
+    return abs(pos1[0] - pos2[0]) + abs(pos1[1] - pos2[1])
+
+
+
+def saveStates(states, directory : str = "", filename: str = "states.cvs"):
+    os.makedirs(directory, exist_ok=True)
+    file_path = os.path.join(directory, filename)
+    with open(file_path, mode="w", newline="") as file:
+        writer = csv.writer(file)
+
+        for ares, stones in states:
+            ares_X, ares_Y = ares
+            
+            row = [ares_X, ares_Y]
+
+            for stone in stones:
+                stone_X, stone_Y, _ = stone
+                row.append(stone_X)
+                row.append(stone_Y)
+
+            writer.writerow(row)

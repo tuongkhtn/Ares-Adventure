@@ -1,44 +1,42 @@
 from utils import readCommand
-from utils import transferToGameState
-from utils import posOfAres, posAndWeightOfStones, posOfSwitches, posOfWalls
-from utils import isEndState
-from utils import validActionsInNextStep
-from utils import updateState
-from algorithms import uniformCostSearch
-from utils import PriorityQueue
+from utils import transferToGameState, saveStates
+from algorithms import uniformCostSearch, depthFirstSearch, breadthFirstSearch, aStarSearch
+import time
+import tracemalloc
+import psutil
+import os
+
 
 if __name__ == '__main__':
-    weights, maze = readCommand()
+    # tracemalloc.start()
+    start = time.time()
+
+    process = psutil.Process(os.getpid())
+    memory_before = process.memory_info().rss / 1024
+    
+    weights, maze, method, level = readCommand()
     gameState = transferToGameState(weights, maze)
     
-    # posAres = posOfAres(gameState)
-    # posAndWeightStones = posAndWeightOfStones(gameState)
-    # posSwitches = posOfSwitches(gameState)
-    # posWalls = posOfWalls(gameState)
-    # posStones = [x[:2] for x in posAndWeightOfStones(gameState)]
     
-    # print("Maze:\n", gameState[1])
-    # print("Position of Ares: ", posAres)
-    # print("Position of Stones: ", posAndWeightStones)
-    # print("Position of Switches: ", posSwitches)
-    # print("Position of Walls: ", posWalls)
-    
-    # print("End state: ", isEndState(posStones, posSwitches))
-    
-    # validActions = validActionsInNextStep(posAres, posAndWeightStones, posWalls)
-    # print("Valid actions: ", validActions)
-    
-    # nextPosOfAres, newPosAndWeightStones = updateState(posAres, posAndWeightStones, (0, -1, 1, 'L'))
-    # print("Next position of Ares: ", nextPosOfAres)
-    # print("New position and weight of stones: ", newPosAndWeightStones)
-    
-    # uniformCostSearch(gameState)
-    
-    actions = PriorityQueue()
-    actions.push((0, 'd'), 1)
-    actions.push((0, 'u'), 2)
-    actions.push((99, 'R'), 3)
-    
-    print(actions.pop())
+    if method == 'dfs':
+        finalNumberOfSteps, finalWeight,  numberOfNodes, finalPath, finalStates = depthFirstSearch(gameState)
+    elif method == 'bfs':
+        finalNumberOfSteps, finalWeight,  numberOfNodes, finalPath, finalStates = breadthFirstSearch(gameState)
+    elif method == 'ucs':
+        finalNumberOfSteps, finalWeight,  numberOfNodes, finalPath, finalStates = uniformCostSearch(gameState)
+    elif method == 'astar':
+        finalNumberOfSteps, finalWeight,  numberOfNodes, finalPath, finalStates = aStarSearch(gameState)
+        
+    end = time.time()
+    memory_after = process.memory_info().rss / 1024
+    current = memory_after - memory_before
+    # current, peak = tracemalloc.get_traced_memory()
+    # tracemalloc.stop()
     
     
+    print(method.upper())
+    print(f"Steps: {finalNumberOfSteps}, Weight: {finalWeight}, Node: {numberOfNodes}, Time (ms): {(end-start):.2f}, Memory (MB): {current / 10**6:.2f}")
+    print(f"Path: {finalPath}")
+    
+    # fileName = level.split('.')[0]
+    # saveStates(finalStates, directory="output", filename=f"{fileName}_{method}_states.csv")
