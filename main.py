@@ -1,6 +1,8 @@
 from utils import readCommand
 from utils import transferToGameState, saveStates
 from algorithms import uniformCostSearch, aStarSearch
+from algorithms.dfs import depthFirstSearch
+from algorithms.bfs import breadthFirstSearch
 import time
 import tracemalloc
 import psutil
@@ -11,16 +13,16 @@ if __name__ == '__main__':
     start = time.time()
 
     process = psutil.Process(os.getpid())
-    memory_before = process.memory_info().rss / 1024  
+    memory_before = process.memory_info().rss / 1024
     
     weights, maze, method, level = readCommand()
     gameState = transferToGameState(weights, maze)
     
     
     if method == 'dfs':
-        print('dfs')
+        finalNumberOfSteps, finalWeight,  numberOfNodes, finalPath, finalStates = depthFirstSearch(gameState)
     elif method == 'bfs':
-        print('bfs')
+        finalNumberOfSteps, finalWeight,  numberOfNodes, finalPath, finalStates = breadthFirstSearch(gameState)
     elif method == 'ucs':
         finalNumberOfSteps, finalWeight,  numberOfNodes, finalPath, finalStates = uniformCostSearch(gameState)
     elif method == 'astar':
