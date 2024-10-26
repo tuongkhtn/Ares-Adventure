@@ -31,30 +31,30 @@ def uniformCostSearch(gameState):
         path (str): A string representing the sequence of actions taken in the solution path.
     """
     
-    beginPosAres = posOfAres(gameState)
-    beginPosAndWeightStones = posAndWeightOfStones(gameState)
-    startState = (beginPosAres, beginPosAndWeightStones)
+    finalWeight = -1
+    finalPath = ""
+    finalNumberOfSteps = -1
+    finalStates = []
+    numberOfNodes = 1
+
+    startPosAres = posOfAres(gameState)
+    startStones = posAndWeightOfStones(gameState)
+    startState = (startPosAres, startStones)
+    posSwitches = posOfSwitches(gameState)
+    posWalls = posOfWalls(gameState)
     
-    frontier = PriorityQueue() # frontier save states
-    frontier.push([startState], 0)
+    openSet = PriorityQueue() # openSet save states
+    openSet.push([startState], 0)
     
     actions = PriorityQueue() # actions store (totalWeight, path), cost
     actions.push((0, ''), float('inf'))
     
     exploredSet = CustomSet() # save state appeared
     
-    posWalls = posOfWalls(gameState)
-    posSwitches = posOfSwitches(gameState)
     
-    totalWeightAndPath = ""
-    minCost = 0
-    
-    finalStates = []
-    numberOfNodes = 1
-    
-    while not frontier.isEmpty():
+    while not openSet.isEmpty():
         # print("Loop:", cnt + 1)
-        node = frontier.pop()
+        node = openSet.pop()
         node_action = actions.pop()
         # print("Node: ", node)
         # print("Node action:", node_action)
@@ -62,25 +62,26 @@ def uniformCostSearch(gameState):
         posOfStonesLastState = [x[:2] for x in node[-1][-1]]
         
         if isEndState(posOfStonesLastState, posSwitches):
-            minCost = costFunction(node_action)
-            totalWeightAndPath = node_action
+            finalWeight = node_action[0]
+            finalPath = node_action[1]
+            finalNumberOfSteps = len(node_action[1])
             finalStates = node
             break
         
         if node[-1] not in exploredSet:
             exploredSet.add(node[-1])
             # print("Actions:")
-            for action in validActionsInNextStep(node[-1][0], node[-1][1], posWalls):
-                newState = updateState(node[-1][0], node[-1][1], action) 
-                # print(action)
+            for valid_action in validActionsInNextStep(node[-1][0], node[-1][1], posWalls):
+                newState = updateState(node[-1][0], node[-1][1], valid_action) 
+                # print(valid_action)
                 # print(newState)
                 
                 if isFailed(newState[1], posWalls, posSwitches):
                    continue
                 
-                addWeightAndPath = (node_action[0] + action[2], node_action[1] + action[-1])
+                addWeightAndPath = (node_action[0] + valid_action[2], node_action[1] + valid_action[-1])
                 cost = costFunction(addWeightAndPath)  
-                frontier.push(node + [newState], cost)
+                openSet.push(node + [newState], cost)
                 actions.push(addWeightAndPath, cost)   
                 numberOfNodes += 1 
         
@@ -88,13 +89,10 @@ def uniformCostSearch(gameState):
         # printQueue(actions)
         
         # print("Push state:")
-        # printQueue(frontier)
+        # printQueue(openSet)
         
         # print("######################################################################################\n")
         
         # cnt += 1
     
-    path = totalWeightAndPath[1]
-    numberOfSteps = len(path)
-    totalWeight = totalWeightAndPath[0]
-    return numberOfSteps, totalWeight, numberOfNodes, path, finalStates
+    return finalNumberOfSteps, finalWeight,  numberOfNodes, finalPath, finalStates
