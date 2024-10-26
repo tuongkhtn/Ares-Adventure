@@ -94,7 +94,7 @@ def aStarSearch(gameState):
                 
                 newState = updateState(node[-1][0], node[-1][1], valid_action)  # newState Tuple[PosAres: Tuple(int, int), Stones: List[Stone: Tuple[X: int, Y: int, Weight: int]]]
                 
-                if isFailed(stones=newState[1], posWalls=posWalls, posSwitches=posSwitches):
+                if isFailed(newState[1], posWalls, posSwitches):
                     continue
                 
                 heuristic_hx = heuristic(posSwitches, newState[1])
