@@ -96,3 +96,4 @@ def uniformCostSearch(gameState):
     numberOfSteps = len(path)
     totalWeight = totalWeightAndPath[0]
     return numberOfSteps, totalWeight, numberOfNodes, path
+
