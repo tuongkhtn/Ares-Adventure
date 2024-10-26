@@ -6,6 +6,8 @@ from typing import List, Tuple
 import heapq
 import numpy as np
 import copy
+import os
+import csv
 
 class PriorityQueue:
     def __init__(self):
@@ -48,6 +50,8 @@ def readCommand():
     Returns:
         weights (List[int]): The weight of the stones.
         maze (List[str]): The structure of the maze represented as a list of strings.
+        method (str): The method used to solve the maze.
+        level (str): The level of the maze.
     """
     
     import argparse
@@ -64,7 +68,7 @@ def readCommand():
     weights = [int(x) for x in lines[0].strip().split()]
     maze = lines[1:]
         
-    return weights, maze, args.method
+    return weights, maze, args.method, args.level
 
 def transferToGameState(weights: List[int], maze: List[str]):
     """
@@ -384,3 +388,25 @@ def manhattanDistance (pos1: Tuple[int, int], pos2: Tuple[int, int]) -> int:
     """
     
     return abs(pos1[0] - pos2[0]) + abs(pos1[1] - pos2[1])
+
+
+
+def saveStates(states, directory : str = "", filename: str = "states.cvs"):
+    os.makedirs(directory, exist_ok=True)
+    file_path = os.path.join(directory, filename)
+    with open(file_path, mode="w", newline="") as file:
+        writer = csv.writer(file)
+
+        for ares, stones in states:
+            ares_X, ares_Y = ares
+            
+            row = [ares_X, ares_Y]
+
+            for stone in stones:
+                stone_X, stone_Y, _ = stone
+                row.append(stone_X)
+                row.append(stone_Y)
+
+            writer.writerow(row)
+
+
