@@ -23,7 +23,10 @@ def uniformCostSearch(gameState):
             - np.ndarray: A 2D grid representing the maze.
     
     Returns:
-        
+        numberOfSteps (int): The number of steps in the solution path.
+        totalWeight (int): The total weight accumulated along the solution path.
+        numberOfNodes (int): The total number of nodes expanded during the search.
+        path (str): A string representing the sequence of actions taken in the solution path.
     """
     
     beginPosAres = posOfAres(gameState)
