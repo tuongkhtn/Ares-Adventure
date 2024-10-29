@@ -10,6 +10,9 @@ WINDOW_HEIGHT = 600
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption("Sokoban - Ares and Stones")
 
+# file name
+FILE_NAME = "input-10.txt"
+
 # Kích thước ô
 TILE_SIZE = 40
 
@@ -18,7 +21,7 @@ OFFSET_X = 40
 OFFSET_Y = 80
 
 # Biến tốc độ di chuyển
-MOVE_SPEED = 5  # pixel per frame
+MOVE_SPEED = 3  # pixel per frame
 
 # Màu sắc
 COLOR_BG = (135, 206, 235)  # Màu nền xanh da trời nhạt
@@ -87,7 +90,7 @@ def load_level_from_file(filename):
                 switches.append([row_idx, col_idx])
 
 # Gọi hàm để tải dữ liệu từ file "level.txt"
-load_level_from_file("input-01.txt")
+load_level_from_file(FILE_NAME)
 
 # Vị trí hiển thị ban đầu của Ares
 player_screen_pos = [player_pos[1] * TILE_SIZE + OFFSET_X, player_pos[0] * TILE_SIZE + OFFSET_Y]
@@ -187,7 +190,7 @@ def reset_game():
     player_pos = []
     stones = []
     switches = []
-    load_level_from_file("input-01.txt")
+    load_level_from_file(FILE_NAME)
     # Đặt lại lịch sử, số bước và tổng trọng số
     history = []
     steps = 0
