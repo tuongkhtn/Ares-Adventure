@@ -16,6 +16,8 @@ if __name__ == '__main__':
     memory_before = process.memory_info().rss / 1024
     
     weights, maze, method, level = readCommand()
+    print(weights)
+    print(maze)
     gameState = transferToGameState(weights, maze)
     
     

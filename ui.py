@@ -1,5 +1,13 @@
 import pygame
 import sys
+import numpy as np
+import threading
+import time
+from algorithms.astar import aStarSearch
+from algorithms.dfs import depthFirstSearch
+from algorithms.bfs import breadthFirstSearch
+from algorithms.ucs import uniformCostSearch
+from utils import transferToGameState
 
 # Khởi tạo Pygame
 pygame.init()
@@ -11,7 +19,7 @@ screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption("Sokoban - Ares and Stones")
 
 # file name
-FILE_NAME = "input-10.txt"
+FILE_NAME = "input-01.txt"
 
 # Kích thước ô
 TILE_SIZE = 40
@@ -21,10 +29,10 @@ OFFSET_X = 40
 OFFSET_Y = 80
 
 # Biến tốc độ di chuyển
-MOVE_SPEED = 3  # pixel per frame
+MOVE_SPEED = 5  # pixel per frame
 
 # Màu sắc
-COLOR_BG = (135, 206, 235)  # Màu nền xanh da trời nhạt
+COLOR_BG = (230, 241, 216)# Màu nền xanh da trời nhạt
 COLOR_WALL = (139, 69, 19)  # Màu tường nâu
 
 # Các biến lưu vị trí Ares, Stones và Switches
@@ -32,6 +40,7 @@ level = []
 player_pos = []
 stones = []
 switches = []
+stones_weights = []
 
 # Lưu trạng thái trò chơi để quay lại
 history = []
@@ -60,9 +69,7 @@ wall3d_image = pygame.transform.scale(wall3d_image, (TILE_SIZE, TILE_SIZE * 1.25
 
 # Hàm đọc lưới trò chơi và khởi tạo các đối tượng từ file
 def load_level_from_file(filename):
-    global level, player_pos, stones, switches
-    stones_weights = []
-    
+    global level, player_pos, stones, switches, stones_weights
     with open(filename, 'r') as f:
         # Đọc dòng đầu tiên lấy trọng số cho từng "stone"
         stones_weights = list(map(int, f.readline().strip().split()))
@@ -98,13 +105,39 @@ player_screen_pos = [player_pos[1] * TILE_SIZE + OFFSET_X, player_pos[0] * TILE_
 # Hàm vẽ lưới
 def draw_grid():
     for row_idx, row in enumerate(level):
+        is_start = True
         for col_idx, tile in enumerate(row):
-            x = col_idx * TILE_SIZE + OFFSET_X
-            y = row_idx * TILE_SIZE + OFFSET_Y
-            if [row_idx, col_idx] in switches:
-                screen.blit(switch_image, (x, y))
+            if tile != " " or (tile==" " and not is_start):
+                is_start = False
+                x = col_idx * TILE_SIZE + OFFSET_X
+                y = row_idx * TILE_SIZE + OFFSET_Y
+                if [row_idx, col_idx] in switches:
+                    screen.blit(switch_image, (x, y))
+                else:
+                    screen.blit(freespace_image, (x, y))
+
+    
+    max_length = max(len(sublist) for sublist in level)
+    padded_level = [sublist + " " * (max_length - len(sublist)) for sublist in level]
+
+    for col_idx in range(max_length):
+        is_start = True
+        for row_idx in range(len(padded_level)):
+            if padded_level[row_idx][col_idx] == " " and is_start:
+                screen.fill(COLOR_BG, (col_idx * TILE_SIZE + OFFSET_X, row_idx * TILE_SIZE + OFFSET_Y, TILE_SIZE, TILE_SIZE))
             else:
-                screen.blit(freespace_image, (x, y))
+                is_start = False
+
+    for col_idx in range(max_length):
+        is_start = True
+        for row_idx in range(len(padded_level)-1, -1, -1):
+            if padded_level[row_idx][col_idx] == " " and is_start:
+                screen.fill(COLOR_BG, (col_idx * TILE_SIZE + OFFSET_X, row_idx * TILE_SIZE + OFFSET_Y, TILE_SIZE, TILE_SIZE))
+            else:
+                is_start = False
+                
+
+    
     
     # Vẽ Ares và Stones
     screen.blit(ares_image, (player_screen_pos[0] + OFFSET_X, player_screen_pos[1] + OFFSET_Y))
@@ -137,8 +170,10 @@ def move_ares(dx, dy):
 
     # Lưu trạng thái hiện tại vào lịch sử, bao gồm cả total_weight
     history.append((player_pos.copy(), [s["pos"].copy() for s in stones], total_weight))
+    
 
     # Kiểm tra nếu Ares đẩy một Stone
+    
     for stone in stones:
         if stone["pos"] == [new_y, new_x]:
             stone_new_x = new_x + dx
@@ -215,17 +250,77 @@ def draw_button(text, rect, color):
     pygame.draw.rect(screen, color, rect)  # Vẽ nút
     screen.blit(text_surface, text_rect)
 
+
+
+
 # Vòng lặp trò chơi
 clock = pygame.time.Clock()
 running = True
 movement_delay = 100
 last_move_time = pygame.time.get_ticks()
+algorithm_running = False
+
+
+
+    
+
+
+selected_algorithm = None  # None, "DFS", "BFS", "UCS", "A*"
+
+# Tạo danh sách các thuật toán và chỉ số cho thuật toán hiện tại
+algorithms = ["DFS", "BFS", "UCS", "A*"]
+search_functions = {
+    "DFS": depthFirstSearch,
+    "BFS": breadthFirstSearch,
+    "UCS": uniformCostSearch,
+    "A*": aStarSearch
+}
+current_algorithm_index = 0  # Bắt đầu với thuật toán đầu tiên
+show_algorithm_list = False
+# Hàm vẽ nút toggle chọn thuật toán
+def draw_toggle_algorithm_button(label, rect, color):
+    draw_button(label, rect, color)
+
+# Hàm vẽ danh sách các thuật toán khi mở toggle (hiển thị phía trên)
+def draw_algorithm_list():
+    for i, algorithm in enumerate(algorithms):
+        # Đặt vị trí các nút lên phía trên của toggle
+        option_rect = pygame.Rect(algorithm_toggle_button.x, algorithm_toggle_button.y - (i + 1) * 40, 80, 40)
+        color =  (128, 128, 128) if i == current_algorithm_index else (200, 200, 200)
+        draw_button(algorithm, option_rect, color)
+
+def run_with_ai_search(algorithm):
+    global stones_weights, level, algorithm_running
+    gameState = transferToGameState(weights=stones_weights, maze=level)
+    
+    finalNumberOfSteps, finalWeight, numberOfNodes, finalPath, finalStates = algorithm(gameState)
+    algorithm_running = True
+    for step in finalPath: 
+        if algorithm_running == False:
+            return
+        if step.lower() == "u":  
+            event = pygame.event.Event(pygame.KEYDOWN, key=pygame.K_UP)
+            pygame.event.post(event) 
+        elif step.lower() == "d": 
+            event = pygame.event.Event(pygame.KEYDOWN, key=pygame.K_DOWN)
+            pygame.event.post(event)  
+        elif step.lower() == "l": 
+            event = pygame.event.Event(pygame.KEYDOWN, key=pygame.K_LEFT)
+            pygame.event.post(event) 
+        elif step.lower() == "r": 
+            event = pygame.event.Event(pygame.KEYDOWN, key=pygame.K_RIGHT)
+            pygame.event.post(event)
+        
+        
+        time.sleep(0.3) 
+
 
 while running:
     screen.fill(COLOR_BG)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+            algorithm_running = False
         elif event.type == pygame.KEYDOWN:
             if pygame.time.get_ticks() - last_move_time > movement_delay:
                 last_move_time = pygame.time.get_ticks()
@@ -237,14 +332,35 @@ while running:
                     move_ares(-1, 0)
                 elif event.key == pygame.K_RIGHT:
                     move_ares(1, 0)
+        
+        
 
         # Xử lý nhấn nút bằng chuột
         if event.type == pygame.MOUSEBUTTONDOWN:
             mouse_pos = event.pos
             if reset_button.collidepoint(mouse_pos):
                 reset_game()
+                algorithm_running = False
+
             elif back_button.collidepoint(mouse_pos):
                 back_step()
+            elif play_button.collidepoint(mouse_pos):
+                reset_game()
+                algorithm = algorithms[current_algorithm_index]
+                search_function = search_functions[algorithm]
+                astar_thread = threading.Thread(target=run_with_ai_search, args=([search_function]))
+                astar_thread.start()
+
+            elif algorithm_toggle_button.collidepoint(mouse_pos):
+                show_algorithm_list = not show_algorithm_list  # Mở/đóng danh sách khi nhấn nút toggle
+            elif show_algorithm_list:
+                # Kiểm tra nhấp vào từng thuật toán trong danh sách
+                for i, algorithm in enumerate(algorithms):
+                    option_rect = pygame.Rect(algorithm_toggle_button.x, algorithm_toggle_button.y - (i + 1) * 40, 80, 40)
+                    if option_rect.collidepoint(mouse_pos):
+                        current_algorithm_index = i  
+                        show_algorithm_list = False  
+
 
     # Nội suy các vị trí của Ares và Stones
     interpolate_positions()
@@ -263,6 +379,15 @@ while running:
     play_button = pygame.Rect((WINDOW_WIDTH // 5 * 3 - 40), (WINDOW_HEIGHT // 10 * 9), 80, 40)
     draw_button("Play", play_button, (0, 0, 255))
 
+    # Vẽ nút toggle chọn thuật toán
+    algorithm_toggle_button = pygame.Rect((WINDOW_WIDTH // 5 * 3 - 40), (WINDOW_HEIGHT // 10 * 9 - 50), 80, 40)
+    current_algorithm = algorithms[current_algorithm_index]
+    draw_toggle_algorithm_button(current_algorithm, algorithm_toggle_button, (0, 200, 0))
+
+    # Hiển thị danh sách thuật toán nếu toggle được mở
+    if show_algorithm_list:
+        draw_algorithm_list()
+
     # Vẽ nút pause
     pause_button = pygame.Rect((WINDOW_WIDTH // 5 * 4 - 40), (WINDOW_HEIGHT // 10 * 9), 80, 40)
     draw_button("Pause", pause_button, (255, 0, 0))
@@ -273,6 +398,6 @@ while running:
     screen.blit(steps_text, (10, 10))
     screen.blit(weight_text, (WINDOW_WIDTH - 200, 10))  # Hiển thị ở góc trên bên phải
 
-    pygame.display.flip()  # Cập nhật màn hình sau khi vẽ
+    pygame.display.update() # Cập nhật màn hình sau khi vẽ
     clock.tick(60)  # Giới hạn FPS của trò chơi
 
