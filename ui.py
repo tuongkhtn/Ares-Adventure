@@ -35,7 +35,7 @@ MOVE_SPEED = 5  # pixel per frame
 COLOR_BG = (230, 241, 216)# Màu nền xanh da trời nhạt
 COLOR_WALL = (139, 69, 19)  # Màu tường nâu
 
-# Các biến lưu vị trí Ares, Stones và Switches
+# Các biến lưu vị trí Ares, Stones và Switches 
 level = []
 player_pos = []
 stones = []
@@ -259,6 +259,7 @@ running = True
 movement_delay = 100
 last_move_time = pygame.time.get_ticks()
 algorithm_running = False
+is_end = True
 
 
 
@@ -290,14 +291,15 @@ def draw_algorithm_list():
         draw_button(algorithm, option_rect, color)
 
 def run_with_ai_search(algorithm):
-    global stones_weights, level, algorithm_running
+    global stones_weights, level, algorithm_running, is_end
     gameState = transferToGameState(weights=stones_weights, maze=level)
     
     finalNumberOfSteps, finalWeight, numberOfNodes, finalPath, finalStates = algorithm(gameState)
-    algorithm_running = True
     for step in finalPath: 
-        if algorithm_running == False:
+        if is_end == True:
             return
+        while (not algorithm_running):
+            pass
         if step.lower() == "u":  
             event = pygame.event.Event(pygame.KEYDOWN, key=pygame.K_UP)
             pygame.event.post(event) 
@@ -310,9 +312,11 @@ def run_with_ai_search(algorithm):
         elif step.lower() == "r": 
             event = pygame.event.Event(pygame.KEYDOWN, key=pygame.K_RIGHT)
             pygame.event.post(event)
-        
-        
         time.sleep(0.3) 
+
+    is_end = True
+    algorithm_running = False
+
 
 
 while running:
@@ -321,6 +325,7 @@ while running:
         if event.type == pygame.QUIT:
             running = False
             algorithm_running = False
+            is_end = True
         elif event.type == pygame.KEYDOWN:
             if pygame.time.get_ticks() - last_move_time > movement_delay:
                 last_move_time = pygame.time.get_ticks()
@@ -341,15 +346,23 @@ while running:
             if reset_button.collidepoint(mouse_pos):
                 reset_game()
                 algorithm_running = False
-
+                is_end = True
+            elif pause_button.collidepoint(mouse_pos):
+                if algorithm_running:
+                    algorithm_running = False
             elif back_button.collidepoint(mouse_pos):
                 back_step()
             elif play_button.collidepoint(mouse_pos):
-                reset_game()
-                algorithm = algorithms[current_algorithm_index]
-                search_function = search_functions[algorithm]
-                astar_thread = threading.Thread(target=run_with_ai_search, args=([search_function]))
-                astar_thread.start()
+                if is_end==False and algorithm_running == False :
+                    algorithm_running = True
+                elif is_end == True:
+                    reset_game()
+                    is_end = False
+                    algorithm_running = True
+                    algorithm = algorithms[current_algorithm_index]
+                    search_function = search_functions[algorithm]
+                    algo_thread = threading.Thread(target=run_with_ai_search, args=([search_function]))
+                    algo_thread.start()
 
             elif algorithm_toggle_button.collidepoint(mouse_pos):
                 show_algorithm_list = not show_algorithm_list  # Mở/đóng danh sách khi nhấn nút toggle
