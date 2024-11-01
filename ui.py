@@ -8,6 +8,7 @@ from algorithms.dfs import depthFirstSearch
 from algorithms.bfs import breadthFirstSearch
 from algorithms.ucs import uniformCostSearch
 from utils import transferToGameState
+from utils.utils import readCommand
 
 # Khởi tạo Pygame
 pygame.init()
@@ -16,10 +17,7 @@ pygame.init()
 WINDOW_WIDTH = 1000
 WINDOW_HEIGHT = 600
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
-pygame.display.set_caption("Sokoban - Ares and Stones")
-
-# file name
-FILE_NAME = "input-01.txt"
+pygame.display.set_caption("Sokoban")
 
 # Kích thước ô
 TILE_SIZE = 40
@@ -36,11 +34,11 @@ COLOR_BG = (230, 241, 216)# Màu nền xanh da trời nhạt
 COLOR_WALL = (139, 69, 19)  # Màu tường nâu
 
 # Các biến lưu vị trí Ares, Stones và Switches 
-level = []
-player_pos = []
+maze = []
+ares_pos = []
 stones = []
 switches = []
-stones_weights = []
+weights = []
 
 # Lưu trạng thái trò chơi để quay lại
 history = []
@@ -67,44 +65,46 @@ wall_image = pygame.transform.scale(wall_image, (TILE_SIZE, TILE_SIZE))
 wall3d_image = pygame.image.load('img/wall3d.png').convert_alpha()
 wall3d_image = pygame.transform.scale(wall3d_image, (TILE_SIZE, TILE_SIZE * 1.25))
 
+# nhan du lieu tu command
+input_weights, input_maze, method, level = readCommand()
+
 # Hàm đọc lưới trò chơi và khởi tạo các đối tượng từ file
-def load_level_from_file(filename):
-    global level, player_pos, stones, switches, stones_weights
-    with open(filename, 'r') as f:
-        # Đọc dòng đầu tiên lấy trọng số cho từng "stone"
-        stones_weights = list(map(int, f.readline().strip().split()))
-        
-        # Đọc phần còn lại lấy bản đồ trò chơi
-        level = [line.rstrip() for line in f.readlines() if line.strip()]  # Loại bỏ dòng trống
+def load_maze_from_file():
+    global maze, ares_pos, stones, switches, weights
+    
+    weights = input_weights
+    maze = input_maze
+
+    maze = [row[:-1] for row in maze]
         
     # Khởi tạo các đối tượng dựa trên bản đồ
     stone_index = 0
-    for row_idx, row in enumerate(level):
+    for row_idx, row in enumerate(maze):
         for col_idx, tile in enumerate(row):
             if tile == "@":  # Ares
-                player_pos = [row_idx, col_idx]
+                ares_pos = [row_idx, col_idx]
             elif tile == "$":  # Stone
-                stones.append({"pos": [row_idx, col_idx], "weight": stones_weights[stone_index], "screen_pos": [col_idx * TILE_SIZE, row_idx * TILE_SIZE]})
+                stones.append({"pos": [row_idx, col_idx], "weight": weights[stone_index], "screen_pos": [col_idx * TILE_SIZE, row_idx * TILE_SIZE]})
                 stone_index += 1
             elif tile == ".":  # Switch
                 switches.append([row_idx, col_idx])
             elif tile == "*":  # Stone on Switch
-                stones.append({"pos": [row_idx, col_idx], "weight": stones_weights[stone_index], "screen_pos": [col_idx * TILE_SIZE, row_idx * TILE_SIZE]})
+                stones.append({"pos": [row_idx, col_idx], "weight": weights[stone_index], "screen_pos": [col_idx * TILE_SIZE, row_idx * TILE_SIZE]})
                 switches.append([row_idx, col_idx])
                 stone_index += 1
             elif tile == "+":  # Ares on Switch
-                player_pos = [row_idx, col_idx]
+                ares_pos = [row_idx, col_idx]
                 switches.append([row_idx, col_idx])
 
-# Gọi hàm để tải dữ liệu từ file "level.txt"
-load_level_from_file(FILE_NAME)
+# Gọi hàm để tải dữ liệu từ file
+load_maze_from_file()
 
 # Vị trí hiển thị ban đầu của Ares
-player_screen_pos = [player_pos[1] * TILE_SIZE + OFFSET_X, player_pos[0] * TILE_SIZE + OFFSET_Y]
+ares_screen_pos = [ares_pos[1] * TILE_SIZE + OFFSET_X, ares_pos[0] * TILE_SIZE + OFFSET_Y]
 
 # Hàm vẽ lưới
 def draw_grid():
-    for row_idx, row in enumerate(level):
+    for row_idx, row in enumerate(maze):
         is_start = True
         for col_idx, tile in enumerate(row):
             if tile != " " or (tile==" " and not is_start):
@@ -117,21 +117,21 @@ def draw_grid():
                     screen.blit(freespace_image, (x, y))
 
     
-    max_length = max(len(sublist) for sublist in level)
-    padded_level = [sublist + " " * (max_length - len(sublist)) for sublist in level]
+    max_length = max(len(sublist) for sublist in maze)
+    padded_maze = [sublist + " " * (max_length - len(sublist)) for sublist in maze]
 
     for col_idx in range(max_length):
         is_start = True
-        for row_idx in range(len(padded_level)):
-            if padded_level[row_idx][col_idx] == " " and is_start:
+        for row_idx in range(len(padded_maze)):
+            if padded_maze[row_idx][col_idx] == " " and is_start:
                 screen.fill(COLOR_BG, (col_idx * TILE_SIZE + OFFSET_X, row_idx * TILE_SIZE + OFFSET_Y, TILE_SIZE, TILE_SIZE))
             else:
                 is_start = False
 
     for col_idx in range(max_length):
         is_start = True
-        for row_idx in range(len(padded_level)-1, -1, -1):
-            if padded_level[row_idx][col_idx] == " " and is_start:
+        for row_idx in range(len(padded_maze)-1, -1, -1):
+            if padded_maze[row_idx][col_idx] == " " and is_start:
                 screen.fill(COLOR_BG, (col_idx * TILE_SIZE + OFFSET_X, row_idx * TILE_SIZE + OFFSET_Y, TILE_SIZE, TILE_SIZE))
             else:
                 is_start = False
@@ -140,7 +140,7 @@ def draw_grid():
     
     
     # Vẽ Ares và Stones
-    screen.blit(ares_image, (player_screen_pos[0] + OFFSET_X, player_screen_pos[1] + OFFSET_Y))
+    screen.blit(ares_image, (ares_screen_pos[0] + OFFSET_X, ares_screen_pos[1] + OFFSET_Y))
     for stone in stones:
         screen.blit(stone_image, (stone["screen_pos"][0] + OFFSET_X, stone["screen_pos"][1] + OFFSET_Y))
         weight_text = font.render(str(stone["weight"]), True, (0, 0, 0))
@@ -148,38 +148,37 @@ def draw_grid():
         screen.blit(weight_text, weight_text_rect)
 
     # Vẽ các bức tường sau cùng để chúng "đè" lên các vật thể khác
-    for row_idx, row in enumerate(level):
+    for row_idx, row in enumerate(maze):
         for col_idx, tile in enumerate(row):
             x = col_idx * TILE_SIZE + OFFSET_X
             y = row_idx * TILE_SIZE + OFFSET_Y
             if tile == "#":
-                if row_idx == len(level) - 1 or row_idx == 0 or col_idx == len(row) - 1 or col_idx == 0 or len(row) > len(level[row_idx + 1]) or level[row_idx + 1][col_idx] != "#":
+                if row_idx == len(maze) - 1 or row_idx == 0 or col_idx == len(row) - 1 or col_idx == 0 or len(row) > len(maze[row_idx + 1]) or maze[row_idx + 1][col_idx] != "#":
                     screen.blit(wall3d_image, (x, y - 0.25 * TILE_SIZE))
                 else:
                     screen.blit(wall_image, (x, y - 0.25 * TILE_SIZE))
 
 # Hàm di chuyển Ares và đẩy đá
 def move_ares(dx, dy):
-    global player_pos, stones, history, steps, total_weight
-    new_x = player_pos[1] + dx
-    new_y = player_pos[0] + dy
+    global ares_pos, stones, history, steps, total_weight
+    new_x = ares_pos[1] + dx
+    new_y = ares_pos[0] + dy
 
     # Kiểm tra tường
-    if level[new_y][new_x] == "#":
+    if maze[new_y][new_x] == "#":
         return
 
     # Lưu trạng thái hiện tại vào lịch sử, bao gồm cả total_weight
-    history.append((player_pos.copy(), [s["pos"].copy() for s in stones], total_weight))
+    history.append((ares_pos.copy(), [s["pos"].copy() for s in stones], total_weight))
     
 
     # Kiểm tra nếu Ares đẩy một Stone
-    
     for stone in stones:
         if stone["pos"] == [new_y, new_x]:
             stone_new_x = new_x + dx
             stone_new_y = new_y + dy
             # Kiểm tra nếu vị trí mới của Stone hợp lệ (không là tường hay Stone khác)
-            if level[stone_new_y][stone_new_x] != "#" and all(s["pos"] != [stone_new_y, stone_new_x] for s in stones):
+            if maze[stone_new_y][stone_new_x] != "#" and all(s["pos"] != [stone_new_y, stone_new_x] for s in stones):
                 # Di chuyển Stone và cộng thêm trọng số
                 stone["pos"] = [stone_new_y, stone_new_x]
                 total_weight += stone["weight"]  # Cộng trọng số của hòn đá vào tổng trọng số
@@ -188,22 +187,22 @@ def move_ares(dx, dy):
                 return  # Nếu không thể di chuyển Stone, dừng lại
 
     # Di chuyển Ares
-    player_pos = [new_y, new_x]
+    ares_pos = [new_y, new_x]
     steps += 1  # Tăng số bước đi
 
 # Hàm di chuyển trượt cho các đối tượng
 def interpolate_positions():
     # Di chuyển Ares từ từ đến vị trí mới
-    target_x = player_pos[1] * TILE_SIZE
-    target_y = player_pos[0] * TILE_SIZE
-    if player_screen_pos[0] < target_x:
-        player_screen_pos[0] += min(MOVE_SPEED, target_x - player_screen_pos[0])
-    elif player_screen_pos[0] > target_x:
-        player_screen_pos[0] -= min(MOVE_SPEED, player_screen_pos[0] - target_x)
-    if player_screen_pos[1] < target_y:
-        player_screen_pos[1] += min(MOVE_SPEED, target_y - player_screen_pos[1])
-    elif player_screen_pos[1] > target_y:
-        player_screen_pos[1] -= min(MOVE_SPEED, player_screen_pos[1] - target_y)
+    target_x = ares_pos[1] * TILE_SIZE
+    target_y = ares_pos[0] * TILE_SIZE
+    if ares_screen_pos[0] < target_x:
+        ares_screen_pos[0] += min(MOVE_SPEED, target_x - ares_screen_pos[0])
+    elif ares_screen_pos[0] > target_x:
+        ares_screen_pos[0] -= min(MOVE_SPEED, ares_screen_pos[0] - target_x)
+    if ares_screen_pos[1] < target_y:
+        ares_screen_pos[1] += min(MOVE_SPEED, target_y - ares_screen_pos[1])
+    elif ares_screen_pos[1] > target_y:
+        ares_screen_pos[1] -= min(MOVE_SPEED, ares_screen_pos[1] - target_y)
 
     # Di chuyển các Stones từ từ đến vị trí mới
     for stone in stones:
@@ -220,22 +219,22 @@ def interpolate_positions():
 
 # Hàm reset trò chơi
 def reset_game():
-    global player_pos, stones, switches, history, steps, total_weight
+    global ares_pos, stones, switches, history, steps, total_weight
     # Tải lại bản đồ trò chơi từ file gốc
-    player_pos = []
+    ares_pos = []
     stones = []
     switches = []
-    load_level_from_file(FILE_NAME)
+    load_maze_from_file()
     # Đặt lại lịch sử, số bước và tổng trọng số
     history = []
     steps = 0
     total_weight = 0
 
 def back_step():
-    global player_pos, stones, history, steps, total_weight
+    global ares_pos, stones, history, steps, total_weight
     if history:
         # Lấy trạng thái cuối cùng trong lịch sử
-        player_pos, stone_positions, prev_total_weight = history.pop()
+        ares_pos, stone_positions, prev_total_weight = history.pop()
         # Đặt lại vị trí của các Stones
         for i, pos in enumerate(stone_positions):
             stones[i]["pos"] = pos
@@ -291,8 +290,8 @@ def draw_algorithm_list():
         draw_button(algorithm, option_rect, color)
 
 def run_with_ai_search(algorithm):
-    global stones_weights, level, algorithm_running, is_end
-    gameState = transferToGameState(weights=stones_weights, maze=level)
+    global weights, maze, algorithm_running, is_end
+    gameState = transferToGameState(weights=weights, maze=maze)
     
     finalNumberOfSteps, finalWeight, numberOfNodes, finalPath, finalStates = algorithm(gameState)
     for step in finalPath: 
