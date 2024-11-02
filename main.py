@@ -16,8 +16,6 @@ if __name__ == '__main__':
     memory_before = process.memory_info().rss / 1024
     
     weights, maze, method, level = readCommand()
-    print(weights)
-    print(maze)
     gameState = transferToGameState(weights, maze)
     
     
@@ -41,5 +39,7 @@ if __name__ == '__main__':
     print(f"Steps: {finalNumberOfSteps}, Weight: {finalWeight}, Node: {numberOfNodes}, Time (ms): {(end-start):.2f}, Memory (MB): {current / 10**6:.2f}")
     print(f"Path: {finalPath}")
     
-    # fileName = level.split('.')[0]
-    # saveStates(finalStates, directory="output", filename=f"{fileName}_{method}_states.csv")
+    # # fileName = level.split('.')[0]
+    # # saveStates(finalStates, directory="output", filename=f"{fileName}_{method}_states.csv")
+
+    # print(finalStates)

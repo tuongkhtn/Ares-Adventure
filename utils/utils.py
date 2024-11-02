@@ -85,9 +85,11 @@ def transferToGameState(weights: List[int], maze: List[str]):
     """
     
     maze = [x.replace('\n', '') for x in maze]
+    
     maze = [','.join(x) for x in maze]
     maze = [x.split(',') for x in maze]
     maxLenCol = max([len(x) for x in maze])
+    
     
     for x in maze:
         for i in range(len(x)):
