@@ -34,11 +34,11 @@ class PriorityQueue:
     
 class CustomSet(set):
     def add(self, item):
-        item_hashable = (item[0], frozenset(item[1]))
+        item_hashable = (item.positionOfAres(), frozenset(item.positionOfStones()))
         super().add(item_hashable)
         
     def __contains__(self, item):
-        item_hashable = (item[0], frozenset(item[1]))
+        item_hashable = (item.positionOfAres(), frozenset(item.positionOfStones()))
         return super().__contains__(item_hashable)
 
 def readCommand():

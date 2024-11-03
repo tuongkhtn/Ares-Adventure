@@ -1,11 +1,10 @@
+import copy
+
 from utils import PriorityQueue
-from utils import posOfAres, posAndWeightOfStones, posOfSwitches, posOfWalls
-from utils import isEndState
 from utils import costFunction
-from utils import validActionsInNextStep
-from utils import updateState
 from utils import CustomSet
-from utils import isFailed
+from utils import GameObject
+from utils import GameState
 
 def printQueue(actions):
     import copy
@@ -14,7 +13,7 @@ def printQueue(actions):
     while not actions_copy.isEmpty():
         print(actions_copy.pop())
 
-def uniformCostSearch(gameState):
+def uniformCostSearch(gameObject: GameObject):
     """
     Performs the Uniform Cost Search algorithm to find the optimal path for Ares to reach
     the goal state.
@@ -34,17 +33,13 @@ def uniformCostSearch(gameState):
     finalWeight = -1
     finalPath = ""
     finalNumberOfSteps = -1
-    finalStates = []
     numberOfNodes = 1
-
-    startPosAres = posOfAres(gameState)
-    startStones = posAndWeightOfStones(gameState)
-    startState = (startPosAres, startStones)
-    posSwitches = posOfSwitches(gameState)
-    posWalls = posOfWalls(gameState)
+    
+    posOfWalls = gameObject.positionOfWalls()
+    posOfSwitches = gameObject.positionOfSwitches()
     
     openSet = PriorityQueue() # openSet save states
-    openSet.push([startState], 0)
+    openSet.push([GameState(gameObject.ares, gameObject.stones)], 0)
     
     actions = PriorityQueue() # actions store (totalWeight, path), cost
     actions.push((0, ''), float('inf'))
@@ -53,46 +48,29 @@ def uniformCostSearch(gameState):
     
     
     while not openSet.isEmpty():
-        # print("Loop:", cnt + 1)
         node = openSet.pop()
         node_action = actions.pop()
-        # print("Node: ", node)
-        # print("Node action:", node_action)
-        
-        posOfStonesLastState = [x[:2] for x in node[-1][-1]]
-        
-        if isEndState(posOfStonesLastState, posSwitches):
+                
+        if node[-1].isEndState(posOfSwitches):
             finalWeight = node_action[0]
             finalPath = node_action[1]
-            finalNumberOfSteps = len(node_action[1])
-            finalStates = node
+            finalNumberOfSteps = len(finalPath)
             break
         
         if node[-1] not in exploredSet:
             exploredSet.add(node[-1])
-            # print("Actions:")
-            for valid_action in validActionsInNextStep(node[-1][0], node[-1][1], posWalls):
-                newState = updateState(node[-1][0], node[-1][1], valid_action) 
-                # print(valid_action)
-                # print(newState)
+
+            for validAction in node[-1].validActionsInNextStep(posOfWalls):
+                newState = copy.deepcopy(node[-1])
+                newState.updateState(validAction) 
                 
-                if isFailed(newState[1], posWalls, posSwitches):
+                if newState.isFailed(posOfSwitches, posOfWalls):
                    continue
                 
-                addWeightAndPath = (node_action[0] + valid_action[2], node_action[1] + valid_action[-1])
+                addWeightAndPath = (node_action[0] + validAction.getWeight(), node_action[1] + validAction.getDirection())
                 cost = costFunction(addWeightAndPath)  
                 openSet.push(node + [newState], cost)
                 actions.push(addWeightAndPath, cost)   
                 numberOfNodes += 1 
-        
-        # print("Push actions:")
-        # printQueue(actions)
-        
-        # print("Push state:")
-        # printQueue(openSet)
-        
-        # print("######################################################################################\n")
-        
-        # cnt += 1
     
-    return finalNumberOfSteps, finalWeight,  numberOfNodes, finalPath, finalStates
+    return finalWeight, finalPath, finalNumberOfSteps, numberOfNodes
