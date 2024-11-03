@@ -122,3 +122,4 @@ def aStarSearch(gameState):
                 numberOfNodes+=1
         
     return finalNumberOfSteps, finalWeight,  numberOfNodes, finalPath, finalStates
+
