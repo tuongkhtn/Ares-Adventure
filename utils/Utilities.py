@@ -1,3 +1,4 @@
+import heapq
 from .Action import Action
 
 class Utilities:
@@ -75,3 +76,35 @@ class Utilities:
             posOfStones.append((posOfAres[0] + 2 * action.getCoordinate()[0], posOfAres[1] + 2 * action.getCoordinate()[1]))
         
         return newPosOfAres, sorted(posOfStones)
+    
+class PriorityQueue:
+    def __init__(self):
+        self.heap = []
+        self.count = 0
+        
+    def push(self, item, priority):
+        entry = (priority, self.count, item)
+        heapq.heappush(self.heap, entry)
+    
+    def pop(self):
+        (_, _, item) = heapq.heappop(self.heap)
+        return item
+
+    def isEmpty(self):
+        return len(self.heap) == 0
+    def peek_all(self):
+        heap_copy = self.heap[:]
+        result = []
+        while heap_copy:
+            (priority, _, item) = heapq.heappop(heap_copy)
+            result.append((item, priority))
+        return result
+    
+class CustomSet(set):
+    def add(self, item):
+        item_hashable = (item[0], frozenset(item[1]))
+        super().add(item_hashable)
+        
+    def __contains__(self, item):
+        item_hashable = (item[0], frozenset(item[1]))
+        return super().__contains__(item_hashable)
