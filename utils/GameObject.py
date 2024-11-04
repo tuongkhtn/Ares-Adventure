@@ -68,6 +68,9 @@ class GameObject:
     def positionOfStones(self):
         return [stone.getCoordinate() for stone in self.stones]
     
+    def weightOfStones(self):
+        return [stone.getWeight() for stone in self.stones]
+    
     def positionOfSwitches(self):
         return [swich.getCoordinate() for swich in self.switches]
     
@@ -76,10 +79,3 @@ class GameObject:
     
     def positionOfFreeSpaces(self):
         return [freeSpace.getCoordinate() for freeSpace in self.freeSpaces]
-    
-    def updateState(self, action: Action):
-        self.ares.setCoordinate(self.ares.getX() + action.getCoordinate()[0], self.ares.getY() + action.getCoordinate()[1])
-        posOfStones = self.positionOfStones()
-        if action.getDirection().isupper(): # push stone
-            index = posOfStones.index(self.ares.getCoordinate())
-            self.stones[index].setCoordinate(self.ares.getX() + action.getCoordinate()[0], self.ares.getY() + action.getCoordinate()[1])

@@ -65,3 +65,13 @@ class Utilities:
                 validActions.append(actionObject)
         
         return validActions
+    
+    def updateState(posOfAres, posOfStones, action: Action):
+        newPosOfAres = posOfAres[0] + action.getCoordinate()[0], posOfAres[1] + action.getCoordinate()[1]
+        
+        if action.getDirection().isupper():
+            index = posOfStones.index(newPosOfAres)
+            posOfStones.pop(index)
+            posOfStones.append((posOfAres[0] + 2 * action.getCoordinate()[0], posOfAres[1] + 2 * action.getCoordinate()[1]))
+        
+        return newPosOfAres, sorted(posOfStones)

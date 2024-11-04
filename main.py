@@ -55,21 +55,32 @@
 
 import numpy as np
 from utils.GameObject import GameObject
-from utils.Ares import Ares
 from utils.Action import Action
-from algorithms.ucs import uniformCostSearch
-from utils.GameState import GameState
-from UI.GameGraphic import GameGraphic
-import pygame
+
+from utils import Utilities
 
 if __name__ == "__main__":
-    gameObject = GameObject("input-01.txt")
+    # gameObject = GameObject("input-01.txt")
     
-    # finalWeight, finalPath, finalNumberOfSteps, numberOfNodes = uniformCostSearch(gameObject)
+    # # finalWeight, finalPath, finalNumberOfSteps, numberOfNodes = uniformCostSearch(gameObject)
     
-    gameGraphic = GameGraphic(gameObject)
-    gameGraphic.run()
+    # gameGraphic = GameGraphic(gameObject)
+    # gameGraphic.run()
     # pygame.init()
     # screen = pygame.display.set_mode((800, 600))  # Kích thước cửa sổ tùy chỉnh
     # pygame.display.set_caption("Game Window")
     # print(gameObject.ares.addUI())
+    
+    gameObject = GameObject("input-01.txt")
+    
+    posOfAres = gameObject.positionOfAres()
+    posOfStones = gameObject.positionOfStones()
+    
+    print(posOfAres)
+    print(posOfStones)
+    
+    action = Action('R')
+    newState = Utilities.updateState(posOfAres, posOfStones, action)
+    
+    print(newState[0])
+    print(newState[1])
