@@ -1,10 +1,8 @@
 import copy
 
 from utils import PriorityQueue
-from utils import costFunction
 from utils import CustomSet
 from utils import GameObject
-from utils import GameState
 from utils import Utilities
 
 def printQueue(actions):
@@ -40,6 +38,7 @@ def uniformCostSearch(gameObject: GameObject):
     posOfStones = gameObject.positionOfStones()
     posOfWalls = gameObject.positionOfWalls()
     posOfSwitches = gameObject.positionOfSwitches()
+    weightOfStones = gameObject.weightOfStones()
     
     openSet = PriorityQueue() # openSet save states
     openSet.push([(posOfAres, posOfStones)], 0)
@@ -53,41 +52,27 @@ def uniformCostSearch(gameObject: GameObject):
     while not openSet.isEmpty():
         
         node = openSet.pop() # List[Tuple(PosAres: Tuple(int, int), Stones: List[Stone: Tuple[X: int, Y: int, Weight: int]])]
-        node_action = actions.pop() # Tuple(total weight: int, path: str)
-
-
-        # print("node: ", node)
-        # print("node_action: ", node_action)
-
+        node_action = actions.pop() # Tuple(total weight: int, path: str)        
 
         if Utilities.isEndState(node[-1][-1], posOfSwitches):
             finalWeight = node_action[0]
             finalPath = node_action[1]
             finalNumberOfSteps = len(node_action[1])
-            finalStates = node
             break
         
-        
         if node[-1] not in exploredSet:
-            # print("node[-1]: ", node[-1])
             exploredSet.add(node[-1])
 
-            for valid_action in Utilities.validActionsInNextStep(node[-1][0], node[-1][1], posWalls):  # action Tuple[X: int, Y: int,  stoneWeight: int, command: str]
-                # print("valid_action: ", valid_action)
-                newState = updateState(node[-1][0], node[-1][1], valid_action)  # newState Tuple[PosAres: Tuple(int, int), Stones: List[Stone: Tuple[X: int, Y: int, Weight: int]]]
-                # print("newState: ", newState)
+            for valid_action in Utilities.validActionsInNextStep(posOfAres=node[-1][0], posOfStones=node[-1][1], posOfWalls=posOfWalls, weightOfStones=weightOfStones):  # action Tuple[X: int, Y: int,  stoneWeight: int, command: str]
+                newState = Utilities.updateState(node[-1][0], node[-1][1], valid_action)  # newState Tuple[PosAres: Tuple(int, int), Stones: List[Stone: Tuple[X: int, Y: int, Weight: int]]]
 
-                if isFailed(posAndWeightStones=newState[1], posWalls=posWalls, posSwitches=posSwitches):
+                if Utilities.isFailed(posOfStones=node[-1][-1], posOfWalls=posOfWalls, posOfSwitches=posOfSwitches):
                     continue
                 
-                heuristic_hx = heuristic(posSwitches, newState[1])
-                
-                cost_gx = costFunction((node_action[0] + valid_action[2], node_action[1] + valid_action[-1]))
-                cost_fx = heuristic_hx + cost_gx
-
-                openSet.push(node + [newState], cost_fx)
-                actions.push((node_action[0] + valid_action[2], node_action[1] + valid_action[-1]), cost_fx) 
-
-                numberOfNodes+=1
+                addWeightAndPath = (node_action[0] + valid_action.getWeight(), node_action[1] + valid_action.getDirection())
+                cost = Utilities.costFunction(addWeightAndPath)  
+                openSet.push(node + [newState], cost)
+                actions.push(addWeightAndPath, cost)   
+                numberOfNodes += 1        
         
-    return finalNumberOfSteps, finalWeight,  numberOfNodes, finalPath, finalStates
+    return finalNumberOfSteps, finalWeight,  numberOfNodes, finalPath

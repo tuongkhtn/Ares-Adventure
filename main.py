@@ -56,6 +56,7 @@
 import numpy as np
 from utils.GameObject import GameObject
 from utils.Action import Action
+from algorithms import uniformCostSearch
 
 from utils import Utilities
 
@@ -71,16 +72,23 @@ if __name__ == "__main__":
     # pygame.display.set_caption("Game Window")
     # print(gameObject.ares.addUI())
     
-    gameObject = GameObject("input-01.txt")
+    gameObject = GameObject("input-02.txt")
     
-    posOfAres = gameObject.positionOfAres()
-    posOfStones = gameObject.positionOfStones()
+    finalNumberOfSteps, finalWeight,  numberOfNodes, finalPath = uniformCostSearch(gameObject)
     
-    print(posOfAres)
-    print(posOfStones)
+    print(f"Steps: {finalNumberOfSteps}, Weight: {finalWeight}, Node: {numberOfNodes}")
+    print(f"Path: {finalPath}")
     
-    action = Action('R')
-    newState = Utilities.updateState(posOfAres, posOfStones, action)
+    # posOfAres = gameObject.positionOfAres()
+    # posOfStones = gameObject.positionOfStones()
+    # posOfWalls = gameObject.positionOfWalls()
+    # posOfSwitches = gameObject.positionOfSwitches()
+    # weightOfStones = gameObject.weightOfStones()
     
-    print(newState[0])
-    print(newState[1])
+    # action = Action('U')
+    # newState = Utilities.updateState(posOfAres=posOfAres, posOfStones=posOfStones, action=action)
+    
+    # print(posOfAres)
+    # print(posOfStones)
+    # print(newState[0])
+    # print(newState[1])

@@ -1,4 +1,6 @@
+import copy
 import heapq
+from typing import Tuple
 from .Action import Action
 
 class Utilities:
@@ -55,7 +57,7 @@ class Utilities:
                 action.pop(3) # pop lowercase
                 
                 index = posOfStones.index((xAresNextStep, yAresNextStep))
-                action[2] = weightOfStones[index].getWeight()
+                action[2] = weightOfStones[index]
             else:
                 action.pop(4) # pop uppercase
             
@@ -70,12 +72,13 @@ class Utilities:
     def updateState(posOfAres, posOfStones, action: Action):
         newPosOfAres = posOfAres[0] + action.getCoordinate()[0], posOfAres[1] + action.getCoordinate()[1]
         
+        posOfStonesCopy = copy.deepcopy(posOfStones)
         if action.getDirection().isupper():
-            index = posOfStones.index(newPosOfAres)
-            posOfStones.pop(index)
-            posOfStones.append((posOfAres[0] + 2 * action.getCoordinate()[0], posOfAres[1] + 2 * action.getCoordinate()[1]))
+            index = posOfStonesCopy.index(newPosOfAres)
+            newPosOfStone = posOfAres[0] + 2 * action.getCoordinate()[0], posOfAres[1] + 2 * action.getCoordinate()[1]
+            posOfStonesCopy[index] = newPosOfStone
         
-        return newPosOfAres, sorted(posOfStones)
+        return newPosOfAres, posOfStonesCopy
     
     def costFunction(action: Tuple[int, str]) -> int:
         """
