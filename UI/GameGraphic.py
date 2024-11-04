@@ -1,8 +1,9 @@
 import sys
 import pygame
 from config import UIConfig
-from utils import GameObject
+from utils import GameObject, GameState
 from utils import Ares, Stone, Wall, FreeSpace, Switch
+from utils import Action
 
 class GameGraphic:
     def __init__(self, gameObject: GameObject):
@@ -15,6 +16,9 @@ class GameGraphic:
         # Init object
         self.initObject(gameObject)
         
+        # Get positions
+        self.positionOfWalls = gameObject.positionOfWalls()
+        
         self.clock = pygame.time.Clock()
         self.running = True
         
@@ -25,20 +29,22 @@ class GameGraphic:
         self.switches = [switch.addUI() for switch in gameObject.switches]
         self.freeSpaces = [freeSpace.addUI() for freeSpace in gameObject.freeSpaces]
         
+        self.gameState = GameState(self.ares, self.stones)
+        
     def draw_all(self):
         for freeSpace in self.freeSpaces:
             freeSpace.draw(self.screen)
         
-        self.ares.draw(self.screen)
+        for switch in self.switches:
+            switch.draw(self.screen)
         
         for stone in self.stones:
             stone.draw(self.screen)
             
         for wall in self.walls:
             wall.draw(self.screen)
-            
-        for switch in self.switches:
-            switch.draw(self.screen)
+        
+        self.ares.draw(self.screen)
         
     def run(self):
         while self.running:
@@ -50,6 +56,6 @@ class GameGraphic:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
-                    
+                                    
         pygame.quit()
         sys.exit()

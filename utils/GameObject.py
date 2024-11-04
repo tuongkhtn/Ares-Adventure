@@ -4,6 +4,7 @@ from .Wall import Wall
 from .Stone import Stone
 from .Switch import Switch
 from .FreeSpace import FreeSpace
+from .Action import Action
 
 class GameObject:
     def __init__(self, filename):
@@ -75,3 +76,10 @@ class GameObject:
     
     def positionOfFreeSpaces(self):
         return [freeSpace.getCoordinate() for freeSpace in self.freeSpaces]
+    
+    def updateState(self, action: Action):
+        self.ares.setCoordinate(self.ares.getX() + action.getCoordinate()[0], self.ares.getY() + action.getCoordinate()[1])
+        posOfStones = self.positionOfStones()
+        if action.getDirection().isupper(): # push stone
+            index = posOfStones.index(self.ares.getCoordinate())
+            self.stones[index].setCoordinate(self.ares.getX() + action.getCoordinate()[0], self.ares.getY() + action.getCoordinate()[1])

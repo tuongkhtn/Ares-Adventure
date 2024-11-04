@@ -1,5 +1,6 @@
 from .Object import Object
-from config import ImageConfig
+from config import ImageConfig, UIConfig
+from utils import Action
 
 class Stone(Object):
     def __init__(self, x, y, weight):
@@ -17,6 +18,12 @@ class Stone(Object):
             return super().addUI(ImageConfig.IMAGE_STONE_ON_SWITCH)
         else:
             return super().addUI(ImageConfig.IMAGE_STONE)
+        
+    def move(self, action: Action):
+        self.screen_position = [
+            self._y * UIConfig.TILE_SIZE + UIConfig.OFFSET_X,
+            self._x * UIConfig.TILE_SIZE + UIConfig.OFFSET_Y
+        ]
     
     
 
