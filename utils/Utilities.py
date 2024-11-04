@@ -77,6 +77,25 @@ class Utilities:
         
         return newPosOfAres, sorted(posOfStones)
     
+    def costFunction(action: Tuple[int, str]) -> int:
+        """
+        Caculates the total cost based on a list of actions.
+
+        Args:
+            action (Tuple[int, str]): A tuple where the first element is an integer (total weight of the action)
+            and the second element is a path (the action itself).
+
+        Returns:
+            int: The total cost, which is the sum the weight and the number of moves. 
+        """
+        
+        discount = 0.9
+        sum = 0.0
+        for i in range(len(action[1])):
+            sum += ord(action[1][i]) * (discount**i)
+            
+        return (action[0] + len(action[1])) + sum * 0.00001
+    
 class PriorityQueue:
     def __init__(self):
         self.heap = []
