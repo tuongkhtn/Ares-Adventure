@@ -11,7 +11,7 @@ class UIConfig:
 
     # Offset
     OFFSET_X = 40
-    OFFSET_Y = 80
+    OFFSET_Y = 100
     
     MOVE_SPEED = 5  # pixel per frame
     

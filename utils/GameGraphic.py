@@ -24,8 +24,8 @@ class GameGraphic:
         self.gameObject = gameObject.addUI()
 
         self.buttons = []
-        self.buttons.append(PlayButton(500, 400))
-        self.buttons.append(ResetButton(300, 400))
+        self.buttons.append(PlayButton(y=50, x=UIConfig.WINDOW_WIDTH - 150))
+        self.buttons.append(ResetButton(y=100, x=UIConfig.WINDOW_WIDTH - 150))
         
         self.clock = pygame.time.Clock()
         self.running = True
@@ -34,10 +34,10 @@ class GameGraphic:
     def draw_all(self):
         self.gameObject.draw(self.screen)
         [button.draw(self.screen) for button in self.buttons]
-        steps_text = UIConfig.STATS_FONT.render(f"Step Count: {self.gameObject.stepCount}", True, (0, 0, 0))
+        steps_text = UIConfig.STATS_FONT.render(f"Step: {self.gameObject.stepCount}", True, (0, 0, 0))
         weight_text = UIConfig.STATS_FONT.render(f"Weight: {self.gameObject.totalWeight}", True, (0, 0, 0))
         self.screen.blit(steps_text, (10, 10))
-        self.screen.blit(weight_text, (UIConfig.WINDOW_WIDTH - 200, 10))
+        self.screen.blit(weight_text, (UIConfig.WINDOW_WIDTH - 150, 10))
         
     def run(self):
         while self.running:
