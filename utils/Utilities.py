@@ -5,9 +5,47 @@ from .Action import Action
 
 class Utilities:
     def isEndState(posOfStones, posOfSwitches):
+        """
+        Check if the positions of the stones match the positions of the switches.
+
+        Args:
+            posOfStones (List[Tuple[int, int]]): A list of tuples representing the coordinates of the stones.
+            posOfSwitches (List[Tuple[int, int]]): A list of tuples representing the coordinates of the switches.
+
+        Returns:
+            bool: True if the stones are in the same positions as the switches, otherwise False.
+        """
+        
         return sorted(posOfStones) == sorted(posOfSwitches)
     
     def isFailed(posOfStones, posOfSwitches, posOfWalls):
+        """
+        This function used to observe if the state is potentially failed, then prune the search.
+        
+        It checks if any of the stones is blocked by walls and other stones. The check is done by
+        rotating and flipping the board and checking if the stone is blocked in any of the 8 
+        possible orientations.
+        
+        Args:
+            posOfStones (List[Tuple[int, int]]): A list of tuples where each tuple contains the 
+                                                coordinates (x, y) of a stone and its weight.
+            posOfSwitches (List[Tuple[int, int]]): A list of tuples representing the coordinates of the switches.
+            posOfWalls (List[Tuple[int, int]]): A list of tuples representing the coordinates of the walls.
+        
+        Returns:
+            bool: True if the state is potentially failed, False otherwise.
+            
+        There are six cases for stone to get stuck:
+        A W A   A W W   A S W   A S W   A S S   A S W    
+        A P W   A P S   A P W   A P S   A P S   W P A
+        A A A   A A A   A A A   A A A   A A A   S A W
+        
+        A: Any character.
+        P: Stone under examination is stuck or not.
+        W: Wall.
+        S: Other stones.
+        """
+        
         rotatePattern = [[0,1,2,3,4,5,6,7,8],
                         [2,5,8,1,4,7,0,3,6],
                         [0,1,2,3,4,5,6,7,8][::-1],
@@ -40,6 +78,25 @@ class Utilities:
         return False
             
     def isValidAction(posOfAres, posOfStones, posOfWalls, action: Action):
+        """
+        Check if the given action is valid based on the current position of Ares, the stones, and the walls.
+
+        Args:
+            posOfAres (Tuple[int, int]): A tuple representing the current position of Ares (x, y).
+            posOfStones (List[Tuple[int, int]]): A list of tuples where each tuple contains
+                                                 the coordinates (x, y) of a stone.
+            posOfWalls (List[Tuple[int, int]]): A list of tuples representing the coordinates of the walls.
+            action (Action): The action Ares is attempting to take.
+
+        Returns:
+            bool: True if the action is valid, False otherwise.
+            
+        The function handles two cases:
+        1. If Ares is pushing a stone (uppercase action), it checks if the stone's next position after being 
+        pushed is either another stone's position or a wall's position.
+        2. If it's a normal move (lowercase action), check if Ares's next position is wall.
+        """
+    
         if action.getDirection().isupper():
             x, y = posOfAres[0] + 2 * action.getCoordinate()[0], posOfAres[1] + 2 * action.getCoordinate()[1] # get stone's next position
         else:
@@ -48,6 +105,21 @@ class Utilities:
         return (x, y) not in posOfStones + posOfWalls
     
     def validActionsInNextStep(posOfAres, posOfStones, posOfWalls, weightOfStones):
+        """
+        Determines valid actions for Ares in the next step based on the current position of Ares and the
+        positions and weights of the stones.
+
+        Args:
+            posOfAres (Tuple[int, int]): A tuple representing the current position of Ares (x, y).
+            posOfStones (List[Tuple[int, int]]): A list of tuples where each tuple contains
+                                                 the coordinates (x, y) of a stone and its weight.
+            posOfWalls (List[Tuple[int, int]]): A list of tuples representing the coordinates of the walls.
+            weightOfStones (List[int]): A list of weight of stones.
+
+        Returns:
+            validAction (List[Action]): A list of valid actions.
+        """
+    
         actionsAll = [[0, -1, 0, 'l', 'L'], [0, 1, 0, 'r', 'R'], [-1, 0, 0, 'u', 'U'], [1, 0, 0, 'd', 'D']]
         validActions = []
         
@@ -70,6 +142,21 @@ class Utilities:
         return validActions
     
     def updateState(posOfAres, posOfStones, action: Action):
+        """
+        Update the state of the game by calculating the next position of Ares and adjusting the positions of the 
+        stones based on the action taken.
+
+        Args:
+            posOfAres (Tuple[int, int]): A tuple representing the current position of Ares (x, y).
+            posOfStones (List[Tuple[int, int]]): A list of tuples where each tuple contains
+                                                 the coordinates (x, y) of a stone and its weight.
+            action (Action): The action Ares is attempting to take.
+
+        Returns:
+            nextPosOfAres (Tuple[int, int]): The updated position of Ares.
+            posAndWeightOfStones (List[Tuple[int, int, int]]): The updated list of stone positions and weights.
+        """
+        
         newPosOfAres = posOfAres[0] + action.getCoordinate()[0], posOfAres[1] + action.getCoordinate()[1]
         
         posOfStonesCopy = copy.deepcopy(posOfStones)
