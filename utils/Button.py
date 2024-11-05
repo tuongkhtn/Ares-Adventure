@@ -10,7 +10,6 @@ class Button():
         self.color = color
         self.text = text
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
-        
     
     def handle(self, gameObject):
         pass

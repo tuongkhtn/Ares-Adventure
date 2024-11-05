@@ -6,5 +6,4 @@ from .Button import *
 from .PlayButton import *
 from .PauseButton import *
 from .ResetButton import *
-from .GameEvent import *
 from .GameGraphic import *
