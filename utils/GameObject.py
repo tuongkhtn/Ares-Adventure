@@ -19,17 +19,7 @@ class GameObject:
         self.stepCount = 0
         
         self.ares = [Ares(x.tolist()[0], x.tolist()[1]) for x in np.argwhere(maze == 3)][0]
-        self.walls = []
-
-        # Vẽ các bức tường sau cùng để chúng "đè" lên các vật thể khác
-        for row_idx, row in enumerate(maze):
-            for col_idx, tile in enumerate(row):
-                if tile == 1:
-                    if row_idx == len(maze) - 1 or len(row) > len(maze[row_idx + 1]) or maze[row_idx + 1][col_idx] != 1:
-                        self.walls.append(Wall(row_idx, col_idx, is_3d=True))
-                    else:
-                        self.walls.append(Wall(row_idx, col_idx))
-
+        self.walls = [Wall(x.tolist()[0], x.tolist()[1]) for x in np.argwhere(maze == 1)]
         self.switches = [Switch(x.tolist()[0], x.tolist()[1]) for x in np.argwhere((maze == 4) | (maze == 5) | (maze == 6))]
         self.freeSpaces = [FreeSpace(x.tolist()[0], x.tolist()[1]) for x in np.argwhere((maze != 1) & (maze != -1))]
         
