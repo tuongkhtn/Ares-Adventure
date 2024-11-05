@@ -85,7 +85,11 @@ class GameGraphic:
             if self.is_in_algorithm:
                 self.result_game = self.buttons[0].game_result
                 
-            
+            if Utilities.isEndState(posOfStones, posOfSwitches):
+                self.result_game = 1
+            elif Utilities.isFailed(posOfStones, posOfSwitches, posOfWalls):
+                self.result_game = -1  
+                          
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     if self.is_in_algorithm:
@@ -117,12 +121,6 @@ class GameGraphic:
 
                         for i in range(len(newPosOfStones)):
                             self.gameObject.stones[i].setCoordinate(newPosOfStones[i][0], newPosOfStones[i][1])
-
-                    if Utilities.isEndState(posOfStones, posOfSwitches):
-                        self.result_game = 1
-                    elif Utilities.isFailed(posOfStones, posOfSwitches, posOfWalls):
-                        self.result_game = -1
-
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     mouse_pos = event.pos
                     # PlayButton
