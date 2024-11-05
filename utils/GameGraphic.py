@@ -27,7 +27,7 @@ class GameGraphic:
     def draw_all(self):
         self.gameObject.draw(self.screen)
         [button.draw(self.screen) for button in self.buttons]
-        steps_text = UIConfig.STATS_FONT.render(f"Step Count: {self.gameObject.stepCount}", True, (0, 0, 0))
+        steps_text = UIConfig.STATS_FONT.render(f"Step: {self.gameObject.stepCount}", True, (0, 0, 0))
         weight_text = UIConfig.STATS_FONT.render(f"Weight: {self.gameObject.totalWeight}", True, (0, 0, 0))
         self.screen.blit(steps_text, (10, 10))
         self.screen.blit(weight_text, (UIConfig.WINDOW_WIDTH - 200, 10))

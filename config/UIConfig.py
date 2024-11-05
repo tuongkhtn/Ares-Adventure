@@ -14,7 +14,7 @@ class UIConfig:
 
     # Offset
     OFFSET_X = 40
-    OFFSET_Y = 80
+    OFFSET_Y = 100
     
     # Biến tốc độ di chuyển
     MOVE_SPEED = 5  # pixel per frame
