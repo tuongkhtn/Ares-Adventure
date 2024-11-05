@@ -14,5 +14,5 @@ class Wall(Object):
             return super().addUI(ImageConfig.IMAGE_WALL)
     
     def draw(self, screen):
-        self.screen_position = [self._y * UIConfig.TILE_SIZE + UIConfig.OFFSET_X, self._x * UIConfig.TILE_SIZE - 0.25 * UIConfig.TILE_SIZE + UIConfig.OFFSET_Y]
-        screen.blit(self.image, (self.screen_position[0], self.screen_position[1]))
+        self.screen_position = [self._y * UIConfig.TILE_SIZE, self._x * UIConfig.TILE_SIZE]
+        screen.blit(self.image, (self.screen_position[0] + UIConfig.OFFSET_X, self.screen_position[1] + UIConfig.OFFSET_Y))
