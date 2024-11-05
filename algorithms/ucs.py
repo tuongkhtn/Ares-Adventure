@@ -64,21 +64,15 @@ def uniformCostSearch(gameObject: GameObject):
             exploredSet.add(node[-1])
 
             for valid_action in Utilities.validActionsInNextStep(posOfAres=node[-1][0], posOfStones=node[-1][1], posOfWalls=posOfWalls, weightOfStones=weightOfStones):  # action Tuple[X: int, Y: int,  stoneWeight: int, command: str]
-                newState = Utilities.updateState(node[-1][0], node[-1][1], valid_action)  # newState Tuple[PosAres: Tuple(int, int), Stones: List[Stone: Tuple[X: int, Y: int, Weight: int]]]
+                newPosOfAres, newPosOfStones, _ = Utilities.updateState(node[-1][0], node[-1][1], valid_action)  # newState Tuple[PosAres: Tuple(int, int), Stones: List[Stone: Tuple[X: int, Y: int, Weight: int]]]
 
-                print("new state: ", newState)
-                
                 if Utilities.isFailed(posOfStones=node[-1][-1], posOfWalls=posOfWalls, posOfSwitches=posOfSwitches):
                     continue
                 
                 addWeightAndPath = (node_action[0] + valid_action.getWeight(), node_action[1] + valid_action.getDirection())
                 cost = Utilities.costFunction(addWeightAndPath)  
-                openSet.push(node + [newState], cost)
+                openSet.push(node + [(newPosOfAres, newPosOfStones)], cost)
                 actions.push(addWeightAndPath, cost)   
                 numberOfNodes += 1      
-                break
-            
-            break
-        break
         
     return finalNumberOfSteps, finalWeight,  numberOfNodes, finalPath

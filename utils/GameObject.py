@@ -5,6 +5,7 @@ from .Stone import Stone
 from .Switch import Switch
 from .FreeSpace import FreeSpace
 from .Action import Action
+from config import UIConfig
 
 class GameObject:
     def __init__(self, filename):
@@ -83,7 +84,18 @@ class GameObject:
     def addUI(self):
         self.ares = self.ares.addUI()
         self.stones = [stone.addUI() for stone in self.stones]
+        
+        # for row_idx, row in enumerate(level):
+        #     for col_idx, tile in enumerate(row):
+        #         x = col_idx * UIConfig.TILE_SIZE + UIConfig.OFFSET_X
+        #         y = row_idx * UIConfig.TILE_SIZE + UIConfig.OFFSET_Y
+        #         if tile == "#":
+        #             if row_idx == len(level) - 1 or row_idx == 0 or col_idx == len(row) - 1 or col_idx == 0 or len(row) > len(level[row_idx + 1]) or level[row_idx + 1][col_idx] != "#":
+        #                 screen.blit(wall3d_image, (x, y - 0.25 * UIConfig.TILE_SIZE))
+        #             else:
+        #                 screen.blit(wall_image, (x, y - 0.25 * UIConfig.TILE_SIZE))
         self.walls = [wall.addUI() for wall in self.walls]
+        
         self.switches = [switch.addUI() for switch in self.switches]
         self.freeSpaces = [freeSpace.addUI() for freeSpace in self.freeSpaces]
         return self

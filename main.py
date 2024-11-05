@@ -61,3 +61,4 @@ if __name__ == '__main__':
     
     # # print(method.upper())
     # print(f"Steps: {finalNumberOfSteps}, Weight: {finalWeight}, Node: {numberOfNodes}, Time (ms): {(end-start)*1000:.2f}, Memory (MB): {current / 10**6:.2f}")
+    # print(finalPath)

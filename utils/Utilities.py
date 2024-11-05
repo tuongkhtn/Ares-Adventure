@@ -163,13 +163,14 @@ class Utilities:
         
         newPosOfAres = posOfAres[0] + action.getCoordinate()[0], posOfAres[1] + action.getCoordinate()[1]
         
+        index = None
         posOfStonesCopy = copy.deepcopy(posOfStones)
         if action.getDirection().isupper():
             index = posOfStonesCopy.index(newPosOfAres)
             newPosOfStone = posOfAres[0] + 2 * action.getCoordinate()[0], posOfAres[1] + 2 * action.getCoordinate()[1]
             posOfStonesCopy[index] = newPosOfStone
         
-        return newPosOfAres, posOfStonesCopy
+        return newPosOfAres, posOfStonesCopy, index
     
     def costFunction(action: Tuple[int, str]) -> int:
         """
