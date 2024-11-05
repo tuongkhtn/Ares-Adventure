@@ -1,3 +1,6 @@
+import pygame
+pygame.font.init()
+
 class UIConfig:
     # Kích thước cửa sổ
     WINDOW_WIDTH = 1000
@@ -21,3 +24,18 @@ class UIConfig:
     COLOR_WALL = (139, 69, 19)  # Màu tường nâu
     
     FONT_SIZE = 24
+
+    FONT = pygame.font.Font(None, 24)
+    STATS_FONT = pygame.font.Font(None, 36)
+
+    BUTTON_HEIGHT = 40
+    BUTTON_WIDTH = 80
+
+    RESET_BUTTON_COLOR = (0, 0, 255)
+    RESET_BUTTON_TEXT = "RESET"
+
+    PLAY_BUTTON_COLOR = (0, 0, 255)
+    PLAY_BUTTON_TEXT = "PLAY"
+
+    PAUSE_BUTTON_COLOR = (0, 0, 255)
+    PAUSE_BUTTON_TEXT = "PAUSE"

@@ -5,6 +5,7 @@ from utils import GameObject
 from utils import Action
 from utils import Utilities
 from .GameEvent import GameEvent
+from utils import Button
 
 class GameGraphic:
     def __init__(self, gameObject: GameObject):
@@ -17,12 +18,19 @@ class GameGraphic:
         # Init object
         self.gameObject = gameObject.addUI()
         self.gameEvent = GameEvent(self.gameObject)
+
+        self.buttons = []
+        button = Button(500, 400, UIConfig.PLAY_BUTTON_COLOR, UIConfig.PLAY_BUTTON_TEXT)
+        self.buttons.append(button)
+        # playbutton = PlayButton(500, 400)
+        # self.buttons.append(playbutton)
         
         self.clock = pygame.time.Clock()
         self.running = True
 
     def draw_all(self):
         self.gameObject.draw(self.screen)
+        # [button.draw(self.screen) for button in self.button]
         
     def run(self):
         while self.running:
