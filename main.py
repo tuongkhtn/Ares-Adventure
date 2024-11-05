@@ -3,7 +3,7 @@ import psutil
 import os
 from algorithms import uniformCostSearch
 from utils import GameObject
-from UI.GameGraphic import GameGraphic
+from utils import GameGraphic
 
 def readCommand():
     """
