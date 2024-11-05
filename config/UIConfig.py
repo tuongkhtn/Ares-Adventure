@@ -20,3 +20,5 @@ class UIConfig:
     # Màu sắc
     COLOR_BG = (230, 241, 216)# Màu nền xanh da trời nhạt
     COLOR_WALL = (139, 69, 19)  # Màu tường nâu
+    
+    FONT_SIZE = 24

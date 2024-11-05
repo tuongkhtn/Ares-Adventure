@@ -3,6 +3,7 @@ import psutil
 import os
 from algorithms import uniformCostSearch
 from utils import GameObject
+from UI.GameGraphic import GameGraphic
 
 def readCommand():
     """
@@ -37,23 +38,26 @@ if __name__ == '__main__':
     
     gameObject = GameObject(args.level)
     
+    gameGraphic = GameGraphic(gameObject)
+    gameGraphic.run()
     
-    if args.method == 'dfs':
-        # finalNumberOfSteps, finalWeight,  numberOfNodes, finalPath = depthFirstSearch(gameState)
-        print("dfs")
-    elif args.method == 'bfs':
-        # finalNumberOfSteps, finalWeight,  numberOfNodes, finalPath = breadthFirstSearch(gameState)
-        print("bfs")
-    elif args.method == 'ucs':
-        finalNumberOfSteps, finalWeight,  numberOfNodes, finalPath = uniformCostSearch(gameObject)
-    elif args.method == 'astar':
-        # finalNumberOfSteps, finalWeight,  numberOfNodes, finalPath = aStarSearch(gameState)
-        print("astar")
+    
+    # if args.method == 'dfs':
+    #     # finalNumberOfSteps, finalWeight,  numberOfNodes, finalPath = depthFirstSearch(gameState)
+    #     print("dfs")
+    # elif args.method == 'bfs':
+    #     # finalNumberOfSteps, finalWeight,  numberOfNodes, finalPath = breadthFirstSearch(gameState)
+    #     print("bfs")
+    # elif args.method == 'ucs':
+    #     finalNumberOfSteps, finalWeight,  numberOfNodes, finalPath = uniformCostSearch(gameObject)
+    # elif args.method == 'astar':
+    #     # finalNumberOfSteps, finalWeight,  numberOfNodes, finalPath = aStarSearch(gameState)
+    #     print("astar")
         
-    end = time.time()
-    memory_after = process.memory_info().rss / 1024
-    current = memory_after - memory_before
+    # end = time.time()
+    # memory_after = process.memory_info().rss / 1024
+    # current = memory_after - memory_before
     
     
-    # print(method.upper())
-    print(f"Steps: {finalNumberOfSteps}, Weight: {finalWeight}, Node: {numberOfNodes}, Time (ms): {(end-start)*1000:.2f}, Memory (MB): {current / 10**6:.2f}")
+    # # print(method.upper())
+    # print(f"Steps: {finalNumberOfSteps}, Weight: {finalWeight}, Node: {numberOfNodes}, Time (ms): {(end-start)*1000:.2f}, Memory (MB): {current / 10**6:.2f}")

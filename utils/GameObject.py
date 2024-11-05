@@ -79,3 +79,26 @@ class GameObject:
     
     def positionOfFreeSpaces(self):
         return [freeSpace.getCoordinate() for freeSpace in self.freeSpaces]
+    
+    def addUI(self):
+        self.ares = self.ares.addUI()
+        self.stones = [stone.addUI() for stone in self.stones]
+        self.walls = [wall.addUI() for wall in self.walls]
+        self.switches = [switch.addUI() for switch in self.switches]
+        self.freeSpaces = [freeSpace.addUI() for freeSpace in self.freeSpaces]
+        return self
+    
+    def draw(self, screen):
+        for freeSpace in self.freeSpaces:
+            freeSpace.draw(screen)
+        
+        for switch in self.switches:
+            switch.draw(screen)
+        
+        for stone in self.stones:
+            stone.draw(screen)
+            
+        for wall in self.walls:
+            wall.draw(screen)
+        
+        self.ares.draw(screen)

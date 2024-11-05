@@ -9,7 +9,10 @@ class Ares(Object):
     def addUI(self):
         return super().addUI(ImageConfig.IMAGE_ARES)
     
-    def move(self, action: Action):
+    def move(self, x_pos, y_pos):
+        self._x += x_pos
+        self._y += y_pos
+        
         self.screen_position = [
             self._y * UIConfig.TILE_SIZE + UIConfig.OFFSET_X,
             self._x * UIConfig.TILE_SIZE + UIConfig.OFFSET_Y

@@ -76,6 +76,10 @@ class Utilities:
                     elif newBoard[1] in posOfStones and newBoard[6] in posOfStones and newBoard[2] in posOfWalls and newBoard[3] in posOfWalls and newBoard[8] in posOfWalls: return True
 
         return False
+    
+    def isPushStone(posOfAres, posOfStones, action: Action):
+        xAresNextStep, yAresNextStep = posOfAres[0] + action.getCoordinate()[0], posOfAres[1] + action.getCoordinate()[1]
+        return (xAresNextStep, yAresNextStep) in posOfStones
             
     def isValidAction(posOfAres, posOfStones, posOfWalls, action: Action):
         """
