@@ -35,17 +35,18 @@ class GameGraphic:
         self.is_in_algorithm = False
         self.current_algorithm_index = 0
         self.show_algorithm_list = False
-        self.success = False
+        self.result_game = 0
         self.is_searching = False
+        
 
         # Init object
         self.gameObject = gameObject.addUI()
 
         self.buttons = []
-        self.buttons.append(PlayButton(y=50, x=UIConfig.WINDOW_WIDTH - 150))
-        self.buttons.append(ResetButton(y=100, x=UIConfig.WINDOW_WIDTH - 150))
-        self.buttons.append(ChoiceButton(y=50, x=UIConfig.WINDOW_WIDTH - 250, text=algorithms[self.current_algorithm_index]))
-        self.algorithms_buttons = [ChoiceButton(y=50 + 40 * (i + 1), x=UIConfig.WINDOW_WIDTH - 250, text=algorithms[i], color=UIConfig.OPTION_BUTTON_COLOR) for i in range(len(algorithms))]
+        self.buttons.append(PlayButton(y=10, x=UIConfig.WINDOW_WIDTH - 150))
+        self.buttons.append(ResetButton(y=60, x=UIConfig.WINDOW_WIDTH - 150))
+        self.buttons.append(ChoiceButton(y = 10, x=UIConfig.WINDOW_WIDTH - 250, text=algorithms[self.current_algorithm_index]))
+        self.algorithms_buttons = [ChoiceButton(y=10 + 40 * (i + 1), x=UIConfig.WINDOW_WIDTH - 250, text=algorithms[i], color=UIConfig.OPTION_BUTTON_COLOR) for i in range(len(algorithms))]
         
         self.clock = pygame.time.Clock()
 
@@ -57,8 +58,18 @@ class GameGraphic:
             [button.draw(self.screen) for button in self.algorithms_buttons]
         steps_text = UIConfig.STATS_FONT.render(f"Step: {self.gameObject.stepCount}", True, (0, 0, 0))
         weight_text = UIConfig.STATS_FONT.render(f"Weight: {self.gameObject.totalWeight}", True, (0, 0, 0))
-        self.screen.blit(steps_text, (10, 10))
-        self.screen.blit(weight_text, (10, 40))
+        self.screen.blit(steps_text, (40, 10))
+        self.screen.blit(weight_text, (40, 40))
+
+        if self.is_in_algorithm and self.is_searching:
+            message = UIConfig.MSS_FONT.render(f"SEARCHING", True, (255, 255, 0))
+            self.screen.blit(message, (250, 20))
+        elif self.result_game == -1:
+            message = UIConfig.MSS_FONT.render(f"FAIL", True, (255, 0, 0))
+            self.screen.blit(message, (250, 20))
+        elif self.result_game == 1:
+            message = UIConfig.MSS_FONT.render(f"SUCCESS", True, (0, 255, 0))
+            self.screen.blit(message, (250, 20))
         
     def run(self):
         while self.running:
@@ -67,24 +78,30 @@ class GameGraphic:
             posOfAres = self.gameObject.ares.getCoordinate()
             posOfStones = [stone.getCoordinate() for stone in self.gameObject.stones]
             posOfWalls = [wall.getCoordinate() for wall in self.gameObject.walls]
+            posOfSwitches = [switch.getCoordinate() for switch in self.gameObject.switches]
+
+            self.is_searching = self.buttons[0].is_searching
+            self.is_in_algorithm = self.buttons[0].is_in_algorithm
+            if self.is_in_algorithm:
+                self.result_game = self.buttons[0].game_result
+                
             
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
+                    if self.is_in_algorithm:
+                        self.is_in_algorithm = False
+                        self.buttons[0].setIsInAlgorithm(self.is_in_algorithm)
                     self.running = False
                 elif event.type == pygame.KEYDOWN:
                     action = Action('n')
                     if event.key == pygame.K_LEFT:
                         action.setDirection('l')
-                        print(action.getDirection())
                     elif event.key == pygame.K_RIGHT:
                         action.setDirection('r')
-                        print(action.getDirection())
                     elif event.key == pygame.K_UP:
                         action.setDirection('u')
-                        print(action.getDirection())
                     elif event.key == pygame.K_DOWN:
                         action.setDirection('d')
-                        print(action.getDirection())
 
                     
                     if Utilities.isPushStone(posOfAres, posOfStones, action):
@@ -101,6 +118,11 @@ class GameGraphic:
                         for i in range(len(newPosOfStones)):
                             self.gameObject.stones[i].setCoordinate(newPosOfStones[i][0], newPosOfStones[i][1])
 
+                    if Utilities.isEndState(posOfStones, posOfSwitches):
+                        self.result_game = 1
+                    elif Utilities.isFailed(posOfStones, posOfSwitches, posOfWalls):
+                        self.result_game = -1
+
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     mouse_pos = event.pos
                     # PlayButton
@@ -116,9 +138,14 @@ class GameGraphic:
                         algo_thread.start()
                     # ResetButton
                     if self.buttons[1].rect.collidepoint(mouse_pos):
+                        self.result_game = 0
+
                         if self.is_in_algorithm:
                             self.is_in_algorithm = False
                             self.buttons[0].setIsInAlgorithm(self.is_in_algorithm)
+                            self.buttons[0].setIsSearching(False)
+                            self.buttons[0].setGameResult(0)
+                            self.buttons[0].update_theme()
                         self.gameObject = self.buttons[1].handle(self.gameObject)
                         self.gameObject = self.gameObject.addUI()
                         self.draw_all()
@@ -133,6 +160,9 @@ class GameGraphic:
                                 self.buttons[2].setText(algorithms[i])
                                 self.show_algorithm_list = False
                                 break
+
+
+
                                     
             self.gameObject.ares.move()
             for stone in self.gameObject.stones:

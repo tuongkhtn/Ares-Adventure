@@ -17,7 +17,9 @@ class UIConfig:
     
     # Màu sắc
     # COLOR_BG = (230, 241, 216)
-    COLOR_BG =  (120, 220, 220)
+    # COLOR_BG =  (120, 220, 220)
+    COLOR_BG =  (255, 255,255)
+
 
     COLOR_WALL = (139, 69, 19)
     
@@ -26,6 +28,7 @@ class UIConfig:
     STONE_FONT = pygame.font.Font(None, 20)
     STATS_FONT = pygame.font.Font(None, 30)
     BTN_FONT = pygame.font.Font(None, 20)
+    MSS_FONT  = pygame.font.Font(None, 40)
 
 
     BUTTON_HEIGHT = 40
