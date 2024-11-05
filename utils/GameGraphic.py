@@ -35,6 +35,8 @@ class GameGraphic:
         self.is_in_algorithm = False
         self.current_algorithm_index = 0
         self.show_algorithm_list = False
+        self.success = False
+        self.is_searching = False
 
         # Init object
         self.gameObject = gameObject.addUI()
@@ -56,15 +58,12 @@ class GameGraphic:
         steps_text = UIConfig.STATS_FONT.render(f"Step: {self.gameObject.stepCount}", True, (0, 0, 0))
         weight_text = UIConfig.STATS_FONT.render(f"Weight: {self.gameObject.totalWeight}", True, (0, 0, 0))
         self.screen.blit(steps_text, (10, 10))
-        self.screen.blit(weight_text, (UIConfig.WINDOW_WIDTH - 150, 10))
+        self.screen.blit(weight_text, (10, 40))
         
     def run(self):
         while self.running:
             self.screen.fill(UIConfig.COLOR_BG)
-            self.draw_all()
-            pygame.display.flip()
-            self.clock.tick(60)
-
+            
             posOfAres = self.gameObject.ares.getCoordinate()
             posOfStones = [stone.getCoordinate() for stone in self.gameObject.stones]
             posOfWalls = [wall.getCoordinate() for wall in self.gameObject.walls]
@@ -135,5 +134,10 @@ class GameGraphic:
                                 self.show_algorithm_list = False
                                 break
                                     
-        pygame.quit()
-        sys.exit()
+            self.gameObject.ares.move()
+            for stone in self.gameObject.stones:
+                stone.move()
+            self.draw_all()
+                                    
+            pygame.display.update() 
+            self.clock.tick(60) 

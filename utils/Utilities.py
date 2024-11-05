@@ -162,8 +162,8 @@ class Utilities:
         """
         
         newPosOfAres = posOfAres[0] + action.getCoordinate()[0], posOfAres[1] + action.getCoordinate()[1]
+        
         index = None
-
         posOfStonesCopy = copy.deepcopy(posOfStones)
         if action.getDirection().isupper():
             index = posOfStonesCopy.index(newPosOfAres)

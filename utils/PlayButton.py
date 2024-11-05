@@ -7,6 +7,8 @@ class PlayButton(Button):
     def __init__(self, x, y):
         super().__init__(x, y, UIConfig.PLAY_BUTTON_COLOR, UIConfig.PLAY_BUTTON_TEXT)
         self.is_in_algorithm = False
+        self.success = False
+        self.is_searching = False
 
     def setIsInAlgorithm(self, is_in_algorithm):
         self.is_in_algorithm = is_in_algorithm
@@ -17,11 +19,13 @@ class PlayButton(Button):
         self.text = text
 
     def handleClick(self, gameObject, algorithm):
-        print("gameObject: ", gameObject.maze)
         if self.is_in_algorithm:
             self.setColor(UIConfig.PLAYING_BUTTON_COLOR)
             self.setText(UIConfig.PLAYING_BUTTON_TEXT)
+        self.is_searching = True
         finalNumberOfSteps, finalWeight,  numberOfNodes, finalPath = algorithm(gameObject)
+        self.is_searching = False
+        
         if finalPath == "":
             return False
         for step in finalPath: 

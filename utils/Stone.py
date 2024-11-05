@@ -16,14 +16,17 @@ class Stone(Object):
     def addUI(self):
         return super().addUI(ImageConfig.IMAGE_STONE)
         
-    def move(self, action: Action):
-        self._x = action.getCoordinate()[0]
-        self._y = action.getCoordinate()[1]
-
-        self.screen_position = [
-            self._y * UIConfig.TILE_SIZE + UIConfig.OFFSET_X,
-            self._x * UIConfig.TILE_SIZE + UIConfig.OFFSET_Y
-        ]
+    def move(self):
+        target_x = self._y * UIConfig.TILE_SIZE + UIConfig.OFFSET_X
+        target_y = self._x * UIConfig.TILE_SIZE + UIConfig.OFFSET_Y
+        if self.screen_position[0] < target_x:
+            self.screen_position[0] += min(UIConfig.MOVE_SPEED, target_x - self.screen_position[0])
+        elif self.screen_position[0] > target_x:
+            self.screen_position[0] -= min(UIConfig.MOVE_SPEED, self.screen_position[0] - target_x)
+        if self.screen_position[1] < target_y:
+            self.screen_position[1] += min(UIConfig.MOVE_SPEED, target_y - self.screen_position[1])
+        elif self.screen_position[1] > target_y:
+            self.screen_position[1] -= min(UIConfig.MOVE_SPEED, self.screen_position[1] - target_y)    
     
     def draw(self, screen):
         super().draw(screen)

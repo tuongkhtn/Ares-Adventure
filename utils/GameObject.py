@@ -7,6 +7,7 @@ from .Stone import Stone
 from .Switch import Switch
 from .FreeSpace import FreeSpace
 from .Action import Action
+from config import UIConfig
 
 class GameObject:
     def __init__(self, filename):
