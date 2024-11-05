@@ -14,7 +14,8 @@ class Button():
         pass
 
     def draw(self, screen):
+        rect = pygame.Rect(self.x, self.y, self.height, self.width)
         text_surface = UIConfig.STATS_FONT.render(self.text, True, (255, 255, 255))
-        text_rect = text_surface.get_rect(center=self.rect.center)
+        text_rect = text_surface.get_rect(center=rect.center)
         pygame.draw.rect(screen, self.color, self.rect)  # Vẽ nút
         screen.blit(text_surface, text_rect)
