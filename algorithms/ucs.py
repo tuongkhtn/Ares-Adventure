@@ -1,16 +1,9 @@
-import copy
-
-from utils import PriorityQueue
 from utils import CustomSet
-from utils import GameObject
 from utils import Utilities
+from utils import GameObject
+from utils import PriorityQueue
 
-def printQueue(actions):
-    import copy
-    
-    actions_copy = copy.deepcopy(actions)
-    while not actions_copy.isEmpty():
-        print(actions_copy.pop())
+
 
 def uniformCostSearch(gameObject: GameObject):
     """
@@ -73,6 +66,6 @@ def uniformCostSearch(gameObject: GameObject):
                 cost = Utilities.costFunction(addWeightAndPath)  
                 openSet.push(node + [(newPosOfAres, newPosOfStones)], cost)
                 actions.push(addWeightAndPath, cost)   
-                numberOfNodes += 1      
+                numberOfNodes += 1                  
         
     return finalNumberOfSteps, finalWeight,  numberOfNodes, finalPath

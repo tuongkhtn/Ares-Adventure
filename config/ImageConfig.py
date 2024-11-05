@@ -10,4 +10,3 @@ class ImageConfig:
     IMAGE_SWITCH = IMAGE_ROOT / "switch.png"
     IMAGE_WALL = IMAGE_ROOT / "wall.png"
     IMAGE_WALL_3D = IMAGE_ROOT / "wall3d.png"
-    IMAGE_STONE_ON_SWITCH = IMAGE_ROOT / "stone_on_switch.png"

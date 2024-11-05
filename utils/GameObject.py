@@ -1,4 +1,6 @@
 import numpy as np
+
+from config.UIConfig import UIConfig
 from .Ares import Ares
 from .Wall import Wall
 from .Stone import Stone
@@ -12,9 +14,23 @@ class GameObject:
         weights, maze = self.readFile(filename)   
         self.weights = weights
         self.maze = maze
+        self.filename = filename
+        
+        self.totalWeight = 0
+        self.stepCount = 0
         
         self.ares = [Ares(x.tolist()[0], x.tolist()[1]) for x in np.argwhere(maze == 3)][0]
-        self.walls = [Wall(x.tolist()[0], x.tolist()[1]) for x in np.argwhere(maze == 1)]
+        self.walls = []
+
+        # Vẽ các bức tường sau cùng để chúng "đè" lên các vật thể khác
+        for row_idx, row in enumerate(maze):
+            for col_idx, tile in enumerate(row):
+                if tile == 1:
+                    if row_idx == len(maze) - 1 or len(row) > len(maze[row_idx + 1]) or maze[row_idx + 1][col_idx] != 1:
+                        self.walls.append(Wall(row_idx, col_idx, is_3d=True))
+                    else:
+                        self.walls.append(Wall(row_idx, col_idx))
+
         self.switches = [Switch(x.tolist()[0], x.tolist()[1]) for x in np.argwhere((maze == 4) | (maze == 5) | (maze == 6))]
         self.freeSpaces = [FreeSpace(x.tolist()[0], x.tolist()[1]) for x in np.argwhere((maze != 1) & (maze != -1))]
         
@@ -62,6 +78,9 @@ class GameObject:
                 x.extend([-1 for _ in range(maxLenCol - lenCol)]) # add walls if lenCol is smaller than maxLenCol
 
         return weights, np.array(maze)
+
+    def reset(self):
+        return GameObject(self.filename)
         
     def positionOfAres(self):
         return self.ares.getCoordinate()
@@ -107,10 +126,11 @@ class GameObject:
         for switch in self.switches:
             switch.draw(screen)
         
+        self.ares.draw(screen)
+
         for stone in self.stones:
             stone.draw(screen)
             
         for wall in self.walls:
             wall.draw(screen)
         
-        self.ares.draw(screen)

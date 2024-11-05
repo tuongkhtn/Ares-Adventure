@@ -13,11 +13,8 @@ class Stone(Object):
     def setWeight(self, weight):
         self.__weight = weight
     
-    def addUI(self, is_on_switch=False):
-        if is_on_switch:
-            return super().addUI(ImageConfig.IMAGE_STONE_ON_SWITCH)
-        else:
-            return super().addUI(ImageConfig.IMAGE_STONE)
+    def addUI(self):
+        return super().addUI(ImageConfig.IMAGE_STONE)
         
     def move(self):
         target_x = self._y * UIConfig.TILE_SIZE
@@ -29,8 +26,12 @@ class Stone(Object):
         if self.screen_position[1] < target_y:
             self.screen_position[1] += min(UIConfig.MOVE_SPEED, target_y - self.screen_position[1])
         elif self.screen_position[1] > target_y:
-            self.screen_position[1] -= min(UIConfig.MOVE_SPEED, self.screen_position[1] - target_y)
+            self.screen_position[1] -= min(UIConfig.MOVE_SPEED, self.screen_position[1] - target_y)    
     
-    
+    def draw(self, screen):
+        super().draw(screen)
+        weight_text = UIConfig.STONE_FONT.render(str(self.__weight), True, (0, 0, 0))
+        weight_text_rect = weight_text.get_rect(center=(self.screen_position[0] + UIConfig.TILE_SIZE // 2, self.screen_position[1] + UIConfig.TILE_SIZE // 2))
+        screen.blit(weight_text, weight_text_rect)
 
         
