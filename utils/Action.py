@@ -1,6 +1,6 @@
 class Action:
     def __init__(self):
-        self.__direction = ""
+        self.__direction = "n"
         self.__weight = 0
     
     def __init__(self, direction):
@@ -30,4 +30,6 @@ class Action:
             return (-1, 0)
         elif direction == 'd':
             return (1, 0)
+        elif direction == 'n':
+            return (0, 0)
             
