@@ -30,6 +30,6 @@ class Object:
         self._x = x
         self._y = y
         
-    def draw(self, surface):
+    def draw(self, screen):
         self.screen_position = [self._y * UIConfig.TILE_SIZE + UIConfig.OFFSET_X, self._x * UIConfig.TILE_SIZE + UIConfig.OFFSET_Y]
-        surface.blit(self.image, (self.screen_position[0], self.screen_position[1]))
+        screen.blit(self.image, (self.screen_position[0], self.screen_position[1]))
