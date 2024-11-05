@@ -15,9 +15,12 @@ class PlayButton(Button):
         self.color = color
     def setText(self, text):
         self.text = text
+
     def handleClick(self, gameObject, algorithm):
         print("gameObject: ", gameObject.maze)
-
+        if self.is_in_algorithm:
+            self.setColor(UIConfig.PLAYING_BUTTON_COLOR)
+            self.setText(UIConfig.PLAYING_BUTTON_TEXT)
         finalNumberOfSteps, finalWeight,  numberOfNodes, finalPath = algorithm(gameObject)
         if finalPath == "":
             return False
