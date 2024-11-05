@@ -4,11 +4,10 @@ from config import UIConfig
 from utils import GameObject
 from utils import Action
 from utils import Utilities
-from utils import GameEvent
 from utils import Button, PlayButton, ResetButton, PauseButton
 from algorithms.astar import aStarSearch
 from algorithms.bfs import breadthFirstSearch
-# from algorithms.dfs import depthFirstSearch
+from algorithms.dfs import depthFirstSearch
 # from algorithms import uniformCostSearch
 import threading
 import copy
@@ -23,7 +22,6 @@ class GameGraphic:
         
         # Init object
         self.gameObject = gameObject.addUI()
-        self.gameEvent = GameEvent(self.gameObject)
 
         self.buttons = []
         self.buttons.append(PlayButton(500, 400))
@@ -31,6 +29,7 @@ class GameGraphic:
         
         self.clock = pygame.time.Clock()
         self.running = True
+        self.is_in_algorithm = False
 
     def draw_all(self):
         self.gameObject.draw(self.screen)
@@ -86,11 +85,21 @@ class GameGraphic:
 
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     mouse_pos = event.pos
+                    # PlayButton
                     if self.buttons[0].rect.collidepoint(mouse_pos):
-                        # self.gameObject = self.gameObject.reset()
-                        algo_thread = threading.Thread(target=self.buttons[0].handleClick, args=([copy.deepcopy(self.gameObject), aStarSearch]))
+                        if self.is_in_algorithm:
+                            self.is_in_algorithm = False
+                            self.buttons[0].setIsInAlgorithm(self.is_in_algorithm)
+                            continue
+                        self.is_in_algorithm = True
+                        self.buttons[0].setIsInAlgorithm(self.is_in_algorithm)
+                        algo_thread = threading.Thread(target=self.buttons[0].handleClick, args=([copy.deepcopy(self.gameObject), depthFirstSearch]))
                         algo_thread.start()
+                    # ResetButton
                     if self.buttons[1].rect.collidepoint(mouse_pos):
+                        if self.is_in_algorithm:
+                            self.is_in_algorithm = False
+                            self.buttons[0].setIsInAlgorithm(self.is_in_algorithm)
                         self.gameObject = self.buttons[1].handle(self.gameObject)
                         self.gameObject = self.gameObject.addUI()
                         self.draw_all()

@@ -55,7 +55,8 @@ def breadthFirstSearch(gameObject: GameObject):
         if node[-1] not in exploredSet:
             exploredSet.add(node[-1])
             for action in Utilities.validActionsInNextStep(posOfAres=node[-1][0], posOfStones=node[-1][1], posOfWalls=posWalls, weightOfStones=weightStones):
-                newState = Utilities.updateState(posOfAres=node[-1][0], posOfStones=node[-1][1], action=action)
+                newPosOfAres, posOfStonesCopy, _ = Utilities.updateState(node[-1][0], node[-1][1], action)  # newState Tuple[PosAres: Tuple(int, int), Stones: List[Stone: Tuple[X: int, Y: int, Weight: int]]]
+                newState = (newPosOfAres, posOfStonesCopy)                
                 if Utilities.isFailed(posOfStones=newState[1], posOfSwitches=posSwitches, posOfWalls=posWalls):
                     continue
                 addWeightAndPath = (node_action[0] + action.getWeight(), node_action[1] + action.getDirection())
@@ -64,4 +65,4 @@ def breadthFirstSearch(gameObject: GameObject):
 
                 numberOfNodes += 1
     
-    return finalNumberOfSteps, finalWeight,  numberOfNodes, finalPath, finalStates
+    return finalNumberOfSteps, finalWeight,  numberOfNodes, finalPath

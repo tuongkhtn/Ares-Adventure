@@ -27,7 +27,7 @@ class Stone(Object):
     
     def draw(self, screen):
         super().draw(screen)
-        weight_text = UIConfig.FONT.render(str(self.__weight), True, (0, 0, 0))
+        weight_text = UIConfig.STONE_FONT.render(str(self.__weight), True, (0, 0, 0))
         weight_text_rect = weight_text.get_rect(center=(self.screen_position[0] + UIConfig.TILE_SIZE // 2, self.screen_position[1] + UIConfig.TILE_SIZE // 2))
         screen.blit(weight_text, weight_text_rect)
 
