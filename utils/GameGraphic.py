@@ -4,7 +4,6 @@ from config import UIConfig
 from utils import GameObject
 from utils import Action
 from utils import Utilities
-from utils import GameEvent
 from utils import Button, PlayButton, ResetButton, PauseButton
 
 class GameGraphic:
@@ -17,7 +16,6 @@ class GameGraphic:
         
         # Init object
         self.gameObject = gameObject.addUI()
-        self.gameEvent = GameEvent(self.gameObject)
 
         self.buttons = []
         self.buttons.append(PlayButton(500, 400))

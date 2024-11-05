@@ -6,9 +6,9 @@ class Object:
         self._x = x
         self._y = y
             
-    def addUI(self, img_path):
+    def addUI(self, img_path, height=UIConfig.TILE_SIZE, width=UIConfig.TILE_SIZE):
         self.image = pygame.image.load(img_path).convert_alpha()
-        self.image = pygame.transform.scale(self.image, (UIConfig.TILE_SIZE, UIConfig.TILE_SIZE))
+        self.image = pygame.transform.scale(self.image, (width, height))
         return self
 
     def getX(self):
