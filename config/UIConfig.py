@@ -1,4 +1,3 @@
-
 class UIConfig:
     # Kích thước cửa sổ
     WINDOW_WIDTH = 1000
