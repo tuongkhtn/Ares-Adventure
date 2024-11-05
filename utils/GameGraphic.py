@@ -8,7 +8,7 @@ from utils import Button, PlayButton, ResetButton, PauseButton
 from algorithms.astar import aStarSearch
 from algorithms.bfs import breadthFirstSearch
 from algorithms.dfs import depthFirstSearch
-# from algorithms import uniformCostSearch
+from algorithms.ucs import uniformCostSearch
 import threading
 import copy
 

@@ -1,7 +1,6 @@
 import time
 import psutil
 import os
-from algorithms import uniformCostSearch
 from utils import GameObject
 from utils import GameGraphic
 
@@ -21,7 +20,7 @@ def readCommand():
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('-l', '--level', type=str,
-                        help='level of game to play', default='input-03.txt')
+                        help='level of game to play', default='input-10.txt')
     parser.add_argument('-m', '--method', type=str,
                         help='algorithm method', default='dfs')
     args = parser.parse_args()
