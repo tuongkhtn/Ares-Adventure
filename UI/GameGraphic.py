@@ -4,7 +4,7 @@ from config import UIConfig
 from utils import GameObject
 from utils import Action
 from utils import Utilities
-# from .GameEvent import GameEvent
+from .GameEvent import GameEvent
 
 class GameGraphic:
     def __init__(self, gameObject: GameObject):
@@ -16,6 +16,7 @@ class GameGraphic:
         
         # Init object
         self.gameObject = gameObject.addUI()
+        self.gameEvent = GameEvent(self.gameObject)
         
         self.clock = pygame.time.Clock()
         self.running = True
@@ -31,34 +32,7 @@ class GameGraphic:
             self.clock.tick(60)
             
             for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    self.running = False
-                # elif event.type == pygame.KEYDOWN:
-                #     posOfAres = self.ares.getCoordinate()
-                #     posOfStones = [stone.getCoordinate() for stone in self.stones]
-                #     posOfWalls = [wall.getCoordinate() for wall in self.walls]
-                #     posOfSwitches = [switch.getCoordinate() for switch in self.switches]
-                    
-                #     action = Action('n')
-                #     if event.key == pygame.K_LEFT:
-                #         action.setDirection('l')
-                #     elif event.key == pygame.K_RIGHT:
-                #         action.setDirection('r')
-                #     elif event.key == pygame.K_UP:
-                #         action.setDirection('u')
-                #     elif event.key == pygame.K_DOWN:
-                #         action.setDirection('d')
-                    
-                #     if Utilities.isPushStone(posOfAres, posOfStones, action):
-                #         action.setDirection(action.getDirection().upper())
-                #         print(action.getDirection())
-                    
-                #     if Utilities.isValidAction(posOfAres, posOfStones, posOfWalls, action):
-                #         newPosOfAres, newPosOfStones = Utilities.updateState(posOfAres, posOfStones, action)
-                #         self.ares.setCoordinate(newPosOfAres[0], newPosOfAres[1])
-                #         print(self.ares.getCoordinate())
-                #         for i in range(len(newPosOfStones)):
-                #             self.stones[i].setCoordinate(newPosOfStones[i][0], newPosOfStones[i][1])
+                self.running, self.gameObject = self.gameEvent.run(event)
                             
                                     
         pygame.quit()
