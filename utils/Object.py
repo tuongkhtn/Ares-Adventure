@@ -8,8 +8,8 @@ class Object:
             
     def addUI(self, img_path, height=UIConfig.TILE_SIZE, width=UIConfig.TILE_SIZE):
         self.image = pygame.image.load(img_path).convert_alpha()
-        self.image = pygame.transform.scale(self.image, (UIConfig.TILE_SIZE, UIConfig.TILE_SIZE))
-        self.screen_position = [self._y * UIConfig.TILE_SIZE, self._x * UIConfig.TILE_SIZE]
+        self.image = pygame.transform.scale(self.image, (width, height))
+        self.screen_position = [self._y * height + UIConfig.OFFSET_X, self._x * width + UIConfig.OFFSET_Y]
         return self
 
     def getX(self):
@@ -31,9 +31,6 @@ class Object:
         self._x = x
         self._y = y
 
-    def draw(self, surface):
-        surface.blit(self.image, (self.screen_position[0] + UIConfig.OFFSET_X, self.screen_position[1] + UIConfig.OFFSET_Y))
-        
-    def setScreenPosition(self, x, y):
-        self.screen_position = [y * UIConfig.TILE_SIZE, x * UIConfig.TILE_SIZE]        
+    def draw(self, screen):
+        screen.blit(self.image, (self.screen_position[0], self.screen_position[1]))     
     
