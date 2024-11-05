@@ -14,6 +14,11 @@ class Button():
     def handle(self, gameObject):
         pass
 
+    def getText(self):
+        return self.text
+
+    def setText(self, text):
+        self.text = text
 
     def draw(self, screen):
         text_surface = UIConfig.BTN_FONT.render(self.text, True, (255, 255, 255))
