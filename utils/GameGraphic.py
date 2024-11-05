@@ -6,6 +6,12 @@ from utils import Action
 from utils import Utilities
 from utils import GameEvent
 from utils import Button, PlayButton, ResetButton, PauseButton
+from algorithms.astar import aStarSearch
+from algorithms.bfs import breadthFirstSearch
+# from algorithms.dfs import depthFirstSearch
+# from algorithms import uniformCostSearch
+import threading
+import copy
 
 class GameGraphic:
     def __init__(self, gameObject: GameObject):
@@ -47,26 +53,33 @@ class GameGraphic:
                     action = Action('n')
                     if event.key == pygame.K_LEFT:
                         action.setDirection('l')
+                        print(action.getDirection())
                     elif event.key == pygame.K_RIGHT:
                         action.setDirection('r')
+                        print(action.getDirection())
                     elif event.key == pygame.K_UP:
                         action.setDirection('u')
+                        print(action.getDirection())
                     elif event.key == pygame.K_DOWN:
                         action.setDirection('d')
+                        print(action.getDirection())
+
                     
                     if Utilities.isPushStone(posOfAres, posOfStones, action):
                         action.setDirection(action.getDirection().upper())
-                        print(action.getDirection())
                     
                     if Utilities.isValidAction(posOfAres, posOfStones, posOfWalls, action):
                         newPosOfAres, newPosOfStones = Utilities.updateState(posOfAres, posOfStones, action)
                         self.gameObject.ares.setCoordinate(newPosOfAres[0], newPosOfAres[1])
-                        print(self.gameObject.ares.getCoordinate())
                         for i in range(len(newPosOfStones)):
                             self.gameObject.stones[i].setCoordinate(newPosOfStones[i][0], newPosOfStones[i][1])
 
                 elif event.type == pygame.MOUSEBUTTONDOWN:
-                    pass
+                    mouse_pos = event.pos
+                    if self.buttons[0].rect.collidepoint(mouse_pos):
+                        # self.gameObject = self.gameObject.reset()
+                        algo_thread = threading.Thread(target=self.buttons[0].handleClick, args=([copy.deepcopy(self.gameObject), aStarSearch]))
+                        algo_thread.start()
                             
                                     
         pygame.quit()
