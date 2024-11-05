@@ -65,6 +65,8 @@ def heuristic(switches, stones):
 
 def aStarSearch(gameObject: GameObject):
 
+    print("aStarSearch")
+
     finalWeight = -1
     finalPath = ""
     finalNumberOfSteps = -1

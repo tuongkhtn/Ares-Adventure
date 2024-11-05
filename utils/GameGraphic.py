@@ -43,7 +43,7 @@ class GameGraphic:
         self.buttons.append(PlayButton(y=50, x=UIConfig.WINDOW_WIDTH - 150))
         self.buttons.append(ResetButton(y=100, x=UIConfig.WINDOW_WIDTH - 150))
         self.buttons.append(ChoiceButton(y=50, x=UIConfig.WINDOW_WIDTH - 250, text=algorithms[self.current_algorithm_index]))
-        self.algorithms_buttons = [ChoiceButton(y=50 * (i + 2), x=UIConfig.WINDOW_WIDTH - 250, text=algorithms[i], color=UIConfig.OPTION_BUTTON_COLOR) for i in range(len(algorithms))]
+        self.algorithms_buttons = [ChoiceButton(y=50 + 40 * (i + 1), x=UIConfig.WINDOW_WIDTH - 250, text=algorithms[i], color=UIConfig.OPTION_BUTTON_COLOR) for i in range(len(algorithms))]
         
         self.clock = pygame.time.Clock()
 
@@ -125,10 +125,15 @@ class GameGraphic:
                         self.draw_all()
                     # ChoiceButton
                     if self.buttons[2].rect.collidepoint(mouse_pos):
-                        if self.show_algorithm_list:
-                            self.show_algorithm_list = False
-                        else:
-                            self.show_algorithm_list = True
+                        self.show_algorithm_list = not self.show_algorithm_list
+                    if self.show_algorithm_list:
+                        for i, button in enumerate(self.algorithms_buttons):
+                            if button.rect.collidepoint(mouse_pos):
+                                print(algorithms[i])
+                                self.current_algorithm_index = i
+                                self.buttons[2].setText(algorithms[i])
+                                self.show_algorithm_list = False
+                                break
                                     
         pygame.quit()
         sys.exit()

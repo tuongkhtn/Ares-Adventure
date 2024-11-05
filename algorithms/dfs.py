@@ -19,6 +19,7 @@ def depthFirstSearch(gameObject: GameObject):
         numberOfNodes (int): The total number of nodes expanded during the search.
         path (str): A string representing the sequence of actions taken in the solution path.
     """
+    print("depthFirstSearch")
     finalWeight = -1
     finalPath = ""
     finalNumberOfSteps = -1
