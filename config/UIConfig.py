@@ -2,31 +2,29 @@ import pygame
 pygame.font.init()
 
 class UIConfig:
-    # Kích thước cửa sổ
     WINDOW_WIDTH = 1000
     WINDOW_HEIGHT = 600
     
-    # Caption
     CAPTION = "Sokoban - Ares and Stones"
     
-    # Kích thước ô
     TILE_SIZE = 40
 
     # Offset
     OFFSET_X = 40
     OFFSET_Y = 100
     
-    # Biến tốc độ di chuyển
     MOVE_SPEED = 5  # pixel per frame
     
     # Màu sắc
-    COLOR_BG = (230, 241, 216)# Màu nền xanh da trời nhạt
-    COLOR_WALL = (139, 69, 19)  # Màu tường nâu
+    COLOR_BG = (230, 241, 216)
+    COLOR_WALL = (139, 69, 19)
     
     FONT_SIZE = 24
 
-    FONT = pygame.font.Font(None, 24)
-    STATS_FONT = pygame.font.Font(None, 36)
+    STONE_FONT = pygame.font.Font(None, 20)
+    STATS_FONT = pygame.font.Font(None, 30)
+    BTN_FONT = pygame.font.Font(None, 20)
+
 
     BUTTON_HEIGHT = 40
     BUTTON_WIDTH = 80
@@ -35,7 +33,10 @@ class UIConfig:
     RESET_BUTTON_TEXT = "RESET"
 
     PLAY_BUTTON_COLOR = (0, 0, 255)
+    PLAYING_BUTTON_COLOR = (0, 255, 0)
+
     PLAY_BUTTON_TEXT = "PLAY"
+    PLAYING_BUTTON_TEXT = "PLAYING"
 
     PAUSE_BUTTON_COLOR = (0, 0, 255)
     PAUSE_BUTTON_TEXT = "PAUSE"

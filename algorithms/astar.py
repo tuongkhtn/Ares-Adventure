@@ -109,8 +109,8 @@ def aStarSearch(gameObject: GameObject):
 
             for valid_action in Utilities.validActionsInNextStep(posOfAres=node[-1][0], posOfStones=node[-1][1], posOfWalls=posOfWalls, weightOfStones=weightOfStones):  # action Tuple[X: int, Y: int,  stoneWeight: int, command: str]
                 # print("valid_action: ", valid_action)
-                newState = Utilities.updateState(node[-1][0], node[-1][1], valid_action)  # newState Tuple[PosAres: Tuple(int, int), Stones: List[Stone: Tuple[X: int, Y: int, Weight: int]]]
-
+                newPosOfAres, posOfStonesCopy, _ = Utilities.updateState(node[-1][0], node[-1][1], valid_action)  # newState Tuple[PosAres: Tuple(int, int), Stones: List[Stone: Tuple[X: int, Y: int, Weight: int]]]
+                newState = (newPosOfAres, posOfStonesCopy)
                 if Utilities.isFailed(posOfStones=node[-1][-1], posOfWalls=posOfWalls, posOfSwitches=posOfSwitches):
                     continue
                 
