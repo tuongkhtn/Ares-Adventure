@@ -65,7 +65,7 @@ def uniformCostSearch(gameObject: GameObject):
                 
                 addWeightAndPath = (node_action[0] + valid_action.getWeight(), node_action[1] + valid_action.getDirection())
                 cost = Utilities.costFunction(addWeightAndPath)  
-                openSet.push(node + [(newPosOfAres, posOfStonesCopy)], cost)
+                openSet.push(node + [newState], cost)
                 actions.push(addWeightAndPath, cost)   
                 numberOfNodes += 1                  
         

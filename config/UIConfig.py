@@ -13,6 +13,7 @@ class UIConfig:
     OFFSET_X = 40
     OFFSET_Y = 100
     
+    MOVE_SPEED = 3  # pixel per frame
     MOVE_SPEED = 5  # pixel per frame
     
     # Màu sắc

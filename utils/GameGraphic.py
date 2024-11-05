@@ -35,6 +35,8 @@ class GameGraphic:
         self.is_in_algorithm = False
         self.current_algorithm_index = 0
         self.show_algorithm_list = False
+        self.success = False
+        self.is_searching = False
 
         # Init object
         self.gameObject = gameObject.addUI()
@@ -56,7 +58,7 @@ class GameGraphic:
         steps_text = UIConfig.STATS_FONT.render(f"Step: {self.gameObject.stepCount}", True, (0, 0, 0))
         weight_text = UIConfig.STATS_FONT.render(f"Weight: {self.gameObject.totalWeight}", True, (0, 0, 0))
         self.screen.blit(steps_text, (10, 10))
-        self.screen.blit(weight_text, (UIConfig.WINDOW_WIDTH - 150, 10))
+        self.screen.blit(weight_text, (10, 40))
         
     def run(self):
         while self.running:
@@ -119,12 +121,23 @@ class GameGraphic:
                             self.buttons[0].setIsInAlgorithm(self.is_in_algorithm)
                         self.gameObject = self.buttons[1].handle(self.gameObject)
                         self.gameObject = self.gameObject.addUI()
-                            
+                        self.draw_all()
+                    # ChoiceButton
+                    if self.buttons[2].rect.collidepoint(mouse_pos):
+                        self.show_algorithm_list = not self.show_algorithm_list
+                    if self.show_algorithm_list:
+                        for i, button in enumerate(self.algorithms_buttons):
+                            if button.rect.collidepoint(mouse_pos):
+                                print(algorithms[i])
+                                self.current_algorithm_index = i
+                                self.buttons[2].setText(algorithms[i])
+                                self.show_algorithm_list = False
+                                break
                                     
             self.gameObject.ares.move()
             for stone in self.gameObject.stones:
                 stone.move()
             self.draw_all()
                                     
-            pygame.display.update() # Cập nhật màn hình sau khi vẽ
-            self.clock.tick(60)  # Giới hạn FPS của trò chơi
+            pygame.display.update() 
+            self.clock.tick(60) 
