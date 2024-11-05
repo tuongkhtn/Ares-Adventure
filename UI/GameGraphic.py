@@ -1,9 +1,10 @@
 import sys
 import pygame
 from config import UIConfig
-from utils import GameObject, GameState
-from utils import Ares, Stone, Wall, FreeSpace, Switch
+from utils import GameObject
 from utils import Action
+from utils import Utilities
+# from .GameEvent import GameEvent
 
 class GameGraphic:
     def __init__(self, gameObject: GameObject):
@@ -11,40 +12,16 @@ class GameGraphic:
         pygame.init()
         self.screen = pygame.display.set_mode((UIConfig.WINDOW_WIDTH, UIConfig.WINDOW_HEIGHT))
         pygame.display.set_caption(UIConfig.CAPTION)
-        self.font = pygame.font.Font(None, 24)
+        self.font = pygame.font.Font(None, UIConfig.FONT_SIZE)
         
         # Init object
-        self.initObject(gameObject)
-        
-        # Get positions
-        self.positionOfWalls = gameObject.positionOfWalls()
+        self.gameObject = gameObject.addUI()
         
         self.clock = pygame.time.Clock()
         self.running = True
-        
-    def initObject(self, gameObject: GameObject):
-        self.ares = gameObject.ares.addUI()
-        self.stones = [stone.addUI() for stone in gameObject.stones]
-        self.walls = [wall.addUI() for wall in gameObject.walls]
-        self.switches = [switch.addUI() for switch in gameObject.switches]
-        self.freeSpaces = [freeSpace.addUI() for freeSpace in gameObject.freeSpaces]
-        
-        self.gameState = GameState(self.ares, self.stones)
-        
+
     def draw_all(self):
-        for freeSpace in self.freeSpaces:
-            freeSpace.draw(self.screen)
-        
-        for switch in self.switches:
-            switch.draw(self.screen)
-        
-        for stone in self.stones:
-            stone.draw(self.screen)
-            
-        for wall in self.walls:
-            wall.draw(self.screen)
-        
-        self.ares.draw(self.screen)
+        self.gameObject.draw(self.screen)
         
     def run(self):
         while self.running:
@@ -56,6 +33,33 @@ class GameGraphic:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
+                # elif event.type == pygame.KEYDOWN:
+                #     posOfAres = self.ares.getCoordinate()
+                #     posOfStones = [stone.getCoordinate() for stone in self.stones]
+                #     posOfWalls = [wall.getCoordinate() for wall in self.walls]
+                #     posOfSwitches = [switch.getCoordinate() for switch in self.switches]
+                    
+                #     action = Action('n')
+                #     if event.key == pygame.K_LEFT:
+                #         action.setDirection('l')
+                #     elif event.key == pygame.K_RIGHT:
+                #         action.setDirection('r')
+                #     elif event.key == pygame.K_UP:
+                #         action.setDirection('u')
+                #     elif event.key == pygame.K_DOWN:
+                #         action.setDirection('d')
+                    
+                #     if Utilities.isPushStone(posOfAres, posOfStones, action):
+                #         action.setDirection(action.getDirection().upper())
+                #         print(action.getDirection())
+                    
+                #     if Utilities.isValidAction(posOfAres, posOfStones, posOfWalls, action):
+                #         newPosOfAres, newPosOfStones = Utilities.updateState(posOfAres, posOfStones, action)
+                #         self.ares.setCoordinate(newPosOfAres[0], newPosOfAres[1])
+                #         print(self.ares.getCoordinate())
+                #         for i in range(len(newPosOfStones)):
+                #             self.stones[i].setCoordinate(newPosOfStones[i][0], newPosOfStones[i][1])
+                            
                                     
         pygame.quit()
         sys.exit()
