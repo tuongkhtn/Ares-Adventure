@@ -56,11 +56,9 @@
 import numpy as np
 from utils.GameObject import GameObject
 from utils.Action import Action
-from algorithms import uniformCostSearch
-from algorithms.bfs import breadthFirstSearch
-from algorithms.dfs import depthFirstSearch
-
+from algorithms import uniformCostSearch, aStarSearch
 from utils import Utilities
+import time
 
 if __name__ == "__main__":
     # gameObject = GameObject("input-01.txt")
@@ -74,10 +72,21 @@ if __name__ == "__main__":
     # pygame.display.set_caption("Game Window")
     # print(gameObject.ares.addUI())
     
-    gameObject = GameObject("input-07.txt")
+    gameObject = GameObject("input-04.txt")
     
-    finalNumberOfSteps, finalWeight,  numberOfNodes, finalPath, finalStates = depthFirstSearch(gameObject)
-    
+    start = time.time()
+    finalNumberOfSteps, finalWeight,  numberOfNodes, finalPath = uniformCostSearch(gameObject)
+    end = time.time()
+    print("Uniform Cost Search")
+    print("UCS runtime", end - start)
+    print(f"Steps: {finalNumberOfSteps}, Weight: {finalWeight}, Node: {numberOfNodes}")
+    print(f"Path: {finalPath}")
+
+    start = time.time()
+    finalNumberOfSteps, finalWeight,  numberOfNodes, finalPath = aStarSearch(gameObject)
+    end = time.time()
+    print("A* Search")
+    print("A* runtime", end - start)
     print(f"Steps: {finalNumberOfSteps}, Weight: {finalWeight}, Node: {numberOfNodes}")
     print(f"Path: {finalPath}")
     
