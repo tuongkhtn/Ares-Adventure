@@ -11,6 +11,7 @@ class GameObject:
         weights, maze = self.readFile(filename)   
         self.weights = weights
         self.maze = maze
+        self.filename = filename
         
         self.ares = [Ares(x.tolist()[0], x.tolist()[1]) for x in np.argwhere(maze == 3)][0]
         self.walls = [Wall(x.tolist()[0], x.tolist()[1]) for x in np.argwhere(maze == 1)]
@@ -61,6 +62,9 @@ class GameObject:
                 x.extend([-1 for _ in range(maxLenCol - lenCol)]) # add walls if lenCol is smaller than maxLenCol
 
         return weights, np.array(maze)
+
+    def reset(self):
+        return GameObject(self.filename)
         
     def positionOfAres(self):
         return self.ares.getCoordinate()

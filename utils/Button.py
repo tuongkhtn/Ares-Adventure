@@ -10,7 +10,7 @@ class Button():
         self.color = color
         self.text = text
     
-    def handle(self):
+    def handle(self, gameObject):
         pass
 
     def draw(self, screen):
