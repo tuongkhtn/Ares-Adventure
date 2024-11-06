@@ -26,9 +26,11 @@ class PlayButton(Button):
         if (self.is_in_algorithm):
             self.setColor(UIConfig.PLAYING_BUTTON_COLOR)
             self.setText(UIConfig.PLAYING_BUTTON_TEXT)
+            self.textColor = UIConfig.PLAYING_BUTTON_TEXT_COLOR
         else:
             self.setColor(UIConfig.PLAY_BUTTON_COLOR)
             self.setText(UIConfig.PLAY_BUTTON_TEXT)
+            self.textColor = UIConfig.PLAY_BUTTON_TEXT_COLOR
 
     def handleClick(self, gameObject, algorithm):
         if self.is_in_algorithm:

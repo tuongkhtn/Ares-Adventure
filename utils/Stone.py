@@ -28,10 +28,10 @@ class Stone(Object):
         elif self.screen_position[1] > target_y:
             self.screen_position[1] -= min(UIConfig.MOVE_SPEED, self.screen_position[1] - target_y)    
     
-    def draw(self, screen):
-        super().draw(screen)
+    def draw(self, screen, offset_x=0, offset_y=0):
+        super().draw(screen, offset_x, offset_y)
         weight_text = UIConfig.STONE_FONT.render(str(self.__weight), True, (0, 0, 0))
-        weight_text_rect = weight_text.get_rect(center=(self.screen_position[0] + UIConfig.TILE_SIZE // 2, self.screen_position[1] + UIConfig.TILE_SIZE // 2))
+        weight_text_rect = weight_text.get_rect(center=(self.screen_position[0] + offset_x + UIConfig.TILE_SIZE // 2, self.screen_position[1] + offset_y + UIConfig.TILE_SIZE // 2))
         screen.blit(weight_text, weight_text_rect)
 
         

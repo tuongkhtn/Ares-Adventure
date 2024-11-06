@@ -11,7 +11,7 @@ class Button():
         self.text = text
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
         self.corner_radius = corner_radius
-        self.textColor = (255, 255, 255)
+        self.textColor = UIConfig.DEFAULT_TEXT_COLOR
         self.textFont = UIConfig.BTN_FONT
     
     def handle(self, gameObject):

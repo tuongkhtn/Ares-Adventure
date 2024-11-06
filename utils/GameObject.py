@@ -28,7 +28,11 @@ class GameObject:
         for i in range(len(stones)):
             stones[i].setWeight(weights[i])
         
-        self.stones = stones        
+        self.stones = stones   
+
+        # Offset
+        self.offsetX = (UIConfig.WINDOW_WIDTH -max([len(x) for x in self.maze])*UIConfig.TILE_SIZE)//2 - 40
+        self.offsetY = (UIConfig.WINDOW_HEIGHT -len(self.maze)*UIConfig.TILE_SIZE)//2 - 100
         
     def readFile(self, filename):
         with open(filename, 'r') as f:
@@ -100,16 +104,16 @@ class GameObject:
     
     def draw(self, screen):
         for freeSpace in self.freeSpaces:
-            freeSpace.draw(screen)
+            freeSpace.draw(screen, self.offsetX, self.offsetY)
         
         for switch in self.switches:
-            switch.draw(screen)
+            switch.draw(screen, self.offsetX, self.offsetY)
         
-        self.ares.draw(screen)
+        self.ares.draw(screen, self.offsetX, self.offsetY)
 
         for stone in self.stones:
-            stone.draw(screen)
+            stone.draw(screen, self.offsetX, self.offsetY)
             
         for wall in self.walls:
-            wall.draw(screen)
+            wall.draw(screen, self.offsetX, self.offsetY)
         
