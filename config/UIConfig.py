@@ -39,7 +39,7 @@ class UIConfig:
     RESET_BUTTON_COLOR = (0, 0, 255)
     RESET_BUTTON_TEXT = "RESET"
 
-    CHOICE_BUTTON_COLOR = (200, 0, 200)
+    CHOICE_BUTTON_COLOR = (205, 0, 200)
     CHOICE_BUTTON_TEXT = "A*"
 
     
@@ -49,7 +49,7 @@ class UIConfig:
 
 
     PLAY_BUTTON_COLOR = (0, 0, 255)
-    PLAYING_BUTTON_COLOR = (0, 255, 0)
+    PLAYING_BUTTON_COLOR = (0, 200, 0)
 
     PLAY_BUTTON_TEXT = "PLAY"
     PLAYING_BUTTON_TEXT = "PLAYING"
@@ -60,7 +60,7 @@ class UIConfig:
 
     ALERT_WIDTH = 350
     ALERT_HEIGHT = 120
-    ALERT_COLOR = (180, 180, 180)
+    ALERT_COLOR = (22, 220, 220)
     ALERT_TEXT_COLOR = (0, 0, 0)
     ALERT_FONT_SIZE = 50
     ALERT_FONT = pygame.font.Font(None, ALERT_FONT_SIZE)
