@@ -14,7 +14,7 @@ class UIConfig:
     OFFSET_X = 40
     OFFSET_Y = 100
     
-    MOVE_SPEED = 3  # pixel per frame
+    MOVE_SPEED = 5  # pixel per frame
     
     # Màu sắc
     # COLOR_BG = (230, 241, 216)
@@ -41,6 +41,9 @@ class UIConfig:
 
     CHOICE_BUTTON_COLOR = (205, 0, 200)
     CHOICE_BUTTON_TEXT = "A*"
+
+    LEVEL_BUTTON_COLOR = (200, 0, 200)
+    LEVEL_BUTTON_TEXT = "Level"
 
     
     OPTION_BUTTON_COLOR = (150,150, 150)

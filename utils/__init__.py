@@ -7,5 +7,5 @@ from .PlayButton import *
 from .PauseButton import *
 from .ResetButton import *
 from .GameGraphic import *
-from .ChoiceButton import *
 from .Alert import *
+from .LevelButton import *

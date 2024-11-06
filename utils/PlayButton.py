@@ -5,7 +5,7 @@ import time
 
 class PlayButton(Button):
     def __init__(self, x, y):
-        super().__init__(x, y, UIConfig.PLAY_BUTTON_COLOR, UIConfig.PLAY_BUTTON_TEXT)
+        super().__init__(x, y, color=UIConfig.PLAY_BUTTON_COLOR, text=UIConfig.PLAY_BUTTON_TEXT)
         self.is_in_algorithm = False
         self.game_result = 0
         self.is_searching = False

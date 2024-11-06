@@ -5,8 +5,8 @@ from utils import GameObject
 from utils import Action
 from utils import Utilities
 from utils import Button, PlayButton, ResetButton, PauseButton, Alert
-from utils.ChoiceButton import ChoiceButton
 from config.ImageConfig import ImageConfig
+from utils.LevelButton import LevelButton
 
 from algorithms.astar import aStarSearch
 from algorithms.bfs import breadthFirstSearch
@@ -42,7 +42,7 @@ class GameGraphic:
         self.show_algorithm_list = False
         self.result_game = 0
         self.is_searching = False
-        
+        self.show_level_choice = False
 
         # Init object
         self.gameObject = gameObject.addUI()
@@ -50,9 +50,11 @@ class GameGraphic:
         self.buttons = []
         self.buttons.append(PlayButton(y=10, x=UIConfig.WINDOW_WIDTH - 150))
         self.buttons.append(ResetButton(y=60, x=UIConfig.WINDOW_WIDTH - 150))
-        self.buttons.append(ChoiceButton(y = 10, x=UIConfig.WINDOW_WIDTH - 250, text=algorithms[self.current_algorithm_index]))
-        self.algorithms_buttons = [ChoiceButton(y=10 + 40 * (i + 1), x=UIConfig.WINDOW_WIDTH - 250, text=algorithms[i], color=UIConfig.OPTION_BUTTON_COLOR, corner_radius=0) for i in range(len(algorithms))]
-        
+        self.buttons.append(Button(y=10, x=UIConfig.WINDOW_WIDTH - 250, text=algorithms[self.current_algorithm_index], color=UIConfig.CHOICE_BUTTON_COLOR))
+        self.buttons.append(LevelButton(y=10, x=UIConfig.WINDOW_WIDTH - 350))
+        self.algorithms_buttons = [Button(y=10 + 40 * (i + 1), x=UIConfig.WINDOW_WIDTH - 250, text=algorithms[i], color=UIConfig.OPTION_BUTTON_COLOR, corner_radius=0) for i in range(len(algorithms))]
+        self.level_buttons = [Button(UIConfig.WINDOW_WIDTH // 4 + 25 + 90 * (i % 5), UIConfig.WINDOW_HEIGHT // 4 + 100 + (i // 5) * 100, UIConfig.LEVEL_BUTTON_COLOR, f"Level {i + 1}") for i in range(10)]
+        self.level_buttons.append(Button(x=UIConfig.WINDOW_WIDTH * 3 // 4 - 20, y=UIConfig.WINDOW_HEIGHT // 4, color=(0,0,0), text="X", height=20, width=20))
 
         self.alert = Alert.ALert()
         self.clock = pygame.time.Clock()
@@ -169,14 +171,32 @@ class GameGraphic:
                                 self.buttons[2].setText(algorithms[i])
                                 self.show_algorithm_list = False
                                 break
+                    # Level Button
+                    if self.buttons[3].rect.collidepoint(mouse_pos):
+                        self.show_level_choice = not self.show_level_choice
+                    
+                    if self.show_level_choice and self.level_buttons[len(self.level_buttons) - 1].rect.collidepoint(mouse_pos):
+                        self.show_level_choice = False
 
+                    for i in range(len(self.level_buttons) - 1):
+                        if self.level_buttons[i].rect.collidepoint(mouse_pos):
+                            filename = ""
+                            if i + 1 < 10:
+                                filename = "input-0" + str(i + 1) + ".txt"
+                            else:
+                                filename = "input-" + str(i + 1) + ".txt"
+                            self.gameObject = GameObject(filename)
+                            self.show_level_choice = False
+                            self.gameObject = self.gameObject.addUI()
+                            self.draw_all()
 
-
-                                    
             self.gameObject.ares.move()
             for stone in self.gameObject.stones:
                 stone.move()
             self.draw_all()
+
+            if self.show_level_choice:
+                self.buttons[3].handle(self.screen, self.level_buttons)
                                     
             pygame.display.update() 
             self.clock.tick(60) 

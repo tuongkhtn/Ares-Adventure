@@ -2,11 +2,11 @@ import pygame
 from config import UIConfig
 
 class Button():
-    def __init__(self, x, y, color, text, corner_radius=10):
+    def __init__(self, x, y, color, text, height=UIConfig.BUTTON_HEIGHT, width=UIConfig.BUTTON_WIDTH, corner_radius=10):
         self.x = x
         self.y = y
-        self.height = UIConfig.BUTTON_HEIGHT
-        self.width = UIConfig.BUTTON_WIDTH
+        self.height = height
+        self.width = width
         self.color = color
         self.text = text
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
