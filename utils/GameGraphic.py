@@ -1,10 +1,9 @@
-import sys
 import pygame
 from config import UIConfig
 from utils import GameObject
 from utils import Action
 from utils import Utilities
-from utils import Button, PlayButton, ResetButton, PauseButton, Alert
+from utils import Button, PlayButton, ResetButton, Alert
 from config.ImageConfig import ImageConfig
 from utils.LevelButton import LevelButton
 
@@ -33,7 +32,7 @@ class GameGraphic:
         self.background_image = pygame.image.load(str(ImageConfig.IMAGE_BG))
         self.background_image = pygame.transform.scale(self.background_image, (UIConfig.WINDOW_WIDTH, UIConfig.WINDOW_HEIGHT))
         self.background_image.set_alpha(UIConfig.ALPHA)
-        self.current_level = "3"
+        self.current_level = "1"
         
         # Init game state
         self.running = True
@@ -70,9 +69,14 @@ class GameGraphic:
             [button.draw(self.screen) for button in self.algorithms_buttons]
         steps_text = UIConfig.STATS_FONT.render(f"Step: {self.gameObject.stepCount}", True, (255, 255, 255))
         weight_text = UIConfig.STATS_FONT.render(f"Weight: {self.gameObject.totalWeight}", True, (255, 255, 255))
+        time_text = UIConfig.STATS_FONT.render(f"Time: {round(self.buttons[0].algo_time, 2)}", True, (255, 255, 255))
+        memory_text = UIConfig.STATS_FONT.render(f"Memory: {round(self.buttons[0].memory, 2)}", True, (255, 255, 255))
         level_text = UIConfig.STATS_FONT.render(f"Level {self.current_level}", True, (255, 255, 255))
+
         self.screen.blit(steps_text, (40, 10))
         self.screen.blit(weight_text, (40, 40))
+        self.screen.blit(time_text, (40, 70))
+        self.screen.blit(memory_text, (40, 100))
         self.screen.blit(level_text, (UIConfig.WINDOW_WIDTH // 2 - 30, 20))
 
     
@@ -150,7 +154,7 @@ class GameGraphic:
                         self.is_in_algorithm = True
                         self.buttons[0].setIsInAlgorithm(self.is_in_algorithm)
                         running_algo = search_functions[algorithms[self.current_algorithm_index]]
-                        algo_thread = threading.Thread(target=self.buttons[0].handleClick, args=([copy.deepcopy(self.gameObject), running_algo]))
+                        algo_thread = threading.Thread(target=self.buttons[0].handle, args=([copy.deepcopy(self.gameObject), running_algo]))
                         algo_thread.start()
                     # ResetButton
                     if self.buttons[1].rect.collidepoint(mouse_pos):

@@ -6,7 +6,6 @@ from .Wall import Wall
 from .Stone import Stone
 from .Switch import Switch
 from .FreeSpace import FreeSpace
-from .Action import Action
 from config import UIConfig
 
 class GameObject:
@@ -19,7 +18,7 @@ class GameObject:
         self.totalWeight = 0
         self.stepCount = 0
         
-        self.ares = [Ares(x.tolist()[0], x.tolist()[1]) for x in np.argwhere(maze == 3)][0]
+        self.ares = [Ares(x.tolist()[0], x.tolist()[1]) for x in np.argwhere((maze == 3) | (maze == 6))][0]
         self.walls = [Wall(x.tolist()[0], x.tolist()[1]) for x in np.argwhere(maze == 1)]
         self.switches = [Switch(x.tolist()[0], x.tolist()[1]) for x in np.argwhere((maze == 4) | (maze == 5) | (maze == 6))]
         self.freeSpaces = [FreeSpace(x.tolist()[0], x.tolist()[1]) for x in np.argwhere((maze != 1) & (maze != -1))]
