@@ -9,3 +9,4 @@ class ImageConfig:
     IMAGE_STONE = IMAGE_ROOT / "stone.png"
     IMAGE_SWITCH = IMAGE_ROOT / "switch.png"
     IMAGE_WALL = IMAGE_ROOT / "wall.png"
+    IMAGE_BG = IMAGE_ROOT / "bg2.png"

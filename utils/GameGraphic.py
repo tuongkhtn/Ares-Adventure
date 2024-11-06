@@ -4,8 +4,9 @@ from config import UIConfig
 from utils import GameObject
 from utils import Action
 from utils import Utilities
-from utils import Button, PlayButton, ResetButton, PauseButton
+from utils import Button, PlayButton, ResetButton, PauseButton, Alert
 from utils.ChoiceButton import ChoiceButton
+from config.ImageConfig import ImageConfig
 
 from algorithms.astar import aStarSearch
 from algorithms.bfs import breadthFirstSearch
@@ -29,6 +30,10 @@ class GameGraphic:
         self.screen = pygame.display.set_mode((UIConfig.WINDOW_WIDTH, UIConfig.WINDOW_HEIGHT))
         pygame.display.set_caption(UIConfig.CAPTION)
         self.font = pygame.font.Font(None, UIConfig.FONT_SIZE)
+        self.background_image = pygame.image.load(str(ImageConfig.IMAGE_BG))
+        self.background_image = pygame.transform.scale(self.background_image, (UIConfig.WINDOW_WIDTH, UIConfig.WINDOW_HEIGHT))
+        self.background_image.set_alpha(UIConfig.ALPHA)
+
         
         # Init game state
         self.running = True
@@ -46,8 +51,10 @@ class GameGraphic:
         self.buttons.append(PlayButton(y=10, x=UIConfig.WINDOW_WIDTH - 150))
         self.buttons.append(ResetButton(y=60, x=UIConfig.WINDOW_WIDTH - 150))
         self.buttons.append(ChoiceButton(y = 10, x=UIConfig.WINDOW_WIDTH - 250, text=algorithms[self.current_algorithm_index]))
-        self.algorithms_buttons = [ChoiceButton(y=10 + 40 * (i + 1), x=UIConfig.WINDOW_WIDTH - 250, text=algorithms[i], color=UIConfig.OPTION_BUTTON_COLOR) for i in range(len(algorithms))]
+        self.algorithms_buttons = [ChoiceButton(y=10 + 40 * (i + 1), x=UIConfig.WINDOW_WIDTH - 250, text=algorithms[i], color=UIConfig.OPTION_BUTTON_COLOR, corner_radius=0) for i in range(len(algorithms))]
         
+
+        self.alert = Alert.ALert()
         self.clock = pygame.time.Clock()
 
 
@@ -56,24 +63,26 @@ class GameGraphic:
         [button.draw(self.screen) for button in self.buttons]
         if self.show_algorithm_list:
             [button.draw(self.screen) for button in self.algorithms_buttons]
-        steps_text = UIConfig.STATS_FONT.render(f"Step: {self.gameObject.stepCount}", True, (0, 0, 0))
-        weight_text = UIConfig.STATS_FONT.render(f"Weight: {self.gameObject.totalWeight}", True, (0, 0, 0))
+        steps_text = UIConfig.STATS_FONT.render(f"Step: {self.gameObject.stepCount}", True, (255, 255, 255))
+        weight_text = UIConfig.STATS_FONT.render(f"Weight: {self.gameObject.totalWeight}", True, (255, 255, 255))
         self.screen.blit(steps_text, (40, 10))
         self.screen.blit(weight_text, (40, 40))
 
+    
         if self.is_in_algorithm and self.is_searching:
-            message = UIConfig.MSS_FONT.render(f"SEARCHING", True, (255, 255, 0))
-            self.screen.blit(message, (250, 20))
+            self.alert.setText("SEARCHING...", (0, 0, 0))
+            self.alert.draw(self.screen)
         elif self.result_game == -1:
-            message = UIConfig.MSS_FONT.render(f"FAIL", True, (255, 0, 0))
-            self.screen.blit(message, (250, 20))
+            self.alert.setText("FAILED", (255, 0, 0))
+            self.alert.draw(self.screen)
         elif self.result_game == 1:
-            message = UIConfig.MSS_FONT.render(f"SUCCESS", True, (0, 255, 0))
-            self.screen.blit(message, (250, 20))
+            self.alert.setText("SUCCESS", (0, 255, 0))
+            self.alert.draw(self.screen)
         
     def run(self):
         while self.running:
             self.screen.fill(UIConfig.COLOR_BG)
+            self.screen.blit(self.background_image, (0, 0))
             
             posOfAres = self.gameObject.ares.getCoordinate()
             posOfStones = [stone.getCoordinate() for stone in self.gameObject.stones]
@@ -96,6 +105,8 @@ class GameGraphic:
                         self.is_in_algorithm = False
                         self.buttons[0].setIsInAlgorithm(self.is_in_algorithm)
                     self.running = False
+                    pygame.quit()
+                    return
                 elif event.type == pygame.KEYDOWN:
                     action = Action('n')
                     if event.key == pygame.K_LEFT:

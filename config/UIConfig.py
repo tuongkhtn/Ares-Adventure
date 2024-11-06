@@ -6,6 +6,7 @@ class UIConfig:
     WINDOW_HEIGHT = 600
     
     CAPTION = "Sokoban - Ares and Stones"
+
     
     TILE_SIZE = 40
 
@@ -18,7 +19,8 @@ class UIConfig:
     # Màu sắc
     # COLOR_BG = (230, 241, 216)
     # COLOR_BG =  (120, 220, 220)
-    COLOR_BG =  (255, 255,255)
+    COLOR_BG =  (20, 20,20)
+    ALPHA = 50
 
 
     COLOR_WALL = (139, 69, 19)
@@ -54,3 +56,11 @@ class UIConfig:
 
     PAUSE_BUTTON_COLOR = (0, 0, 255)
     PAUSE_BUTTON_TEXT = "PAUSE"
+
+
+    ALERT_WIDTH = 350
+    ALERT_HEIGHT = 120
+    ALERT_COLOR = (180, 180, 180)
+    ALERT_TEXT_COLOR = (0, 0, 0)
+    ALERT_FONT_SIZE = 50
+    ALERT_FONT = pygame.font.Font(None, ALERT_FONT_SIZE)
