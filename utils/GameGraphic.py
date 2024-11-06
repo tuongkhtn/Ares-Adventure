@@ -33,7 +33,7 @@ class GameGraphic:
         self.background_image = pygame.image.load(str(ImageConfig.IMAGE_BG))
         self.background_image = pygame.transform.scale(self.background_image, (UIConfig.WINDOW_WIDTH, UIConfig.WINDOW_HEIGHT))
         self.background_image.set_alpha(UIConfig.ALPHA)
-
+        self.current_level = "3"
         
         # Init game state
         self.running = True
@@ -67,8 +67,10 @@ class GameGraphic:
             [button.draw(self.screen) for button in self.algorithms_buttons]
         steps_text = UIConfig.STATS_FONT.render(f"Step: {self.gameObject.stepCount}", True, (255, 255, 255))
         weight_text = UIConfig.STATS_FONT.render(f"Weight: {self.gameObject.totalWeight}", True, (255, 255, 255))
+        level_text = UIConfig.STATS_FONT.render(f"Level {self.current_level}", True, (255, 255, 255))
         self.screen.blit(steps_text, (40, 10))
         self.screen.blit(weight_text, (40, 40))
+        self.screen.blit(level_text, (UIConfig.WINDOW_WIDTH // 2 - 30, 20))
 
     
         if self.is_in_algorithm and self.is_searching:
@@ -187,6 +189,7 @@ class GameGraphic:
                                 filename = "input-" + str(i + 1) + ".txt"
                             self.gameObject = GameObject(filename)
                             self.show_level_choice = False
+                            self.current_level = i + 1
                             self.gameObject = self.gameObject.addUI()
                             self.draw_all()
 
