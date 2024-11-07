@@ -4,7 +4,7 @@ from .Wall import Wall
 from .Stone import Stone
 from .Switch import Switch
 from .FreeSpace import FreeSpace
-from .UIConfig import UIConfig
+from config import UIConfig
 
 class GameObject:
     def __init__(self, filename):
