@@ -26,6 +26,10 @@ class PlayButton(Button):
     def setText(self, text):
         self.text = text
 
+    def resetMemAndTime(self):
+        self.memory = 0
+        self.algo_time = 0
+
     def update_theme(self):
         if (self.is_in_algorithm):
             self.setColor(UIConfig.PLAYING_BUTTON_COLOR)
@@ -41,13 +45,15 @@ class PlayButton(Button):
             self.update_theme()
         self.is_searching = True
         start_time = time.time()
-        tracemalloc.start()
+        # tracemalloc.start()
         finalNumberOfSteps, finalWeight,  numberOfNodes, finalPath = algorithm(gameObject)
-        current, peak = tracemalloc.get_traced_memory()
-        tracemalloc.stop()
+        # current, peak = tracemalloc.get_traced_memory()
+        # tracemalloc.stop()
         end_time = time.time()
         self.algo_time = end_time - start_time
-        self.memory = (peak - current) / (1024 * 1024)
+        self.memory = 0
+        # self.memory = (peak - current) / (1024 * 1024)
+
         self.is_searching = False
         print(finalPath)
         if finalPath == "":
