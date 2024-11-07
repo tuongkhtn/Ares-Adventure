@@ -9,9 +9,7 @@ def breadthFirstSearch(gameObject: GameObject):
     the goal state.
     
     Args:
-        gameState (Tuple[List[int], np.ndarray): A tuple containing:
-            - List[int]: The weights of the stones.
-            - np.ndarray: A 2D grid representing the maze.
+        gameObject (GameObject)
     
     Returns:
         numberOfSteps (int): The number of steps in the solution path.
