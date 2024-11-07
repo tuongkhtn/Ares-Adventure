@@ -1,6 +1,5 @@
 from .Object import Object
 from config import ImageConfig, UIConfig
-from .Action import Action
 
 class Ares(Object):
     def __init__(self, x, y):

@@ -3,23 +3,10 @@ from utils.Utilities import Utilities
 from utils.GameObject import GameObject
 from utils.Utilities import PriorityQueue
 
-
-
 def uniformCostSearch(gameObject: GameObject):
     """
     Performs the Uniform Cost Search algorithm to find the optimal path for Ares to reach
     the goal state.
-    
-    Args:
-        gameState (Tuple[List[int], np.ndarray): A tuple containing:
-            - List[int]: The weights of the stones.
-            - np.ndarray: A 2D grid representing the maze.
-    
-    Returns:
-        numberOfSteps (int): The number of steps in the solution path.
-        totalWeight (int): The total weight accumulated along the solution path.
-        numberOfNodes (int): The total number of nodes expanded during the search.
-        path (str): A string representing the sequence of actions taken in the solution path.
     """
     print("uniformCostSearch")
     finalWeight = -1

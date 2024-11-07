@@ -17,7 +17,6 @@ class UIConfig:
     
     MOVE_SPEED = 5  # pixel per frame
     
-    # Màu sắc
     # COLOR_BG = (230, 241, 216)
     # COLOR_BG =  (120, 220, 220)
     COLOR_BG =  (20, 20,20)
@@ -26,8 +25,8 @@ class UIConfig:
 
     COLOR_WALL = (139, 69, 19)
     
+    # Font
     FONT_SIZE = 24
-
     STONE_FONT = pygame.font.Font(None, 20)
     STATS_FONT = pygame.font.Font(None, 30)
     BTN_FONT = pygame.font.Font(None, 20)

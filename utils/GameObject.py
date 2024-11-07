@@ -1,11 +1,10 @@
 import numpy as np
-
-from config.UIConfig import UIConfig
 from .Ares import Ares
 from .Wall import Wall
 from .Stone import Stone
 from .Switch import Switch
 from .FreeSpace import FreeSpace
+from config import UIConfig
 
 class GameObject:
     def __init__(self, filename):

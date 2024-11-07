@@ -31,8 +31,6 @@ In this project, we developed a Sokoban game using Pygame, featuring a character
 │   ├── stone.png
 │   ├── switch.png
 │   └── wall.png
-├── output
-│   └── input-01_ucs_states.csv
 ├── requirements.txt
 ├── utils
 │   ├── Action.py

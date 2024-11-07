@@ -21,7 +21,6 @@ def depthFirstSearch(gameObject: GameObject):
     finalWeight = -1
     finalPath = ""
     finalNumberOfSteps = -1
-    finalStates = []
     numberOfNodes = 1
 
     startPosStones = gameObject.positionOfStones()
@@ -48,7 +47,6 @@ def depthFirstSearch(gameObject: GameObject):
             finalWeight = node_action[0]
             finalPath = node_action[1]
             finalNumberOfSteps = len(node_action[1])
-            finalStates = node
             break
         if node[-1] not in exploredSet:
             exploredSet.add(node[-1])
