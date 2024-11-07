@@ -1,7 +1,7 @@
-from utils import CustomSet
-from utils import Utilities
-from utils import GameObject
-from utils import PriorityQueue
+from utils.Utilities import CustomSet
+from utils.Utilities import Utilities
+from utils.GameObject import GameObject
+from utils.Utilities import PriorityQueue
 
 
 

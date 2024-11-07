@@ -1,7 +1,7 @@
 import collections
-from utils import CustomSet
-from utils import Utilities
-from utils import GameObject
+from utils.Utilities import CustomSet
+from utils.Utilities import Utilities
+from utils.GameObject import GameObject
 
 def depthFirstSearch(gameObject: GameObject):
     """

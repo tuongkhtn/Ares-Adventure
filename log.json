@@ -1,0 +1,342 @@
+{
+  "input-01.txt": {
+    "DFS": {
+      "time": 0.046999216079711914,
+      "memory": 0.6083097457885742,
+      "finalPath": "drUdruuurdDuurdddLuuulddldRuuulDDuurdddRuuulddlulddRuuurddrdRuuuldddLuuurdddrRuuuldddluuulddlulddRuuurddrdruuurdddRuuuldddluuuldddLuuurdddruuurdddrRuuuldddluuuldddluuulddlulddRuuurddrdruuurdddruuurdddRuuuldddluuuldddluuuldddL",
+      "finalNumberOfSteps": 225,
+      "finalWeight": 900,
+      "numberOfNodes": 1500
+    },
+    "BFS": {
+      "time": 0.48964595794677734,
+      "memory": 4.048813819885254,
+      "finalPath": "urDrRRRRRRurD",
+      "finalNumberOfSteps": 13,
+      "finalWeight": 694,
+      "numberOfNodes": 15087
+    },
+    "UCS": {
+      "time": 2.145343780517578,
+      "memory": 6.704501152038574,
+      "finalPath": "RurDldRRRRRRRlllluLLulD",
+      "finalNumberOfSteps": 23,
+      "finalWeight": 306,
+      "numberOfNodes": 50226
+    },
+    "A*": {
+      "time": 0.7954673767089844,
+      "memory": 3.7077255249023438,
+      "finalPath": "RurDldRRRRRRRlllluLLulD",
+      "finalNumberOfSteps": 23,
+      "finalWeight": 306,
+      "numberOfNodes": 16914
+    }
+  },
+  "input-02.txt": {
+    "DFS": {
+      "time": 0.011318445205688477,
+      "memory": 0.06329917907714844,
+      "finalPath": "uuRlddrUdruUUdddluluRddruUruuLDDlddrUUU",
+      "finalNumberOfSteps": 39,
+      "finalWeight": 80,
+      "numberOfNodes": 395
+    },
+    "BFS": {
+      "time": 0.029000043869018555,
+      "memory": 0.13405132293701172,
+      "finalPath": "uRdrUUUruLdddlluRdrUU",
+      "finalNumberOfSteps": 21,
+      "finalWeight": 51,
+      "numberOfNodes": 870
+    },
+    "UCS": {
+      "time": 0.034999847412109375,
+      "memory": 0.13980579376220703,
+      "finalPath": "uuRlddrUrUUruLdddlluRdrUU",
+      "finalNumberOfSteps": 25,
+      "finalWeight": 44,
+      "numberOfNodes": 992
+    },
+    "A*": {
+      "time": 0.03399252891540527,
+      "memory": 0.14503097534179688,
+      "finalPath": "uuRlddrUrUUruLdddlluRdrUU",
+      "finalNumberOfSteps": 25,
+      "finalWeight": 44,
+      "numberOfNodes": 806
+    }
+  },
+  "input-03.txt": {
+    "DFS": {
+      "time": 0.46482205390930176,
+      "memory": 1.2191143035888672,
+      "finalPath": "ddddLdruuuuLurdddLddruuuuuldDDulldRuluRdrrdLurdddlUdruuuuulDurddLDuuurdddddlUdruuuuuldlldddRRdrUdluUddruUddlulluuurrDDuulldddrRdrUdluuuullddRdrUdluluurDurDuldlddrrUdlluR",
+      "finalNumberOfSteps": 169,
+      "finalWeight": 67,
+      "numberOfNodes": 8503
+    },
+    "BFS": {
+      "time": 1.4576160907745361,
+      "memory": 4.938985824584961,
+      "finalPath": "ddLruulDlDRllddrRdrUllUluR",
+      "finalNumberOfSteps": 26,
+      "finalWeight": 18,
+      "numberOfNodes": 27091
+    },
+    "UCS": {
+      "time": 1.7913882732391357,
+      "memory": 5.621905326843262,
+      "finalPath": "ddLruulDlDRllddrUluRddRdrU",
+      "finalNumberOfSteps": 26,
+      "finalWeight": 18,
+      "numberOfNodes": 29012
+    },
+    "A*": {
+      "time": 0.908860445022583,
+      "memory": 3.8725967407226562,
+      "finalPath": "ddLruulDlDRllddrUluRddRdrU",
+      "finalNumberOfSteps": 26,
+      "finalWeight": 18,
+      "numberOfNodes": 12791
+    }
+  },
+  "input-04.txt": {
+    "DFS": {
+      "time": 0.14771652221679688,
+      "memory": 0.6222429275512695,
+      "finalPath": "DuUddRdLuuuRDDuuldddRuuuldddLruuuLuRdddLdruuuuRddddluuuuldDuurddddlUUUdddruuuuL",
+      "finalNumberOfSteps": 79,
+      "finalWeight": 42,
+      "numberOfNodes": 2021
+    },
+    "BFS": {
+      "time": 2.4848499298095703,
+      "memory": 10.835016250610352,
+      "finalPath": "ULrRuLddDLdRRluRUUluRlLdDDrdL",
+      "finalNumberOfSteps": 29,
+      "finalWeight": 34,
+      "numberOfNodes": 30984
+    },
+    "UCS": {
+      "time": 2.7404685020446777,
+      "memory": 10.555423736572266,
+      "finalPath": "DRdLLruuULuRdRDDldRluLUUruRlL",
+      "finalNumberOfSteps": 29,
+      "finalWeight": 34,
+      "numberOfNodes": 31391
+    },
+    "A*": {
+      "time": 3.7952957153320312,
+      "memory": 11.048203468322754,
+      "finalPath": "DLdRRluuURuLdLDDrdLruRUUluRlL",
+      "finalNumberOfSteps": 29,
+      "finalWeight": 34,
+      "numberOfNodes": 30295
+    }
+  },
+  "input-05.txt": {
+    "DFS": {
+      "time": 0.22512006759643555,
+      "memory": 1.4145917892456055,
+      "finalPath": "lluuurrRllldddrrurUrULddldlluuuluurrrrDDrruLdlLLLdddrrurUdldlluuurrRddldlluulluRdrddrrururUdldldlluuluuurrrrDDuulllldddrddrrurUdldlluuluRdddrruruUddldlluuuluurrrrDDlLLdddrrurUdldlluulUdrddrrururuLuullllDDuurrrrddddldlluuurRlldddrruruUddldlluuuluurrrrDDrruLdlllldddrrurUdldlluuurrRddldlluuuluurrrrDDuullllddrdddrrurUrUruLdLddldlluuuluurrrrDDuullllddrdddrrurUdldlluuulldRuuurrrrdrddlULLLDlluRuurrrrDrddldldllUdrrururuLL",
+      "finalNumberOfSteps": 417,
+      "finalWeight": 153,
+      "numberOfNodes": 4283
+    },
+    "BFS": {
+      "time": 0.4235966205596924,
+      "memory": 1.3756256103515625,
+      "finalPath": "lluuurrRllldddrrurUrULLLLdlluRuurrrrDDllLdddrrurUruLuulllldDldRuuurrrrddrruLdlLLLDlluRuurrrrDrdLLrddldllU",
+      "finalNumberOfSteps": 105,
+      "finalWeight": 77,
+      "numberOfNodes": 8540
+    },
+    "UCS": {
+      "time": 0.6192488670349121,
+      "memory": 1.4078168869018555,
+      "finalPath": "lluuurrRllldddrrurUrULddldlluuluuurrrrDDLLLdddrrurUruLuulllldDldRuuurrrrddrruLdlLLLDlluRuurrrrDrdLLrddldllU",
+      "finalNumberOfSteps": 107,
+      "finalWeight": 71,
+      "numberOfNodes": 9039
+    },
+    "A*": {
+      "time": 0.6904900074005127,
+      "memory": 1.4419488906860352,
+      "finalPath": "lluuurrRllldddrrurUrULddldlluuluuurrrrDDLLLdddrrurUruLuulllldDldRuuurrrrddrruLdlLLLDlluRuurrrrDrdLLrddldllU",
+      "finalNumberOfSteps": 107,
+      "finalWeight": 71,
+      "numberOfNodes": 8657
+    }
+  },
+  "input-06.txt": {
+    "DFS": {
+      "time": 1.2868142127990723,
+      "memory": 7.839980125427246,
+      "finalPath": "ddruruuuldlulllddRRlluurrDurdDuurdrdddllUUddruruuullldRdddruruuulllllddrRuurdDuurrddddllUdruruuLurddddluldllUdrrurdruuuuldLDDuuurdrdddlLuuuulllddRddRRuuuurdrdddLuruuuldlulllddrRlddrRuUddRuruuullDDuurdrddldlUdruruuulllDurdDuurdrddldlUUddruruuullldRdddruruuulllllddrRuurdDuRurD",
+      "finalNumberOfSteps": 275,
+      "finalWeight": 158,
+      "numberOfNodes": 26616
+    },
+    "BFS": {
+      "time": 1.4385709762573242,
+      "memory": 5.3633575439453125,
+      "finalPath": "uulllddRRlluurrDrrrddllULuullddRRuRRurDDDlldllUdrruUluullddRRuRDuRurD",
+      "finalNumberOfSteps": 69,
+      "finalWeight": 84,
+      "numberOfNodes": 29866
+    },
+    "UCS": {
+      "time": 2.2368874549865723,
+      "memory": 5.879122734069824,
+      "finalPath": "uulllddRRlluurrDrrrddllUdrruulullllddrRuRRurDDDldlllUdrruUluullddRRuRDuRurD",
+      "finalNumberOfSteps": 75,
+      "finalWeight": 74,
+      "numberOfNodes": 37602
+    },
+    "A*": {
+      "time": 1.9754621982574463,
+      "memory": 5.085991859436035,
+      "finalPath": "uulllddRRlluurrDrrrddllUdrruulullllddrRuRRurDDDldlllUdrruUluullddRRuRDuRurD",
+      "finalNumberOfSteps": 75,
+      "finalWeight": 74,
+      "numberOfNodes": 26060
+    }
+  },
+  "input-07.txt": {
+    "DFS": {
+      "time": 0.759580135345459,
+      "memory": 2.83823299407959,
+      "finalPath": "luUddrruLdllluluurDDuuldddRuuRlddRRRuuLLrrddllluluurDDuuldddRuurrrddlLrruulDurddLuuruulDDD",
+      "finalNumberOfSteps": 90,
+      "finalWeight": 107,
+      "numberOfNodes": 14627
+    },
+    "BFS": {
+      "time": 1.74068021774292,
+      "memory": 4.866941452026367,
+      "finalPath": "luUddrruLdlllluuurDDldRRRRuulLrrddlllluuurDDurrDrdLruuuulDDD",
+      "finalNumberOfSteps": 60,
+      "finalWeight": 71,
+      "numberOfNodes": 30837
+    },
+    "UCS": {
+      "time": 2.121238946914673,
+      "memory": 5.078222274780273,
+      "finalPath": "luUddrruLdlllluuurDDldRRRRuulLrrddlllluuurDDurrDrdLruuuulDDD",
+      "finalNumberOfSteps": 60,
+      "finalWeight": 71,
+      "numberOfNodes": 31820
+    },
+    "A*": {
+      "time": 1.5875697135925293,
+      "memory": 4.200217247009277,
+      "finalPath": "luUddrruLdlllluuurDDldRRRRuulLrrddlllluuurDDurrDrdLruuuulDDD",
+      "finalNumberOfSteps": 60,
+      "finalWeight": 71,
+      "numberOfNodes": 18990
+    }
+  },
+  "input-08.txt": {
+    "DFS": {
+      "time": 60.2044517993927,
+      "memory": 190.35245323181152,
+      "finalPath": "RurrddddlDuruuuLurddddldRuuuuuldLdRDuuuldLrdrdrddlUdruuUdddluUddLdllUdrruurdruulUdddldlluUddrruurdruuulluurDDDuuurDuldddrddlUdruuUdddluUddldlluRRuruUddrddLUdruuuuldDuuluurDDrddddlLuurUdrddlUdruuulUdDuurddddlUdlulldRRurUdrdLuuruulluurrDDDDlddrUdluuldldRuurdrUddLuurUdddluuldldRuurdruuUlDuluurrDDuullddrdDrddLUdruuUdddlulldRurruulDuuluurDDDrddL",
+      "finalNumberOfSteps": 342,
+      "finalWeight": 227,
+      "numberOfNodes": 570865
+    },
+    "BFS": {
+      "time": 7.981319904327393,
+      "memory": 36.4171838760376,
+      "finalPath": "RurrddddlDRuuuuLLLrdRDrddlLdllURlU",
+      "finalNumberOfSteps": 34,
+      "finalWeight": 37,
+      "numberOfNodes": 72596
+    },
+    "UCS": {
+      "time": 23.172181606292725,
+      "memory": 81.89621067047119,
+      "finalPath": "RurrddddlDRuuuuLLLrdRDrddlLdllUUdR",
+      "finalNumberOfSteps": 34,
+      "finalWeight": 37,
+      "numberOfNodes": 179603
+    },
+    "A*": {
+      "time": 3.5528411865234375,
+      "memory": 12.088770866394043,
+      "finalPath": "RurrddddlDRuuuuLLLrdRDrddlLdllUUdR",
+      "finalNumberOfSteps": 34,
+      "finalWeight": 37,
+      "numberOfNodes": 24786
+    }
+  },
+  "input-09.txt": {
+    "DFS": {
+      "time": 105.07063269615173,
+      "memory": 419.5707788467407,
+      "finalPath": "ddruuulUUruuululddllddrRlluurrDuuurdrddLDDDDuuuuUdddddrddlUdruuuluuuuruLdddddDuuuuulllddrUdRluRuruulDDDuuurddrdLDDDuuLUdrddrdddlluRdrUdluUUUdrDuluUdddddrUdluuuuuUdddrDuluuuruulDuuldDuurddrddldddddrUdluuuuuUdddrDuluuuUdddddddrUdluuuuuuuluurDDDDDDDDuuuulUdrddddrdLuuuuuuuuuldDuurddddddrDDuuluulUUdlldRururddruuululDurdddlldRuUddluluRddrurDDDDDuuuuuuLddruuuulDDDuuurddddLulldRuluRddRuUdrDDDDuuuuuuulDDDuuurdddddddrdLuuuuuuuuldddldRuuuurdddDDDD",
+      "finalNumberOfSteps": 440,
+      "finalWeight": 302,
+      "numberOfNodes": 1289949
+    },
+    "BFS": {
+      "time": 1230.3124692440033,
+      "memory": 593.4031944274902,
+      "finalPath": "uUULUUddrruLruulDDDDDDrddlluRdrUluuuuuulllddRRlUluRRDrDDDDDrdLuuuuuruuululDrDDDDDDurDDLuuuuulluRurDDDDDDDuuuuulldRurDDDD",
+      "finalNumberOfSteps": 120,
+      "finalWeight": 191,
+      "numberOfNodes": 1837147
+    },
+    "UCS": {
+      "time": 211.19420766830444,
+      "memory": 649.2703666687012,
+      "finalPath": "uUUruuulldllddrRlluurrDuurrddLDDDDrddlluRdrUluuuuruuulldllddrRlluurrDrDDDDDrdLuuuuuulullddrRurDDDDurDDLuuuuluuurDDDDDDDuuuullluRRurDDDDD",
+      "finalNumberOfSteps": 136,
+      "finalWeight": 144,
+      "numberOfNodes": 1904532
+    },
+    "A*": {
+      "time": 250.3004002571106,
+      "memory": 649.6772603988647,
+      "finalPath": "uUUruuulldllddrRlluurrDuurrddLDDDDrddlluRdrUluuuuruuulDDDDDDDrdLuuuuuuulllddrRUrDDDDDuuuullluRuRurDDDDDDurDDLuuuulluRurDDDDD",
+      "finalNumberOfSteps": 124,
+      "finalWeight": 147,
+      "numberOfNodes": 1890189
+    }
+  },
+  "input-10.txt": {
+    "DFS": {
+      "time": 145.92892980575562,
+      "memory": 476.33233165740967,
+      "finalPath": "ldddllluuRUdlddrruruLddrurRRRUdlllldllluuRuUddlddrruruLddrurrrruUddlllldllluuRlddrrurrrrruuUdddlllluLddrurrrrurrdLLLLLLdllluuRlddrrruuurrDulldddllluurRDrdLurrRuullDurrddRRuuuruulDDDuulllllulldRdddrddrUdluuluuuRulddddrddrurruullDurrddrrUdlluulldlddrUdluuluuuurdRRRlllulddddrddrurruullDurrddrruUddlluulldlddrUdluullddRluurrdrrruullDurrddrruuUdddlluulldldRdLuururrddrruuuruulDDDuuLLLLLulldRdddrddruuurrddrrUdlluulldddluuluuuRulddddrddruuurrddrruUddlluulldddluuluuuurdRRRlllulddddrddruuurrddrrurrdLuluUddrdLuuuruulDDDuuLLLLLulldRdddrddruuurrddRluulldddluuluuuRulddddrddruuurrddrRlluulldddluuluuuurdRRRlllulddddrddruuurrddrrUdlluulldddluullddRluurrdruurrddrruUddllLLdLUdruuurrddrruuUddrrdLuluuruulDDDuuLLLLLulldRdddRddrurruullDurrddrRUdlluulldlddrUdluullddRluuruuuRulddddrdrrruullDurrddrruUddlluulldldRuurrddrruuUdddlluulldddLuururrddrruuuruulDlllLLulldRdddrddruuurrddrruuUdddlluulldddluuluuuRulddddlddRluuruuuurdRRRlllulddddrrurrddrruuuruulDDDuuLLLLLulldRdddrdruurrddrrUdlluullddluluuuRulddddrdruurrddrrurrdLulUdrdLuuUruulDDDuulllLLulldRdddrdruurrddRluullddluluuuRulddddrdruurrddrRlluullddluluuuurdRRRlllulddddrdruurrddLrrrUdlllLdLUdruuurrddrrurrdLulUdrdLuuUdddLruuuruulDDDuuLLLLLulldRdddRddrurRuullDurrddlLdlUdruuurrddRRUUdrrdLuluUddrdLuuuruulDDDuullllLulldRdddRluuuRulddddrddrurruullDurrddRluulldlddrUdluuluuuurdRRRlllulddddrddrurruullDurrddrRlluulldlddrUdluullddRluurrdrrrrrUUdrrdLuluUddrdLuuuruulDDDuuLLLLLulldRdddrdrrruullDurrddRRUdlluulldlluuuRRRllulddddrdRdLuururrddrruUddlluulldddluullddRluurrdruurrddrruuUdddlluulldddLuururrddrrurrdLuluuruulDDulLLLLulldRdddrddruuurrddLruulldlddrUdluuluuuRulddddrddrurruullDurrddlLdlUdruuurrddrRuUdrrdLuluUddrdLuuuruulDDulllLLulldRdddRddrurruullDurrddlLuurrddRRuUddlluulldlluuuRulddddrrdrrrruuUdddlluulldddlUdruuurrddrruuuruulDDDuulllLLulldRdddlddRluuruuuRulddddRdrrruullDurrddlLdLruuurrddrrUdlluulldlluuuurdRRRlllulddddrrdrrrruUddlluulldlllddRluurrrurrddrruuUdddlluulldddLruuurrddrruuuruulDDDuuLLLLLulldRdddlddRluuruuuRulddddrrurrddrrUdlluulldlluuuurdRRRlllulddddrrurrddrrurrdLulUdrdLuuUdddLruuuruulDDDuuLLLLLulldRdddrrddLruulluuuRulddddrrdrRuulldlluuuurdRRllulddddrrddlUdruuurrddRRUUdrrdLuluUddrdLuuuruulDlLLLLulldRdddRddrurruullDurrddRRuuUdddlluulldlddrUdluuluuuRulddddrddrurruullDurrddrruuuruulDDulllLLulldRRRRllulddddrddrUdluullddRluurrdrrruullDurrddrruUddlllLdLruuurrddrruuUdddlluulldddlUdruuurrddrruuuruulDDulLLLLulldRdddlddRluuruuuRRlulddddRdrdLurrruullDurrddrruUddlluulldlddrUdluuluuuurdrRllulddddrddrurruullDurrddrruuUdddlluulldlddrUdluuluuuurdrrRlllulddddrddrurruullDurrddrruuuruulDLLLLLulldRdddrddrUdluuluuuRulddddrddrurruullDurrddrrurrdLuluUddrdLuuuruulDDDuulllLLulldRdddlddRluuruuuRulddddrdRdLuuluuuurdRRRlllulddddrddruuurrddLruulldlddrUrrRRUUdrrdLuluUddrdLuuuruulDDuLLLLLulldRdddlddRluuruuuRulddddrdrdLuuluuuurdRRllulddddrddrurruullDurrddRRurrdLulUdrdLuuUdddLruuuruulDDDuulLLLLulldRRulddddrddrUdluuluuuurdRRllulddddrddrurRuullDurrddRRlluulldlddrUdluullddRluurrdrrruullDurrddlLdLruuurrddrrUdlluulldlllddRluurrrdrrrruUdrrdLuluUddrdLuuuruulDDDuulLLLLulldRdddrrdrrRRUUddlluulldlluuuRulddddrrdrrrruuUdddlluulldlluuuurdRlulddddrrddLUdruuurrddrruuuruulDllLLLulldRdddlddRluuruuuRulddddRdrrrrruuUdddlluullDurrddrruuuruulDDDuulllLLulldRRRRllulddddrdRdLuullddRluurrrurrddrrUrrdLulUdrdLuuUruulDDulLLLLulldRdddrdrdLuuluuuRulddddrddruuurrddRluulldddluuluuuurdRRllulddddrddruuurrddLruulldlddrUdluullddRluurrdrrrrRuUdrrdLuluUddrdLuuuruulDlLLLLulldRdddrdrrruullDurrddRRuuUdddlluulldldRuurrddrruuuruulDllllLulldRdddrdruurrddrrurrdLuluUddrdLuuuruulDllllLulldRdddrdrdLuururrddRluulldddluuluuuRulddddrddruuurrddLruulldlddrUdluuluuuurdRRllulddddrddrurrrRuuUddrrdLuluuruulDDDuulLLLLulldRdddlddRluuruuuRulddddrdrrruullDurrddlLdLruulluuuurdRlulddddrrddlUdruuurrddrRUUdrrdLuluUddrdLLruuuruulDDullLLLulldRdddRluuuRulddddrddrurRuullDurrddlLuurrddRluulldlluuuurdRlulddddrrdrrrRuUddlluulldlllddRluurrrdrrrruuUddrrdLuluuruulDDDuullLLLulldRRRlulddddrrdrrrRUrrdLulUdrdLuuUdddLLuulldddLUdruuurrddrruuuruulDDDuullLLLulldRdddRluuuRulddddlddRluuruuuurdRRllulddddrdrRRuullDurrddRluulldldRdLuururrddLruulldlddrUrrrRUrrdLulUdrdLuuUdddLruuuruulDDDuulLLLLulldRdddlddRluuruuuRulddddrdrrRRRUrrdLulUdrdLuuUdddLruuuruulDDulllLLulldRdddrdrrRuullDurrddRluulldldRulluuuRulddddrdruurrddLruulldlluuuurdRlulddddrdRdLuururrddrRuUddlluulldddluullddRluurrdruurrddrruuUdddlluulldddLuururrddrrurrdLLuuuruulDllLLLulldRRulddddrddruuurrddLruulldlddrUdluuluuuurdRlulddddrddrurruullDurrddRluulldlddrUdluullddRluurrdrrruullDurrddrRuuUdddlluulldlluuuurdrRllulddddrrurrddrrurrdLuluuruulDDDuulLLLLulldRRRlulddddrdRdLuururrddrRlluulldddluullddRluurrdruurrddrrUdllLrrrurrdLulUdrdLuuUruulDDullLLLulldRRulddddrdRulluuuurdRlulddddrdrdLuururrddLruulldlddrUdluullddRluurrdrrrRRuUdrrdLuluUddrdLLruuuruulDllLLLulldRdddrdrdLuuluuuRulddddrddrurRRRuuUddrrdLuluuruulDlllLLulldRdddrddrurrrRuuUddrrdLLLLuullDurrddrruuuruulDDDuullllLulldRdddrrurrddrrUdlluulldlddrUdluuluuuRulddddlddRluuruuuurdRlulddddrdrdLurRRRRuUdrrdLuluUddrdLLLuullDurrddrruuuruulDDullLLLulldRRulddddrrurrddrruUddlluulldlluuuurdRRRlllulddddrrurrddrruuUdddlluulldlddrUdluullddRluurrdrRRuullDurrddRluulldldRdLuururrddLruulldlddrUdluullddRluurrdrrrrRuuuruulDDDuuLLLLLulldRdddrdrrrrrUUdrrdLuluUddrdLLLLLdLUdrurruullDDuurrddrruuuruulDDDDuuullllLulldRdddRdrrrrRuuuullllLulDDuurdrrrrrddddlllllulUUddrdrrrrrurrdLuluuulllllulldRRulddddrdrrrrRurrdLuluuulllLrrrrdddrdLuuuullllLulldRRRRRRllllulddddrdrrrRRuuuruulDDDuulllllulddddrdrrrrrUUdrrdLuluUddrdLuuuruLddddLruuuuLrddddlLrruuuulLrrddddllLrrruuuullLrrrddddlllLrrrruuuulllLLulldRdddrDuluuuRRRRRllllulddddrdrrrrruuuruulDDDDuuulllllulddddrdrrrrRurrdLLLLL",
+      "finalNumberOfSteps": 5532,
+      "finalWeight": 9987,
+      "numberOfNodes": 1008681
+    },
+    "BFS": {
+      "time": 182.00001215934753,
+      "memory": 732.7561502456665,
+      "finalPath": "lddrRRRUrrdLLLLLLuurrDulldddllluuRUUddRDrrRRRurrdLLLLLLdLUrrrrruUUruulDDDDrdLLLLLrruullDDrrrruuuulllllulldRRRRRRllllldddRDrrrrruuuruulDDDDrdLLLL",
+      "finalNumberOfSteps": 144,
+      "finalWeight": 565,
+      "numberOfNodes": 1987345
+    },
+    "UCS": {
+      "time": 239.92044401168823,
+      "memory": 783.2767057418823,
+      "finalPath": "lddrRRRUrrdLLLLLLuurrDulldddllluuRUUddRDrrRRRurrdLLLLLLdLUrrrrruUUruulDDDDrdLLLLLrruullDDrrrruuuulllllulldRRRRRRllllldddRDrrrrruuuruulDDDDrdLLLL",
+      "finalNumberOfSteps": 144,
+      "finalWeight": 565,
+      "numberOfNodes": 2090181
+    },
+    "A*": {
+      "time": 267.36777663230896,
+      "memory": 759.4207782745361,
+      "finalPath": "lddrRRRUrrdLLLLLLuurrDulldddllluuRUUddRDrrRRRurrdLLLLLLdLUrrrrruUUruulDDDDrdLLLLLrruullDDrrrruuuulllllulldRRRRRRllllldddRDrrrrruuuruulDDDDrdLLLL",
+      "finalNumberOfSteps": 144,
+      "finalWeight": 565,
+      "numberOfNodes": 1983332
+    }
+  }
+}
