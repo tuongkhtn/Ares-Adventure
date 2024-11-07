@@ -31,6 +31,6 @@ class Object:
         self._x = x
         self._y = y
 
-    def draw(self, screen):
-        screen.blit(self.image, (self.screen_position[0], self.screen_position[1]))     
+    def draw(self, screen, offset_x=0, offset_y=0):
+        screen.blit(self.image, (self.screen_position[0] + offset_x, self.screen_position[1] + offset_y))     
     

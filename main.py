@@ -20,7 +20,7 @@ def readCommand():
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('-l', '--level', type=str,
-                        help='level of game to play', default='input-10.txt')
+                        help='level of game to play', default='input-01.txt')
     parser.add_argument('-m', '--method', type=str,
                         help='algorithm method', default='dfs')
     args = parser.parse_args()
@@ -38,24 +38,24 @@ if __name__ == '__main__':
     
     gameObject = GameObject(args.level)
     
-    # gameGraphic = GameGraphic(gameObject)
-    # gameGraphic.run()
+    gameGraphic = GameGraphic(gameObject)
+    gameGraphic.run()
     
     
-    if args.method == 'dfs':
-        finalNumberOfSteps, finalWeight,  numberOfNodes, finalPath = depthFirstSearch(gameObject)
-    elif args.method == 'bfs':
-        finalNumberOfSteps, finalWeight,  numberOfNodes, finalPath = breadthFirstSearch(gameObject)
-    elif args.method == 'ucs':
-        finalNumberOfSteps, finalWeight,  numberOfNodes, finalPath = uniformCostSearch(gameObject)
-    elif args.method == 'astar':
-        finalNumberOfSteps, finalWeight,  numberOfNodes, finalPath = aStarSearch(gameObject)
+    # if args.method == 'dfs':
+    #     finalNumberOfSteps, finalWeight,  numberOfNodes, finalPath = depthFirstSearch(gameObject)
+    # elif args.method == 'bfs':
+    #     finalNumberOfSteps, finalWeight,  numberOfNodes, finalPath = breadthFirstSearch(gameObject)
+    # elif args.method == 'ucs':
+    #     finalNumberOfSteps, finalWeight,  numberOfNodes, finalPath = uniformCostSearch(gameObject)
+    # elif args.method == 'astar':
+    #     finalNumberOfSteps, finalWeight,  numberOfNodes, finalPath = aStarSearch(gameObject)
         
-    end = time.time()
-    memory_after = process.memory_info().rss / 1024
-    current = memory_after - memory_before
+    # end = time.time()
+    # memory_after = process.memory_info().rss / 1024
+    # current = memory_after - memory_before
     
     
-    # print(method.upper())
-    print(f"Steps: {finalNumberOfSteps}, Weight: {finalWeight}, Node: {numberOfNodes}, Time (ms): {(end-start)*1000:.2f}, Memory (MB): {current / 10**6:.2f}")
-    print(finalPath)
+    # # print(method.upper())
+    # print(f"Steps: {finalNumberOfSteps}, Weight: {finalWeight}, Node: {numberOfNodes}, Time (ms): {(end-start)*1000:.2f}, Memory (MB): {current / 10**6:.2f}")
+    # print(finalPath)

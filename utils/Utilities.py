@@ -126,7 +126,7 @@ class Utilities:
         
         return newPosOfAres, posOfStonesCopy, index
     
-    def costFunction(action: Tuple[int, str]) -> int:
+    def costFunction(action: Tuple[int, str]):
         """
         Caculates the total cost based on a list of actions.
         """

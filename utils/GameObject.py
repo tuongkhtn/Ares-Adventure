@@ -4,6 +4,7 @@ from .Wall import Wall
 from .Stone import Stone
 from .Switch import Switch
 from .FreeSpace import FreeSpace
+from config import UIConfig
 
 class GameObject:
     def __init__(self, filename):
@@ -15,7 +16,7 @@ class GameObject:
         self.totalWeight = 0
         self.stepCount = 0
         
-        self.ares = [Ares(x.tolist()[0], x.tolist()[1]) for x in np.argwhere(maze == 3)][0]
+        self.ares = [Ares(x.tolist()[0], x.tolist()[1]) for x in np.argwhere((maze == 3) | (maze == 6))][0]
         self.walls = [Wall(x.tolist()[0], x.tolist()[1]) for x in np.argwhere(maze == 1)]
         self.switches = [Switch(x.tolist()[0], x.tolist()[1]) for x in np.argwhere((maze == 4) | (maze == 5) | (maze == 6))]
         self.freeSpaces = [FreeSpace(x.tolist()[0], x.tolist()[1]) for x in np.argwhere((maze != 1) & (maze != -1))]
@@ -24,7 +25,11 @@ class GameObject:
         for i in range(len(stones)):
             stones[i].setWeight(weights[i])
         
-        self.stones = stones        
+        self.stones = stones   
+
+        # Offset
+        self.offsetX = (UIConfig.WINDOW_WIDTH -max([len(x) for x in self.maze])*UIConfig.TILE_SIZE)//2 - 40
+        self.offsetY = (UIConfig.WINDOW_HEIGHT -len(self.maze)*UIConfig.TILE_SIZE)//2 - 100
         
     def readFile(self, filename):
         with open(filename, 'r') as f:
@@ -96,16 +101,16 @@ class GameObject:
     
     def draw(self, screen):
         for freeSpace in self.freeSpaces:
-            freeSpace.draw(screen)
+            freeSpace.draw(screen, self.offsetX, self.offsetY)
         
         for switch in self.switches:
-            switch.draw(screen)
+            switch.draw(screen, self.offsetX, self.offsetY)
         
-        self.ares.draw(screen)
+        self.ares.draw(screen, self.offsetX, self.offsetY)
 
         for stone in self.stones:
-            stone.draw(screen)
+            stone.draw(screen, self.offsetX, self.offsetY)
             
         for wall in self.walls:
-            wall.draw(screen)
+            wall.draw(screen, self.offsetX, self.offsetY)
         
