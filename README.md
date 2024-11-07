@@ -49,6 +49,7 @@ In this project, we developed a Sokoban game using Pygame, featuring a character
 │   ├── Utilities.py
 │   ├── Wall.py
 │   └── __init__.py
+├── input-01.txt
 ├── input-02.txt
 ├── input-03.txt
 ├── input-04.txt
@@ -58,6 +59,17 @@ In this project, we developed a Sokoban game using Pygame, featuring a character
 ├── input-08.txt
 ├── input-09.txt
 ├── input-10.txt
+├── log.json
+├── output-01.txt
+├── output-02.txt
+├── output-03.txt
+├── output-04.txt
+├── output-05.txt
+├── output-06.txt
+├── output-07.txt
+├── output-08.txt
+├── output-09.txt
+├── output-10.txt
 ├── main.py
 ```
 
