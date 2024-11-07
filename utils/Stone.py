@@ -1,6 +1,5 @@
 from .Object import Object
 from config import ImageConfig, UIConfig
-from utils import Action
 
 class Stone(Object):
     def __init__(self, x, y, weight):

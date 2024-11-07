@@ -1,4 +1,3 @@
-import sys
 import pygame
 from config import UIConfig
 from utils import GameObject

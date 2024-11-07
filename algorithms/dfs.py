@@ -7,17 +7,6 @@ def depthFirstSearch(gameObject: GameObject):
     """
     Performs the Depth First Search algorithm to find the path for Ares to reach
     the goal state.
-    
-    Args:
-        gameState (Tuple[List[int], np.ndarray): A tuple containing:
-            - List[int]: The weights of the stones.
-            - np.ndarray: A 2D grid representing the maze.
-    
-    Returns:
-        numberOfSteps (int): The number of steps in the solution path.
-        totalWeight (int): The total weight accumulated along the solution path.
-        numberOfNodes (int): The total number of nodes expanded during the search.
-        path (str): A string representing the sequence of actions taken in the solution path.
     """
     print("depthFirstSearch")
     finalWeight = -1

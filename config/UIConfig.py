@@ -13,19 +13,15 @@ class UIConfig:
     OFFSET_X = 40
     OFFSET_Y = 100
     
-    MOVE_SPEED = 3  # pixel per frame
     MOVE_SPEED = 5  # pixel per frame
     
-    # Màu sắc
     # COLOR_BG = (230, 241, 216)
     # COLOR_BG =  (120, 220, 220)
     COLOR_BG =  (255, 255,255)
-
-
     COLOR_WALL = (139, 69, 19)
     
+    # Font
     FONT_SIZE = 24
-
     STONE_FONT = pygame.font.Font(None, 20)
     STATS_FONT = pygame.font.Font(None, 30)
     BTN_FONT = pygame.font.Font(None, 20)
@@ -45,8 +41,7 @@ class UIConfig:
     OPTION_BUTTON_COLOR = (150,150, 150)
     OPTION_BUTTON_TEXT = "A*"
 
-
-
+    # Button
     PLAY_BUTTON_COLOR = (0, 0, 255)
     PLAYING_BUTTON_COLOR = (0, 255, 0)
 
