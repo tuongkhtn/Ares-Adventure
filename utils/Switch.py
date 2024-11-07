@@ -1,5 +1,5 @@
 from .Object import Object
-from config import ImageConfig
+from config.ImageConfig import ImageConfig
 
 class Switch(Object):
     def __init__(self, x, y):

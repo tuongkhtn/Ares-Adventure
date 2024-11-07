@@ -1,8 +1,8 @@
 import time
 import psutil
 import os
-from utils import GameObject
-from utils import GameGraphic
+from utils.GameObject import GameObject
+from utils.GameGraphic import GameGraphic
 
 def readCommand():
     """
