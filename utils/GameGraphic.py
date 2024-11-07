@@ -124,6 +124,8 @@ class GameGraphic:
                         action.setDirection('u')
                     elif event.key == pygame.K_DOWN:
                         action.setDirection('d')
+                    else:
+                        continue
 
                     
                     if Utilities.isPushStone(posOfAres, posOfStones, action):
