@@ -1,5 +1,6 @@
 import pygame
-from config import UIConfig
+from config.UIConfig import UIConfig
+
 
 class Object:
     def __init__(self, x, y):

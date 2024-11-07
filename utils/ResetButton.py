@@ -1,5 +1,5 @@
-from utils import Button
-from config import UIConfig
+from utils.Button import Button
+from config.UIConfig import UIConfig
 
 class ResetButton(Button):
     def __init__(self, x, y):
