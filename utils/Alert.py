@@ -1,6 +1,5 @@
 from utils.Button import Button
 from config.UIConfig import UIConfig
-import pygame
 
 class Alert(Button):
     def __init__(self):

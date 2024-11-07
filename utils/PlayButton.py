@@ -1,9 +1,7 @@
-import os
 from utils.Button import Button
 from config.UIConfig import UIConfig
 import pygame
 import time
-import tracemalloc
 
 class PlayButton(Button):
     def __init__(self, x, y, algo_time=0, memory=0):
