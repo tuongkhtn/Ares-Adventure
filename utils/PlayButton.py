@@ -26,6 +26,10 @@ class PlayButton(Button):
     def setText(self, text):
         self.text = text
 
+    def resetMemAndTime(self):
+        self.memory = 0
+        self.algo_time = 0
+
     def update_theme(self):
         if (self.is_in_algorithm):
             self.setColor(UIConfig.PLAYING_BUTTON_COLOR)

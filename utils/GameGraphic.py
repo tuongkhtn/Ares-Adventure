@@ -69,14 +69,10 @@ class GameGraphic:
             [button.draw(self.screen) for button in self.algorithms_buttons]
         steps_text = UIConfig.STATS_FONT.render(f"Step: {self.gameObject.stepCount}", True, (255, 255, 255))
         weight_text = UIConfig.STATS_FONT.render(f"Weight: {self.gameObject.totalWeight}", True, (255, 255, 255))
-        time_text = UIConfig.STATS_FONT.render(f"Time: {round(self.buttons[0].algo_time, 2)}", True, (255, 255, 255))
-        memory_text = UIConfig.STATS_FONT.render(f"Memory: {round(self.buttons[0].memory, 2)}", True, (255, 255, 255))
         level_text = UIConfig.STATS_FONT.render(f"Level {self.current_level}", True, (255, 255, 255))
 
         self.screen.blit(steps_text, (40, 10))
         self.screen.blit(weight_text, (40, 40))
-        self.screen.blit(time_text, (40, 70))
-        self.screen.blit(memory_text, (40, 100))
         self.screen.blit(level_text, (UIConfig.WINDOW_WIDTH // 2 - 30, 20))
 
     
@@ -166,6 +162,9 @@ class GameGraphic:
                             self.buttons[0].setIsSearching(False)
                             self.buttons[0].setGameResult(0)
                             self.buttons[0].update_theme()
+                            self.buttons[0].resetMemAndTime()
+                        self.buttons[0].algo_time = 0
+                        self.buttons[1].memory = 0
                         self.gameObject = self.buttons[1].handle(self.gameObject)
                         self.gameObject = self.gameObject.addUI()
                         self.draw_all()
