@@ -1,9 +1,9 @@
 import copy
 
-from utils import PriorityQueue
-from utils import CustomSet
-from utils import GameObject
-from utils import Utilities
+from utils.Utilities import PriorityQueue
+from utils.Utilities import CustomSet
+from utils.GameObject import GameObject
+from utils.Utilities import Utilities
 from scipy.optimize import linear_sum_assignment
 import numpy as np
 

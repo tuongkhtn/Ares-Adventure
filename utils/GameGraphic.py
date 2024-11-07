@@ -1,9 +1,12 @@
 import pygame
 from config import UIConfig
-from utils import GameObject
-from utils import Action
-from utils import Utilities
-from utils import Button, PlayButton, ResetButton, Alert
+from utils.GameObject import GameObject
+from utils.Action import Action
+from utils.Utilities import Utilities
+from utils.Button import Button
+from utils.PlayButton import PlayButton
+from utils.ResetButton import ResetButton
+from utils.Alert import Alert
 from config.ImageConfig import ImageConfig
 from utils.LevelButton import LevelButton
 
@@ -58,7 +61,7 @@ class GameGraphic:
         self.level_buttons = [Button(UIConfig.WINDOW_WIDTH // 4 + 25 + 90 * (i % 5), UIConfig.WINDOW_HEIGHT // 4 + 100 + (i // 5) * 100, UIConfig.OPTION_BUTTON_COLOR, f"Level {i + 1}") for i in range(10)]
         self.level_buttons.append(Button(x=UIConfig.WINDOW_WIDTH * 3 // 4 - 30, y=UIConfig.WINDOW_HEIGHT // 4 + 5, color=(0,0,0), text="X", height=20, width=20))
 
-        self.alert = Alert.ALert()
+        self.alert = Alert()
         self.clock = pygame.time.Clock()
 
 
@@ -69,11 +72,13 @@ class GameGraphic:
             [button.draw(self.screen) for button in self.algorithms_buttons]
         steps_text = UIConfig.STATS_FONT.render(f"Step: {self.gameObject.stepCount}", True, (255, 255, 255))
         weight_text = UIConfig.STATS_FONT.render(f"Weight: {self.gameObject.totalWeight}", True, (255, 255, 255))
+        time_text = UIConfig.STATS_FONT.render(f"Time: {round(self.buttons[0].algo_time, 4)} s", True, (255, 255, 255))
         level_text = UIConfig.STATS_FONT.render(f"Level {self.current_level}", True, (255, 255, 255))
 
         self.screen.blit(steps_text, (40, 10))
         self.screen.blit(weight_text, (40, 40))
         self.screen.blit(level_text, (UIConfig.WINDOW_WIDTH // 2 - 30, 20))
+        self.screen.blit(time_text, (40, 70))
 
     
         if self.is_in_algorithm and self.is_searching:

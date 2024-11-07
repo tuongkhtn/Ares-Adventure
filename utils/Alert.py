@@ -1,8 +1,8 @@
-from utils import Button
-from config import UIConfig
+from utils.Button import Button
+from config.UIConfig import UIConfig
 import pygame
 
-class ALert(Button):
+class Alert(Button):
     def __init__(self):
         super().__init__(UIConfig.WINDOW_WIDTH//2 - UIConfig.ALERT_WIDTH//2, UIConfig.WINDOW_HEIGHT//2 - UIConfig.ALERT_HEIGHT//2, UIConfig.ALERT_COLOR, text="")
         self.setHeight(UIConfig.ALERT_HEIGHT)

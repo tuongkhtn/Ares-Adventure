@@ -1,5 +1,5 @@
 import pygame
-from config import UIConfig
+from config.UIConfig import UIConfig
 
 class Button():
     def __init__(self, x, y, color, text, height=UIConfig.BUTTON_HEIGHT, width=UIConfig.BUTTON_WIDTH, corner_radius=10):
