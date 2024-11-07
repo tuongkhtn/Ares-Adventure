@@ -28,35 +28,9 @@ def readCommand():
     return args
 
 if __name__ == '__main__':
-    # from algorithms import uniformCostSearch, aStarSearch, depthFirstSearch, breadthFirstSearch
-    # start = time.time()
-
-    # process = psutil.Process(os.getpid())
-    # memory_before = process.memory_info().rss / 1024
+    args = readCommand()
     
-    # args = readCommand()
+    gameObject = GameObject(args.level)
     
-    # gameObject = GameObject(args.level)
-    
-    # gameGraphic = GameGraphic(gameObject)
-    # gameGraphic.run()
-    
-    # if args.method == 'dfs':
-    #     finalNumberOfSteps, finalWeight,  numberOfNodes, finalPath = depthFirstSearch(gameObject)
-    # elif args.method == 'bfs':
-    #     finalNumberOfSteps, finalWeight,  numberOfNodes, finalPath = breadthFirstSearch(gameObject)
-    # elif args.method == 'ucs':
-    #     finalNumberOfSteps, finalWeight,  numberOfNodes, finalPath = uniformCostSearch(gameObject)
-    # elif args.method == 'astar':
-    #     finalNumberOfSteps, finalWeight,  numberOfNodes, finalPath = aStarSearch(gameObject)
-        
-    # end = time.time()
-    # memory_after = process.memory_info().rss / 1024
-    # current = memory_after - memory_before
-    
-    
-    # # print(method.upper())
-    # print(f"Steps: {finalNumberOfSteps}, Weight: {finalWeight}, Node: {numberOfNodes}, Time (ms): {(end-start)*1000:.2f}, Memory (MB): {current / 10**6:.2f}")
-    # print(finalPath)
-    
-    print("hello")
+    gameGraphic = GameGraphic(gameObject)
+    gameGraphic.run()
